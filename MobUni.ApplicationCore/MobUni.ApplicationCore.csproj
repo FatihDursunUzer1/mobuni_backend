@@ -12,6 +12,14 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Services\" />
     <Folder Include="Specifications\" />
+    <Folder Include="DTOs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="DTOs\" />
+    <None Remove="AutoMapper" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+  </ItemGroup>
 </Project>
