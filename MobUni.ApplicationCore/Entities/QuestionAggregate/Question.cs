@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.Entities.QuestionAggregate
 {
-    public class Question:BaseEntity<int>:IAggregateRoot
+    public class Question:BaseEntity<int>,IAggregateRoot
     {
         public User User { get; set; }
         public string Title { get; set; }

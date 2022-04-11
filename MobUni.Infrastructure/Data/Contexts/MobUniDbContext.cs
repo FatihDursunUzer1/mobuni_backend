@@ -14,7 +14,10 @@ namespace MobUni.Infrastructure.Data.Contexts
 {
     public class MobUniDbContext:DbContext
     {
+        public MobUniDbContext(DbContextOptions options):base(options)
+        {
 
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             /* optionsBuilder.
@@ -35,6 +38,7 @@ namespace MobUni.Infrastructure.Data.Contexts
             base.OnModelCreating(builder);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+
 
     }
 }

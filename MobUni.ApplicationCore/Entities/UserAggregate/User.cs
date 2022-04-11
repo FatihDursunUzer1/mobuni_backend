@@ -7,7 +7,7 @@ using MobUni.ApplicationCore.Interfaces;
 
 namespace MobUni.ApplicationCore.Entities.UserAggregate
 {
-   public class User:BaseEntity<string>:IAggregateRoot
+   public class User:BaseEntity<string>,IAggregateRoot
     {
         public string PasswordHash { get; set; }
         public string UserName { get; set; }
