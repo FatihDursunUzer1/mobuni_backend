@@ -10,6 +10,7 @@ namespace MobUni.ApplicationCore.Services
 	public class ActivityService:IActivityService
 	{
         private readonly IActivityRepository _activityRepository;
+
         private readonly IMapper _mapper;
 		public ActivityService(IActivityRepository activityRepository,IMapper mapper)
 		{
