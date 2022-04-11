@@ -1,4 +1,5 @@
 ﻿using MobUni.ApplicationCore.Entities.UserAggregate;
+using MobUni.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.Entities.ActivityAggregate
 {
-    public class Activity:BaseEntity<int>
+    public class Activity:BaseEntity<int>,IAggregateRoot
     {
         public User User { get; set; }
         public string Title { get; set; }

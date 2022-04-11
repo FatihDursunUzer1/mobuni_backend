@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MobUni.ApplicationCore.Interfaces;
 
 namespace MobUni.ApplicationCore.Entities.UserAggregate
 {
-   public class User:BaseEntity<string>
+   public class User:BaseEntity<string>:IAggregateRoot
     {
         public string PasswordHash { get; set; }
         public string UserName { get; set; }
