@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using MobUni.ApplicationCore.DTOs;
+using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
@@ -19,6 +20,7 @@ namespace MobUni.ApplicationCore
 			CreateMap<Comment, CommentDTO>().ReverseMap();
 			CreateMap<Department, DepartmentDTO>().ReverseMap();
 			CreateMap<University, UniversityDTO>().ReverseMap();
+			CreateMap<Activity, CreateActivityDTO>().ReverseMap();
 		}
 	}
 }

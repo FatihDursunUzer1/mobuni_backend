@@ -1,18 +1,26 @@
 ﻿using System;
+using AutoMapper;
 using MobUni.ApplicationCore.DTOs;
+using MobUni.ApplicationCore.Entities.UserAggregate;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.ApplicationCore.Interfaces.Repositories;
 
 namespace MobUni.ApplicationCore.Services
 {
 	public class UserService:IUserService
 	{
-		public UserService()
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+		public UserService(IUserRepository userRepository,IMapper mapper)
 		{
+            _userRepository = userRepository;
+            _mapper = mapper;
 		}
 
-        public Task<UserDTO> Add(UserDTO dto)
+        public async Task<UserDTO> Add(UserDTO dto)
         {
-            throw new NotImplementedException();
+            var user = _mapper.Map<UserDTO, User>(dto);
+            return _mapper.Map<User,UserDTO>(await _userRepository.Add(user));
         }
 
         public Task<bool> Delete(UserDTO dto)

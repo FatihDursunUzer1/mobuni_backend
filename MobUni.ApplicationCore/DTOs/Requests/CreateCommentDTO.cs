@@ -1,16 +1,15 @@
-﻿using MobUni.ApplicationCore.Entities.UserAggregate;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobUni.ApplicationCore.Entities
+namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class Comment:BaseEntity<int>
+    public class CreateCommentDTO
     {
-        public string UserId { get; set; }
-        public User User { get; set; }
+       // public UserDTO User { get; set; }
+       public string UserId { get; set; }
         public int TableId { get; set; }
         public int TableType { get; set; }
         public string Content { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
+using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -41,7 +42,7 @@ namespace MobUni.WebAPI.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]ActivityDTO activityDTO)
+        public async Task<IActionResult> Post([FromBody]CreateActivityDTO activityDTO)
         {
             return Ok(await _activtyService.Add(activityDTO));
         }

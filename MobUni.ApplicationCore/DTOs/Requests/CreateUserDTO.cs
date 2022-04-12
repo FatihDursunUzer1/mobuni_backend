@@ -1,9 +1,13 @@
 ﻿using System;
-namespace MobUni.ApplicationCore.DTOs
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MobUni.ApplicationCore.DTOs.Requests
 {
-	public class UserDTO
+    public class CreateUserDTO
     {
-        public string Id { get; set; }
         public string PasswordHash { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
@@ -13,10 +17,7 @@ namespace MobUni.ApplicationCore.DTOs
         // at mappingprofile to UserType
         public int UserType { get; set; }
         public string? Image { get; set; } = String.Empty;
-        //UniversityId foreignKey. UniversityId is nullable because each user not have University
-        public UniversityDTO? University { get; set; }
-        //University DepartmentId foreignKey. DepartmentId is nullable
-        public DepartmentDTO? Department { get; set; }
+       public int UniversityId { get; set; }
+       public int DepartmentId { get; set; }
     }
 }
-

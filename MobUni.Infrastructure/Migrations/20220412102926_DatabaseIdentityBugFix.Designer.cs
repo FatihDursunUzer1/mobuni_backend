@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MobUni.Infrastructure.Data.Contexts;
 
@@ -11,9 +12,10 @@ using MobUni.Infrastructure.Data.Contexts;
 namespace MobUni.Infrastructure.Migrations
 {
     [DbContext(typeof(MobUniDbContext))]
-    partial class MobUniContextModelSnapshot : ModelSnapshot
+    [Migration("20220412102926_DatabaseIdentityBugFix")]
+    partial class DatabaseIdentityBugFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,6 @@ namespace MobUni.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -103,7 +104,6 @@ namespace MobUni.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -168,7 +168,6 @@ namespace MobUni.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -229,7 +228,7 @@ namespace MobUni.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -254,7 +253,7 @@ namespace MobUni.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UniversityId")
+                    b.Property<int?>("UniversityId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedTime")
@@ -286,9 +285,7 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("University");
 
@@ -299,9 +296,7 @@ namespace MobUni.Infrastructure.Migrations
                 {
                     b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -316,9 +311,7 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("University");
 
@@ -329,15 +322,11 @@ namespace MobUni.Infrastructure.Migrations
                 {
                     b.HasOne("MobUni.ApplicationCore.Entities.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("MobUni.ApplicationCore.Entities.University", "University")
                         .WithMany()
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UniversityId");
 
                     b.Navigation("Department");
 

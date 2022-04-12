@@ -1,9 +1,13 @@
 ﻿using System;
-namespace MobUni.ApplicationCore.DTOs
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MobUni.ApplicationCore.DTOs.Requests
 {
-	public class UniversityDTO
+    public class CreateUniversityDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Province { get; set; }
         public string District { get; set; }
@@ -13,4 +17,3 @@ namespace MobUni.ApplicationCore.DTOs
         public string? Description { get; set; } = String.Empty;
     }
 }
-

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MobUni.Infrastructure.Data.Contexts;
 
@@ -11,9 +12,10 @@ using MobUni.Infrastructure.Data.Contexts;
 namespace MobUni.Infrastructure.Migrations
 {
     [DbContext(typeof(MobUniDbContext))]
-    partial class MobUniContextModelSnapshot : ModelSnapshot
+    [Migration("20220412132010_DatabaseNullProperty")]
+    partial class DatabaseNullProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -2,7 +2,8 @@
 namespace MobUni.ApplicationCore.DTOs
 {
 	public class QuestionDTO
-	{
+    {
+        public int Id { get; set; }
         public UserDTO User { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }

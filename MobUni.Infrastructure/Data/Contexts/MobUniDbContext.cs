@@ -14,10 +14,10 @@ namespace MobUni.Infrastructure.Data.Contexts
 {
     public class MobUniDbContext:DbContext
     {
-        public MobUniDbContext(DbContextOptions options):base(options)
+       /* public MobUniDbContext(DbContextOptions options):base(options)
         {
 
-        }
+        } */
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             /* optionsBuilder.
@@ -37,6 +37,18 @@ namespace MobUni.Infrastructure.Data.Contexts
         {
             base.OnModelCreating(builder);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            builder.Entity<User>().HasKey(p => p.Id);
+            builder.Entity<User>().Property(p=>p.Id).ValueGeneratedOnAdd();
+            builder.Entity<Activity>().HasKey(p => p.Id);
+            builder.Entity<Activity>().Property(p => p.Id).ValueGeneratedOnAdd();
+            builder.Entity<Department>().HasKey(p => p.Id);
+            builder.Entity<Department>().Property(p => p.Id).ValueGeneratedOnAdd();
+            builder.Entity<University>().HasKey(p => p.Id);
+            builder.Entity<University>().Property(p => p.Id).ValueGeneratedOnAdd();
+            builder.Entity<Question>().HasKey(p => p.Id);
+            builder.Entity<Question>().Property(p => p.Id).ValueGeneratedOnAdd();
+            builder.Entity<Comment>().HasKey(p => p.Id);
+            builder.Entity<Comment>().Property(p => p.Id).ValueGeneratedOnAdd();
         }
 
 

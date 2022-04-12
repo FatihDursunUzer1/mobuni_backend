@@ -15,7 +15,7 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<T> Add(T entity)
         {
-            await _mobUniDbContext.AddAsync<T>(entity);
+           var a= await _mobUniDbContext.AddAsync<T>(entity);
             await _mobUniDbContext.SaveChangesAsync();
             return entity;
         }
