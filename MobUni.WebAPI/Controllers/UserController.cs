@@ -21,5 +21,16 @@ namespace MobUni.WebAPI.Controllers
         {
             return Ok(await _userService.Add(userDTO));
         }
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _userService.GetAll());
+        }
+        [HttpGet("GetByUserId")]
+        public IActionResult GetByUserId([FromQuery] string UserId)
+        {
+            return Ok(_userService.GetById(UserId));
+        }
     }
 }

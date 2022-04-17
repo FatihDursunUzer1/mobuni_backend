@@ -6,6 +6,8 @@ using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Services;
 using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

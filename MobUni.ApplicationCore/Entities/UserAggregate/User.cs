@@ -18,10 +18,10 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public UserType UserType { get; set; }
         public string? Image { get; set; }=String.Empty;
         //UniversityId foreignKey. UniversityId is nullable because each user not have University
-        public University? University { get;  set; }
-       // public int UniversityId { get; set; }
+        public virtual University? University { get;  set; }
+        public int UniversityId { get; set; }
         //University DepartmentId foreignKey. DepartmentId is nullable
-        public Department? Department { get;  set; }
+        public virtual Department? Department { get;  set; }
         public int DepartmentId { get; set; }
 
        /* public void setUniversityInfo(int UniversityId, int DepartmentId)

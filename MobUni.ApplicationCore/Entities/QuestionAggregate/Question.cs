@@ -11,11 +11,11 @@ namespace MobUni.ApplicationCore.Entities.QuestionAggregate
     public class Question:BaseEntity<int>,IAggregateRoot
     {
         public string UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public int UniversityId { get; set; }
-        public University University { get; set; }
+        public virtual University University { get; set; }
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
     }

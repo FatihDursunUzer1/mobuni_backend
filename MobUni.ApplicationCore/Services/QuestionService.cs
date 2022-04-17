@@ -20,7 +20,7 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public List<QuestionDTO> GetAll()
+        public async Task<List<QuestionDTO>> GetAll()
         {
             throw new NotImplementedException();
         }

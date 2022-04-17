@@ -17,7 +17,7 @@ namespace MobUni.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -271,7 +271,8 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("UniversityId");
+                    b.HasIndex("UniversityId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -334,9 +335,9 @@ namespace MobUni.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("MobUni.ApplicationCore.Entities.University", "University")
-                        .WithMany()
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("MobUni.ApplicationCore.Entities.UserAggregate.User", "UniversityId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Department");

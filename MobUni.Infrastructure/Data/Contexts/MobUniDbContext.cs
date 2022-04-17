@@ -20,10 +20,8 @@ namespace MobUni.Infrastructure.Data.Contexts
         } */
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            /* optionsBuilder.
-               UseSqlServer(configuration.GetConnectionString("DevConnection"));*/
-            optionsBuilder.
-              UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseLazyLoadingProxies().
+            UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
 
         public DbSet<User> Users { get; set; }
@@ -36,19 +34,9 @@ namespace MobUni.Infrastructure.Data.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<User>().HasOne(u => u.University).WithOne().OnDelete(DeleteBehavior.NoAction);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            builder.Entity<User>().HasKey(p => p.Id);
-            builder.Entity<User>().Property(p=>p.Id).ValueGeneratedOnAdd();
-            builder.Entity<Activity>().HasKey(p => p.Id);
-            builder.Entity<Activity>().Property(p => p.Id).ValueGeneratedOnAdd();
-            builder.Entity<Department>().HasKey(p => p.Id);
-            builder.Entity<Department>().Property(p => p.Id).ValueGeneratedOnAdd();
-            builder.Entity<University>().HasKey(p => p.Id);
-            builder.Entity<University>().Property(p => p.Id).ValueGeneratedOnAdd();
-            builder.Entity<Question>().HasKey(p => p.Id);
-            builder.Entity<Question>().Property(p => p.Id).ValueGeneratedOnAdd();
-            builder.Entity<Comment>().HasKey(p => p.Id);
-            builder.Entity<Comment>().Property(p => p.Id).ValueGeneratedOnAdd();
         }
 
 

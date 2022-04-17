@@ -28,9 +28,14 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public List<UserDTO> GetAll()
+        public async Task< List<UserDTO>> GetAll()
         {
-            throw new NotImplementedException();
+            return _mapper.Map<List<User>,List<UserDTO>>(await _userRepository.GetAll());
+        }
+
+        public  UserDTO GetById(string userId)
+        {
+            return _mapper.Map<User, UserDTO>( _userRepository.GetById(userId));
         }
 
         public Task<UserDTO> Update(UserDTO dto)

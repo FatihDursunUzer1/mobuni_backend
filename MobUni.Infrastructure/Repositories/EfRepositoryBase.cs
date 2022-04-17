@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.Infrastructure.Data.Contexts;
 
@@ -6,7 +7,7 @@ namespace MobUni.Infrastructure.Repositories
 {
 	public class EfRepositoryBase<T>:IRepository<T> where T :class
 	{
-		private readonly MobUniDbContext _mobUniDbContext;
+		protected readonly MobUniDbContext _mobUniDbContext;
 
         public EfRepositoryBase(MobUniDbContext mobUniDbContext)
         {
@@ -27,7 +28,10 @@ namespace MobUni.Infrastructure.Repositories
 
        
 
-        public List<T> GetAll() => _mobUniDbContext.Set<T>().ToList();
+        public async Task<List<T>> GetAll()
+        {
+           return await _mobUniDbContext.Set<T>().ToListAsync();
+        }
 
         public async Task<T> GetById()
         {

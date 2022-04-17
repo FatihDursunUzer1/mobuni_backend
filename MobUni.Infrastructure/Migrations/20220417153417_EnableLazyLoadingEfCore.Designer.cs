@@ -12,14 +12,14 @@ using MobUni.Infrastructure.Data.Contexts;
 namespace MobUni.Infrastructure.Migrations
 {
     [DbContext(typeof(MobUniDbContext))]
-    [Migration("20220412132010_DatabaseNullProperty")]
-    partial class DatabaseNullProperty
+    [Migration("20220417153417_EnableLazyLoadingEfCore")]
+    partial class EnableLazyLoadingEfCore
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -273,7 +273,8 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("UniversityId");
+                    b.HasIndex("UniversityId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -336,9 +337,9 @@ namespace MobUni.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("MobUni.ApplicationCore.Entities.University", "University")
-                        .WithMany()
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("MobUni.ApplicationCore.Entities.UserAggregate.User", "UniversityId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Department");

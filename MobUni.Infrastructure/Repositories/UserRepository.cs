@@ -9,8 +9,12 @@ namespace MobUni.Infrastructure.Repositories
 	{
         public UserRepository(MobUniDbContext mobUniDbContext):base(mobUniDbContext)
         {
-
+            
         }
-	}
+        public User? GetById(string id)
+        {
+            return _mobUniDbContext.Set<User>().FirstOrDefault(x => x.Id == id);
+        }
+    }
 }
 

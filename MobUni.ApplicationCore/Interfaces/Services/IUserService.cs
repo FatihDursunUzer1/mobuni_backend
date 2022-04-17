@@ -5,6 +5,7 @@ namespace MobUni.ApplicationCore.Interfaces
 {
 	public interface IUserService:IService<UserDTO>
 	{
+		UserDTO GetById(string userId);
 	}
 }
 

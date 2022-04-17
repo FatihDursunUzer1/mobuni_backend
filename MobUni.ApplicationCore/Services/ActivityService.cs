@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
@@ -31,10 +32,11 @@ namespace MobUni.ApplicationCore.Services
             return await _activityRepository.Delete(activity);
         }
 
-        public List<ActivityDTO> GetAll()
+        public async Task<List<ActivityDTO>> GetAll()
         {
-            var a = _activityRepository.GetAll();
-            List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(_activityRepository.GetAll());
+
+            var a =await  _activityRepository.GetAll();
+            List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(a);
             return activities;
         }
 

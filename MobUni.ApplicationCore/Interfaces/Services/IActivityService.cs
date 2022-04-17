@@ -9,7 +9,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<bool> Delete(ActivityDTO dto);
 		public Task<ActivityDTO> Add(CreateActivityDTO dto);
 		public Task<ActivityDTO> Update(ActivityDTO dto);
-		public List<ActivityDTO> GetAll();
+		public Task<List<ActivityDTO>> GetAll();
 	}
 }
 
