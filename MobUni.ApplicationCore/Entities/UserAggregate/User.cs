@@ -24,12 +24,11 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public virtual Department? Department { get;  set; }
         public int DepartmentId { get; set; }
 
-       /* public void setUniversityInfo(int UniversityId, int DepartmentId)
+       public void CreateUserTime()
         {
-            this.UniversityId= UniversityId;
-            this.DepartmentId= DepartmentId;
-        } */
-
+            this.CreatedTime = DateTime.Now;
+            this.UpdatedTime = DateTime.Now;
+        }
        
     }
 }

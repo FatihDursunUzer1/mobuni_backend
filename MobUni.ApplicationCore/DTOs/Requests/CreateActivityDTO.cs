@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class CreateActivityDTO
+    public class CreateActivityDTO: BaseCreateDTO<int>
     {
        // public UserDTO User { get; set; }
+       public int Id { get; set; }
        public string UserId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }

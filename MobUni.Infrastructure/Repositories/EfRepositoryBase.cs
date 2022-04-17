@@ -40,7 +40,9 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<T> Update(T entity)
         {
-            throw new NotImplementedException();
+            _mobUniDbContext.Entry(entity).State = EntityState.Modified;
+            await _mobUniDbContext.SaveChangesAsync();
+            return entity;
         }
     }
 }

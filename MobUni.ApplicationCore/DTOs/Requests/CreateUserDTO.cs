@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class CreateUserDTO
+    public class CreateUserDTO: BaseCreateDTO<string>
     {
         public string PasswordHash { get; set; }
         public string UserName { get; set; }

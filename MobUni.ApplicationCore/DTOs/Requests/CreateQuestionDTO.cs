@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class CreateQuestionDTO
+    public class CreateQuestionDTO: BaseCreateDTO<int>
     {
        // public UserDTO User { get; set; }
        public string UserId { get; set; }

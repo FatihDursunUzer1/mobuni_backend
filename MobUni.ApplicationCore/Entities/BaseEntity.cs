@@ -17,5 +17,11 @@ namespace MobUni.ApplicationCore.Entities
         public  T Id { get; set; }
         public DateTime? CreatedTime { get; set; } = DateTime.Now;
         public DateTime? UpdatedTime { get; set; }=DateTime.Now;
+
+        public void CreateObject()
+        {
+            this.CreatedTime = DateTime.Now;
+            this.UpdatedTime = DateTime.Now;
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class CreateUniversityDTO
+    public class CreateUniversityDTO: BaseCreateDTO<int>
     {
         public string Name { get; set; }
         public string Province { get; set; }

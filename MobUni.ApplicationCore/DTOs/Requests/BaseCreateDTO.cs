@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class CreateDepartmentDTO: BaseCreateDTO<int>
+    public class BaseCreateDTO<TId>
     {
-        public string Name { get; set; }
+        public TId Id { get; set; }
     }
 }

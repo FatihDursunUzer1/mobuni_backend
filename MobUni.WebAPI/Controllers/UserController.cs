@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
+using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Interfaces;
 
 namespace MobUni.WebAPI.Controllers
@@ -17,7 +18,7 @@ namespace MobUni.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody]UserDTO userDTO)
+        public async Task<IActionResult> Add([FromBody]CreateUserDTO userDTO)
         {
             return Ok(await _userService.Add(userDTO));
         }
@@ -31,6 +32,11 @@ namespace MobUni.WebAPI.Controllers
         public IActionResult GetByUserId([FromQuery] string UserId)
         {
             return Ok(_userService.GetById(UserId));
+        }
+        [HttpPut]
+        public async Task< IActionResult> Update([FromBody] CreateUserDTO user)
+        {
+            return Ok(await _userService.Update(user));
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
+using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.ApplicationCore.Services;
 using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
@@ -22,6 +23,8 @@ builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IDepartmentRepository,DepartmentRepository>();
+builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 #region
 var mappingConfig = new MapperConfiguration(mc =>
 {

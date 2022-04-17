@@ -5,7 +5,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 {
 	public interface IUserRepository:IRepository<User>
 	{
-		User GetById(string UserId);
+		User? GetById(string UserId);
 	}
 }
 
