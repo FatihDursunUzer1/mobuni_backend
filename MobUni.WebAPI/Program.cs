@@ -25,6 +25,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IDepartmentRepository,DepartmentRepository>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
+builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 #region
 var mappingConfig = new MapperConfiguration(mc =>
 {

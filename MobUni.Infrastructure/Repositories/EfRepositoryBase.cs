@@ -33,9 +33,9 @@ namespace MobUni.Infrastructure.Repositories
            return await _mobUniDbContext.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetById()
+        public  T GetById(int id)
         {
-            throw new NotImplementedException();
+            return _mobUniDbContext.Set<T>().Find(id);
         }
 
         public async Task<T> Update(T entity)

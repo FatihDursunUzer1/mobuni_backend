@@ -36,6 +36,7 @@ namespace MobUni.Infrastructure.Data.Contexts
             base.OnModelCreating(builder);
 
             builder.Entity<User>().HasOne(u => u.University).WithOne().OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<User>().HasOne(u => u.Department).WithOne().OnDelete(DeleteBehavior.NoAction);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 

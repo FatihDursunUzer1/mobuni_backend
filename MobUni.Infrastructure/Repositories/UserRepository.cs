@@ -14,7 +14,7 @@ namespace MobUni.Infrastructure.Repositories
         }
         public User? GetById(string id)
         {
-            return _mobUniDbContext.Set<User>().Include(u=>u.University).Include(u=>u.Department).FirstOrDefault(u=>u.Id == id);
+            return _mobUniDbContext.Set<User>().FirstOrDefault(u=>u.Id == id);
         }
 
         public User? GetByIdAsNoTracking(string id)

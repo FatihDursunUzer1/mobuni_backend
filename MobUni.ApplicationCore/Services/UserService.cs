@@ -11,17 +11,24 @@ namespace MobUni.ApplicationCore.Services
 	public class UserService:IUserService
 	{
         private readonly IUserRepository _userRepository;
+       // private readonly IUniversityRepository _universityRepository;
+        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUniversityRepository _universityRepository;
         private readonly IMapper _mapper;
-		public UserService(IUserRepository userRepository,IMapper mapper)
+		public UserService(IUserRepository userRepository,IMapper mapper,IDepartmentRepository departmentRepository, IUniversityRepository universityRepository)
 		{
             _userRepository = userRepository;
             _mapper = mapper;
-		}
+            _departmentRepository = departmentRepository;
+            _universityRepository = universityRepository;
+        }
 
         public async Task<UserDTO> Add(CreateUserDTO dto)
         {
             var user = _mapper.Map<CreateUserDTO, User>(dto);
             user.CreateUserTime();
+            user.Department = _departmentRepository.GetById(dto.DepartmentId);
+            user.University = _universityRepository.GetById(dto.UniversityId);
             await _userRepository.Add(user);
             return _mapper.Map<User, UserDTO>(_userRepository.GetById(user.Id));
         }
