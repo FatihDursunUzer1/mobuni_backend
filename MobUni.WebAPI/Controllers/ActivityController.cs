@@ -20,12 +20,7 @@ namespace MobUni.WebAPI.Controllers
         {
             _activtyService = activityService;
         }
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+   
 
         [HttpGet("GetAll")]
         public  IActionResult GetAll()
@@ -33,31 +28,12 @@ namespace MobUni.WebAPI.Controllers
             return Ok( _activtyService.GetAll());
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateActivityDTO activityDTO)
         {
             return Ok(await _activtyService.Add(activityDTO));
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
 
