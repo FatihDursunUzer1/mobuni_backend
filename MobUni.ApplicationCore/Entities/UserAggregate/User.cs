@@ -22,10 +22,11 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         [ForeignKey("UniversityId")]
         public virtual University? University { get;  set; }
        
-        //public int UniversityId { get; set; }
+       // public int UniversityId { get; set; }
         //University DepartmentId foreignKey. DepartmentId is nullable
         [ForeignKey("DepartmentId")]
         public virtual Department? Department { get;  set; }
+       // public int DepartmentId { get; set; }
 
        public void CreateUserTime()
         {

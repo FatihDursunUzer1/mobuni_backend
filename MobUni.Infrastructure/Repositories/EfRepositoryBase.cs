@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.Infrastructure.Data.Contexts;
 
@@ -38,9 +39,10 @@ namespace MobUni.Infrastructure.Repositories
             return _mobUniDbContext.Set<T>().Find(id);
         }
 
-        public async Task<T> Update(T entity)
+        public async Task<T> Update(T entity,int entityId)
         {
-            _mobUniDbContext.Entry(entity).State = EntityState.Modified;
+            T exist = _mobUniDbContext.Set<T>().Find(entityId);
+            _mobUniDbContext.Entry(exist).CurrentValues.SetValues(entity);
             await _mobUniDbContext.SaveChangesAsync();
             return entity;
         }

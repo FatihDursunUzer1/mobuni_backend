@@ -30,7 +30,7 @@ namespace MobUni.ApplicationCore.Services
             user.Department = _departmentRepository.GetById(dto.DepartmentId);
             user.University = _universityRepository.GetById(dto.UniversityId);
             await _userRepository.Add(user);
-            return _mapper.Map<User, UserDTO>(_userRepository.GetById(user.Id));
+            return _mapper.Map<User, UserDTO>(user);
         }
 
         public Task<bool> Delete(UserDTO dto)
@@ -50,6 +50,7 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<UserDTO> Update(UserDTO dto)
         {
+            //University veya Department'ı boş gönderirse değerler boş olur ve bu şekilde updatelenir veya veri tabanından verilen Id'ye göre yerleştirme yapılabilir.
             var dtoUser = _mapper.Map<User>(dto);
             var user = _userRepository.GetByIdAsNoTracking(dto.Id);
             dtoUser.UpdatedTime = DateTime.Now;
