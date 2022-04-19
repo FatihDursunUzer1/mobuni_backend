@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public string? Image { get; set; }=String.Empty;
         //UniversityId foreignKey. UniversityId is nullable because each user not have University
         public virtual University? University { get;  set; }
+       
         public int UniversityId { get; set; }
         //University DepartmentId foreignKey. DepartmentId is nullable
         public virtual Department? Department { get;  set; }

@@ -46,9 +46,9 @@ namespace MobUni.ApplicationCore.Services
             return _mapper.Map<Department,DepartmentDTO>(_departmentRepository.GetById(id));
         }
 
-        public async Task<DepartmentDTO> Update(CreateDepartmentDTO dto)
+        public async Task<DepartmentDTO> Update(DepartmentDTO dto)
         {
-            var department = _mapper.Map<CreateDepartmentDTO, Department>(dto);
+            var department = _mapper.Map<DepartmentDTO, Department>(dto);
             
             return _mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department));
         }

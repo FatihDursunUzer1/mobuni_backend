@@ -22,7 +22,8 @@ namespace MobUni.ApplicationCore.Services
         {
             var user = _mapper.Map<CreateUserDTO, User>(dto);
             user.CreateUserTime();
-            return _mapper.Map<User,UserDTO>(await _userRepository.Add(user));
+            await _userRepository.Add(user);
+            return _mapper.Map<User, UserDTO>(_userRepository.GetById(user.Id));
         }
 
         public Task<bool> Delete(UserDTO dto)
@@ -40,13 +41,15 @@ namespace MobUni.ApplicationCore.Services
             return _mapper.Map<User, UserDTO>( _userRepository.GetById(userId));
         }
 
-        public async Task<UserDTO> Update(CreateUserDTO dto)
+        public async Task<UserDTO> Update(UserDTO dto)
         {
-            var user=_mapper.Map<CreateUserDTO,User>(dto);
-            user.UpdatedTime = DateTime.Now;
-            var databaseUser = _userRepository.GetById(user.Id);
-            user.CreatedTime = databaseUser?.CreatedTime;
-            return _mapper.Map<User,UserDTO>(await _userRepository.Update(user));
+            var dtoUser = _mapper.Map<User>(dto);
+            var user = _userRepository.GetByIdAsNoTracking(dto.Id);
+            dtoUser.UpdatedTime = DateTime.Now;
+            dtoUser.CreatedTime = user?.CreatedTime;
+
+            await _userRepository.UpdateAsync(dtoUser);
+            return _mapper.Map<User, UserDTO>(dtoUser);
         }
 
         UserDTO IService<UserDTO, CreateUserDTO>.GetById(int id)

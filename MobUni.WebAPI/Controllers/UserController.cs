@@ -34,7 +34,7 @@ namespace MobUni.WebAPI.Controllers
             return Ok(_userService.GetById(UserId));
         }
         [HttpPut]
-        public async Task< IActionResult> Update([FromBody] CreateUserDTO user)
+        public async Task< IActionResult> Update([FromBody] UserDTO user)
         {
             return Ok(await _userService.Update(user));
         }

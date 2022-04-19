@@ -27,7 +27,7 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public Task<QuestionDTO> Update(CreateQuestionDTO dto)
+        public Task<QuestionDTO> Update(QuestionDTO dto)
         {
             throw new NotImplementedException();
         }
