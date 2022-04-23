@@ -234,7 +234,7 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
@@ -266,7 +266,7 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("UserType")
                         .HasColumnType("int");
@@ -277,9 +277,15 @@ namespace MobUni.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[DepartmentId] IS NOT NULL");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("UniversityId")
                         .IsUnique()
                         .HasFilter("[UniversityId] IS NOT NULL");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

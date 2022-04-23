@@ -39,7 +39,5 @@ namespace MobUni.Infrastructure.Data.Contexts
             builder.Entity<User>().HasOne(u => u.Department).WithOne().OnDelete(DeleteBehavior.NoAction);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
-
     }
 }

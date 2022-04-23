@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
@@ -17,6 +18,13 @@ namespace MobUni.WebAPI.Controllers
             _userService= userService;
         }
 
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] CreateUserDTO userDTO)
+        {
+            return Ok(await _userService.Register(userDTO));
+        }
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CreateUserDTO userDTO)
         {
@@ -39,6 +47,17 @@ namespace MobUni.WebAPI.Controllers
         {
             return Ok(_userService.GetById(UserId));
         }
+
+        [HttpGet("Me")]
+        public IActionResult GetMyAccount()
+        {
+            var userId = HttpContext.Items["UserId"]?.ToString();
+            if (userId != null)
+                return Ok(_userService.GetById(userId));
+            return Unauthorized();
+        }
+
+     
         [HttpPut]
         public async Task< IActionResult> Update([FromBody] UserDTO user)
         {

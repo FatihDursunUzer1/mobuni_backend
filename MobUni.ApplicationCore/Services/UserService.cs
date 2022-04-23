@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using AutoMapper;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using MobUni.ApplicationCore.Authorization;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.UserAggregate;
@@ -17,12 +18,15 @@ namespace MobUni.ApplicationCore.Services
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IUniversityRepository _universityRepository;
         private readonly IMapper _mapper;
-		public UserService(IUserRepository userRepository,IMapper mapper,IDepartmentRepository departmentRepository, IUniversityRepository universityRepository)
+        private readonly IJwtUtils _jwtUtils;
+		public UserService(IUserRepository userRepository,IMapper mapper,IDepartmentRepository departmentRepository, IUniversityRepository universityRepository,
+            IJwtUtils jwtUtils)
 		{
             _userRepository = userRepository;
             _mapper = mapper;
             _departmentRepository = departmentRepository;
             _universityRepository = universityRepository;
+            _jwtUtils = jwtUtils;
         }
 
         public async Task<UserDTO> Add(CreateUserDTO dto)
@@ -37,15 +41,15 @@ namespace MobUni.ApplicationCore.Services
             await _userRepository.Add(user);
             return _mapper.Map<User, UserDTO>(user);
         }
-        public UserDTO Login(CreateUserDTO userDto)
+        public string Login(CreateUserDTO userDto)
         {
             var databaseUser=_userRepository.GetByUserName(userDto.UserName);
+            if (databaseUser is null)
+                throw new ArgumentNullException();
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
             if (dtoPasswordBool)
-                return _mapper.Map<User, UserDTO>(databaseUser);
-            else
-                ArgumentNullException.ThrowIfNull(databaseUser);
-            return null;
+                return _jwtUtils.GenerateJwtToken(databaseUser);
+            else return null;
         }
 
 
@@ -100,6 +104,12 @@ namespace MobUni.ApplicationCore.Services
         UserDTO IService<UserDTO, CreateUserDTO>.GetById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<string> Register(CreateUserDTO userDto)
+        {
+            var user = await Add(userDto);
+            return _jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO,User>(user));
         }
     }
 }
