@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Security.Cryptography;
 using AutoMapper;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.UserAggregate;
@@ -26,12 +28,26 @@ namespace MobUni.ApplicationCore.Services
         public async Task<UserDTO> Add(CreateUserDTO dto)
         {
             var user = _mapper.Map<CreateUserDTO, User>(dto);
+            var hashFunction=CreatePasswordHash(dto.Password);
+            user.PasswordHash = hashFunction.Item1;
+            user.PasswordSalt = hashFunction.Item2;
             user.CreateUserTime();
             user.Department = _departmentRepository.GetById(dto.DepartmentId);
             user.University = _universityRepository.GetById(dto.UniversityId);
             await _userRepository.Add(user);
             return _mapper.Map<User, UserDTO>(user);
         }
+        public UserDTO Login(CreateUserDTO userDto)
+        {
+            var databaseUser=_userRepository.GetByUserName(userDto.UserName);
+            var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
+            if (dtoPasswordBool)
+                return _mapper.Map<User, UserDTO>(databaseUser);
+            else
+                ArgumentNullException.ThrowIfNull(databaseUser);
+            return null;
+        }
+
 
         public Task<bool> Delete(UserDTO dto)
         {
@@ -58,6 +74,27 @@ namespace MobUni.ApplicationCore.Services
 
             await _userRepository.UpdateAsync(dtoUser);
             return _mapper.Map<User, UserDTO>(dtoUser);
+        }
+
+        private (byte[],byte[]) CreatePasswordHash(string password)
+        {
+            byte[] passwordHash,passwordSalt; 
+            
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+            return (passwordHash, passwordSalt);
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
         }
 
         UserDTO IService<UserDTO, CreateUserDTO>.GetById(int id)

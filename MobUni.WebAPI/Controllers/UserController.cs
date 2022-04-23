@@ -17,6 +17,12 @@ namespace MobUni.WebAPI.Controllers
             _userService= userService;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] CreateUserDTO userDTO)
+        {
+            return Ok(_userService.Login(userDTO));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]CreateUserDTO userDTO)
         {

@@ -22,6 +22,11 @@ namespace MobUni.Infrastructure.Repositories
             return _mobUniDbContext.Set<User>().AsNoTracking().FirstOrDefault(x => x.Id == id);
         }
 
+        public User? GetByUserName(string userName)
+        {
+            return _mobUniDbContext.Set<User>().FirstOrDefault(x=>x.UserName == userName);
+        }
+
         public async Task<User> UpdateAsync(User entity)
         {
            /* _mobUniDbContext.Set<User>().Attach(entity);
