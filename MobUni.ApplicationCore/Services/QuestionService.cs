@@ -2,12 +2,13 @@
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.ApplicationCore.Result.Abstract;
 
 namespace MobUni.ApplicationCore.Services
 {
     public class QuestionService : IQuestionService
     {
-        public Task<QuestionDTO> Add(CreateQuestionDTO dto)
+        public Task<IDataResult<QuestionDTO>> Add(CreateQuestionDTO dto)
         {
             throw new NotImplementedException();
         }
@@ -17,17 +18,17 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<QuestionDTO>> GetAll()
+        public Task<IDataResult<List<QuestionDTO>>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public QuestionDTO GetById(int id)
+        public IDataResult<QuestionDTO> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<QuestionDTO> Update(QuestionDTO dto)
+        public Task<IDataResult<QuestionDTO>> Update(QuestionDTO dto)
         {
             throw new NotImplementedException();
         }

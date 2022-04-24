@@ -1,14 +1,16 @@
 ﻿using System;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
+using MobUni.ApplicationCore.Entities;
+using MobUni.ApplicationCore.Result.Abstract;
 
 namespace MobUni.ApplicationCore.Interfaces
 {
 	public interface IUserService:IService<UserDTO,CreateUserDTO>
 	{
-		UserDTO GetById(string userId);
-		string Login(CreateUserDTO userDto);
-        Task<string> Register(CreateUserDTO userDto);
+		IDataResult<UserDTO> GetById(string userId);
+		Token Login(CreateUserDTO userDto);
+        Task<IDataResult<Token>> Register(CreateUserDTO userDto);
     }
 }
 

@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Security.Cryptography;
 using AutoMapper;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.Authorization;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
+using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.UserAggregate;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
+using MobUni.ApplicationCore.Result.Abstract;
+using MobUni.ApplicationCore.Result.Concrete;
+
 
 namespace MobUni.ApplicationCore.Services
 {
@@ -29,19 +34,36 @@ namespace MobUni.ApplicationCore.Services
             _jwtUtils = jwtUtils;
         }
 
-        public async Task<UserDTO> Add(CreateUserDTO dto)
+        public async Task<IDataResult<UserDTO>> Add(CreateUserDTO dto)
         {
-            var user = _mapper.Map<CreateUserDTO, User>(dto);
-            var hashFunction=CreatePasswordHash(dto.Password);
-            user.PasswordHash = hashFunction.Item1;
-            user.PasswordSalt = hashFunction.Item2;
-            user.CreateUserTime();
-            user.Department = _departmentRepository.GetById(dto.DepartmentId);
-            user.University = _universityRepository.GetById(dto.UniversityId);
-            await _userRepository.Add(user);
-            return _mapper.Map<User, UserDTO>(user);
+
+            try
+            {
+                var user = _mapper.Map<CreateUserDTO, User>(dto);
+                var hashFunction = CreatePasswordHash(dto.Password);
+                user.PasswordHash = hashFunction.Item1;
+                user.PasswordSalt = hashFunction.Item2;
+                user.CreateUserTime();
+                user.Department = _departmentRepository.GetById(dto.DepartmentId);
+                user.University = _universityRepository.GetById(dto.UniversityId);
+                await _userRepository.Add(user);
+                return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(user));
+            }
+            catch (SqlException ex)
+            {
+                var c = ex.Errors;
+                var b = ex.ErrorCode;
+                var a = ex.Number;
+                throw;
+            }
+            catch(DbUpdateException ex)
+            {
+                var a = ex.Data;
+                var b = ex.Source;
+                throw;
+            }
         }
-        public string Login(CreateUserDTO userDto)
+        public Token Login(CreateUserDTO userDto)
         {
             var databaseUser=_userRepository.GetByUserName(userDto.UserName);
             if (databaseUser is null)
@@ -58,17 +80,17 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task< List<UserDTO>> GetAll()
+        public async Task< IDataResult<List<UserDTO>>> GetAll()
         {
-            return _mapper.Map<List<User>,List<UserDTO>>(await _userRepository.GetAll());
+            return new SuccessDataResult<List<UserDTO>>(_mapper.Map<List<User>, List<UserDTO>>(await _userRepository.GetAll()));
         }
 
-        public  UserDTO GetById(string userId)
+        public  IDataResult<UserDTO> GetById(string userId)
         {
-            return _mapper.Map<User, UserDTO>( _userRepository.GetById(userId));
+            return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(_userRepository.GetById(userId)));
         }
 
-        public async Task<UserDTO> Update(UserDTO dto)
+        public async Task<IDataResult<UserDTO>> Update(UserDTO dto)
         {
             //University veya Department'ı boş gönderirse değerler boş olur ve bu şekilde updatelenir veya veri tabanından verilen Id'ye göre yerleştirme yapılabilir.
             var dtoUser = _mapper.Map<User>(dto);
@@ -77,7 +99,7 @@ namespace MobUni.ApplicationCore.Services
             dtoUser.CreatedTime = user?.CreatedTime;
 
             await _userRepository.UpdateAsync(dtoUser);
-            return _mapper.Map<User, UserDTO>(dtoUser);
+            return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(dtoUser));
         }
 
         private (byte[],byte[]) CreatePasswordHash(string password)
@@ -101,15 +123,17 @@ namespace MobUni.ApplicationCore.Services
             }
         }
 
-        UserDTO IService<UserDTO, CreateUserDTO>.GetById(int id)
+        IDataResult<UserDTO> IService<UserDTO, CreateUserDTO>.GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<string> Register(CreateUserDTO userDto)
+        public async Task<IDataResult<Token>> Register(CreateUserDTO userDto)
         {
             var user = await Add(userDto);
-            return _jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO,User>(user));
+            if (user.Data == null)
+                return null;
+            return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
         }
     }
 }

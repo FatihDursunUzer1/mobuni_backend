@@ -10,6 +10,7 @@ using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.ApplicationCore.Services;
 using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
+using MobUni.WebAPI;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -19,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options=>options.Filters.Add<ActionFilterTest>());
 
 //builder.Services.AddDbContext<MobUniDbContext>(options=> options.UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 builder.Services.AddDbContext<MobUniDbContext>();

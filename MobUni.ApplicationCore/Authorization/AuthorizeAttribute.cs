@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
 using MobUni.ApplicationCore.Entities.UserAggregate;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Web.Helpers;
 
 namespace MobUni.ApplicationCore.Authorization
 {
@@ -17,8 +18,10 @@ namespace MobUni.ApplicationCore.Authorization
 
             // authorization
             var user = (User)context.HttpContext.Items["User"];
-           /* if (user == null)
-                context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized }; */
+            /* if (user == null)
+                 context.Result= new UnauthorizedObjectResult(value:"Unauthorized"); */
+
+          // await context.HttpContext.Response.Body.WriteAsync();
 
         }
     }
