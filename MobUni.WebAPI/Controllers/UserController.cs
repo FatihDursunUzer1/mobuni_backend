@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.ApplicationCore.Result.Concrete;
 
 namespace MobUni.WebAPI.Controllers
 {
@@ -22,7 +22,8 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateUserDTO userDTO)
         {
-            return Ok(await _userService.Register(userDTO));
+         return Ok(await _userService.Register(userDTO));
+            
         }
         [AllowAnonymous]
         [HttpPost("login")]
@@ -54,7 +55,7 @@ namespace MobUni.WebAPI.Controllers
             var userId = HttpContext.Items["UserId"]?.ToString();
             if (userId != null)
                 return Ok(_userService.GetById(userId));
-            return Unauthorized();
+            return new UnauthorizedObjectResult(value:"sadasd");
         }
 
      

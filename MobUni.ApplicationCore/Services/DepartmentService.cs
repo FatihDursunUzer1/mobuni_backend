@@ -5,6 +5,8 @@ using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Interfaces.Services;
+using MobUni.ApplicationCore.Result.Abstract;
+using MobUni.ApplicationCore.Result.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +25,11 @@ namespace MobUni.ApplicationCore.Services
             _mapper = mapper;
             _departmentRepository= departmentRepository;
         }
-        public async Task<DepartmentDTO> Add(CreateDepartmentDTO dto)
+        public async Task<IDataResult<DepartmentDTO>> Add(CreateDepartmentDTO dto)
         {
             var department = _mapper.Map<CreateDepartmentDTO, Department>(dto);
             department.CreateObject();
-            return _mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Add(department));
+            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Add(department))); 
 
         }
 
@@ -36,21 +38,21 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<DepartmentDTO>> GetAll()
+        public async Task<IDataResult<List<DepartmentDTO>>> GetAll()
         {
-            return _mapper.Map<List<Department>, List<DepartmentDTO>>(await _departmentRepository.GetAll());
+            return new SuccessDataResult<List<DepartmentDTO>>(_mapper.Map<List<Department>, List<DepartmentDTO>>(await _departmentRepository.GetAll()));
         }
 
-        public DepartmentDTO GetById(int id)
+        public IDataResult<DepartmentDTO> GetById(int id)
         {
-            return _mapper.Map<Department,DepartmentDTO>(_departmentRepository.GetById(id));
+            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(_departmentRepository.GetById(id)));
         }
 
-        public async Task<DepartmentDTO> Update(DepartmentDTO dto)
+        public async Task<IDataResult<DepartmentDTO>> Update(DepartmentDTO dto)
         {
             var department = _mapper.Map<DepartmentDTO, Department>(dto);
-            
-            return _mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department,department.Id));
+
+            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department, department.Id)));
         }
     }
 }
