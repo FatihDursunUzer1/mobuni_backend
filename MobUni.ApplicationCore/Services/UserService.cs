@@ -63,19 +63,19 @@ namespace MobUni.ApplicationCore.Services
                 throw;
             }
         }
-        public Token Login(CreateUserDTO userDto)
+        public IDataResult<Token> Login(CreateUserDTO userDto)
         {
             var databaseUser=_userRepository.GetByUserName(userDto.UserName);
            if(databaseUser is null)
             {
                 databaseUser = _userRepository.GetByEmail(userDto.Email);
                 if (databaseUser is null)
-                    throw new ArgumentNullException();
+                    return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış");
             }
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
             if (dtoPasswordBool)
-                return _jwtUtils.GenerateJwtToken(databaseUser);
-            else return null;
+                return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(databaseUser));
+            else return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış");
         }
 
 
@@ -134,6 +134,8 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<Token>> Register(CreateUserDTO userDto)
         {
+            if (userDto.Password.Length < 6)
+                return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.");
             var user = await Add(userDto);
             if (user.Data == null)
                 return null;

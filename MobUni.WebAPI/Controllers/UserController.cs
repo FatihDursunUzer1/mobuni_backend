@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
+using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Result.Concrete;
 
@@ -29,7 +30,14 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CreateUserDTO userDTO)
         {
-            return Ok(_userService.Login(userDTO));
+            var data=_userService.Login(userDTO);
+            var dataType = data.GetType();
+            if(dataType== typeof(SuccessDataResult<Token>))
+            {
+                return Ok(data);
+            }
+                return StatusCode(400, data);
+            
         }
 
         [HttpPost]
