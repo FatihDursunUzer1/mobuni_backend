@@ -9,7 +9,7 @@ namespace MobUni.ApplicationCore.DTOs.Requests
     public class CreateUserDTO: BaseCreateDTO<string>
     {
         public string Password { get; set; }
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; } = String.Empty;
         public string? Name { get; set; }

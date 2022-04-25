@@ -66,8 +66,12 @@ namespace MobUni.ApplicationCore.Services
         public Token Login(CreateUserDTO userDto)
         {
             var databaseUser=_userRepository.GetByUserName(userDto.UserName);
-            if (databaseUser is null)
-                throw new ArgumentNullException();
+           if(databaseUser is null)
+            {
+                databaseUser = _userRepository.GetByEmail(userDto.Email);
+                if (databaseUser is null)
+                    throw new ArgumentNullException();
+            }
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
             if (dtoPasswordBool)
                 return _jwtUtils.GenerateJwtToken(databaseUser);
