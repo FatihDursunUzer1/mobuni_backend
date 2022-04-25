@@ -1,9 +1,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MobUni.ApplicationCore;
 using MobUni.ApplicationCore.Authorization;
+using MobUni.ApplicationCore.Errors;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Interfaces.Services;
@@ -32,6 +34,15 @@ builder.Services.AddTransient<IDepartmentRepository,DepartmentRepository>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 builder.Services.AddTransient<IJwtUtils, JwtUtils>();
+builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var problems = new CustomBadRequest(context);
+
+        return new UnprocessableEntityObjectResult(problems);
+    };
+});
 
 /*
  * Json Web Token Authentication Scheme
