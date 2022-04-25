@@ -18,8 +18,11 @@ namespace MobUni.ApplicationCore.Authorization
 
             // authorization
             var user = (User)context.HttpContext.Items["User"];
-            /* if (user == null)
-                 context.Result= new UnauthorizedObjectResult(value:"Unauthorized"); */
+            if (user == null)
+            {
+                context.Result = new UnauthorizedObjectResult(value: "Unauthorized");
+                context.HttpContext.Response.WriteAsync("Unauthorized");
+            }
 
           // await context.HttpContext.Response.Body.WriteAsync();
 

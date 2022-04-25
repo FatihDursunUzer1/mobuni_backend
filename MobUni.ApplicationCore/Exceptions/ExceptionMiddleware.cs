@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MobUni.ApplicationCore.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace MobUni.ApplicationCore.Exceptions
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-      
+
         public ExceptionMiddleware(RequestDelegate next)
         {
 
@@ -32,11 +33,7 @@ namespace MobUni.ApplicationCore.Exceptions
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(new ErrorDetails()
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = "Internal Server Error from the custom middleware."
-            }.ToString());
+            await context.Response.WriteAsync(new Error(" Internal Server Error from the custom middleware.").ToString());
         }
     }
 }

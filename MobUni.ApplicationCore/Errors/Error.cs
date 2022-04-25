@@ -5,12 +5,16 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MobUni.ApplicationCore.Exceptions
+namespace MobUni.ApplicationCore.Errors
 {
-    public class ErrorDetails
+    public class Error
     {
-        public int StatusCode { get; set; }
+        public Error(string message)
+        {
+            Message = message;
+        }
         public string Message { get; set; }
+
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);

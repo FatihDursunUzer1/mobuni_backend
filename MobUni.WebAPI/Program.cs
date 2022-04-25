@@ -62,6 +62,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = "mobuni",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MobUniMobilProgramxxxs"))
         };
+        options.Events = new JwtBearerEvents
+        {
+            OnChallenge = context =>
+            {
+                context.Response.OnStarting(async () =>
+                {
+                    //Unauthorized api 
+                    await context.Response.WriteAsync(new Error("Unauthorized").ToString());
+                });
+
+                return Task.CompletedTask;
+            }
+        };
     });
 #region
 var mappingConfig = new MapperConfiguration(mc =>
