@@ -28,7 +28,7 @@ namespace MobUni.WebAPI.Controllers
         }
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] CreateUserDTO userDTO)
+        public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
         {
             var data=_userService.Login(userDTO);
             var dataType = data.GetType();

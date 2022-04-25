@@ -63,7 +63,7 @@ namespace MobUni.ApplicationCore.Services
                 throw;
             }
         }
-        public IDataResult<Token> Login(CreateUserDTO userDto)
+        public IDataResult<Token> Login(LoginUserDTO userDto)
         {
             var databaseUser=_userRepository.GetByUserName(userDto.UserName);
            if(databaseUser is null)
