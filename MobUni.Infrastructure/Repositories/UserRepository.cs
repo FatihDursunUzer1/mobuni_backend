@@ -12,6 +12,12 @@ namespace MobUni.Infrastructure.Repositories
         {
             
         }
+
+        public User? GetByEmail(string? email)
+        {
+            return _mobUniDbContext.Set<User>().FirstOrDefault(u => u.Email == email);
+        }
+
         public User? GetById(string id)
         {
             return _mobUniDbContext.Set<User>().FirstOrDefault(u=>u.Id == id);

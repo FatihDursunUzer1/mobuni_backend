@@ -9,6 +9,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 		Task<User> UpdateAsync(User entity);
 		User? GetByIdAsNoTracking(string id);
 		User? GetByUserName(string userName);
-	}
+        User? GetByEmail(string? email);
+    }
 }
 
