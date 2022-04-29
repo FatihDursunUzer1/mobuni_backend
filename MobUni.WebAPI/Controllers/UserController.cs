@@ -5,12 +5,13 @@ using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Result.Concrete;
+using MobUni.Infrastructure.Controllers;
 
 namespace MobUni.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : MobUniControllerBase
     {
 
         private readonly IUserService _userService;
@@ -23,38 +24,31 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateUserDTO userDTO)
         {
-         return Ok(await _userService.Register(userDTO));
+         return CreateActionResultInstance(await _userService.Register(userDTO));
             
         }
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
         {
-            var data=_userService.Login(userDTO);
-            var dataType = data.GetType();
-            if(dataType== typeof(SuccessDataResult<Token>))
-            {
-                return Ok(data);
-            }
-                return StatusCode(400, data);
-            
+            return CreateActionResultInstance(_userService.Login(userDTO));
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]CreateUserDTO userDTO)
         {
-            return Ok(await _userService.Add(userDTO));
+            return CreateActionResultInstance(await _userService.Add(userDTO));
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _userService.GetAll());
+            return CreateActionResultInstance(await _userService.GetAll());
         }
         [HttpGet("GetByUserId")]
         public IActionResult GetByUserId([FromQuery] string UserId)
         {
-            return Ok(_userService.GetById(UserId));
+            return CreateActionResultInstance(_userService.GetById(UserId));
         }
 
         [HttpGet("Me")]
@@ -62,15 +56,15 @@ namespace MobUni.WebAPI.Controllers
         {
             var userId = HttpContext.Items["UserId"]?.ToString();
             if (userId != null)
-                return Ok(_userService.GetById(userId));
-            return new UnauthorizedObjectResult(value:"sadasd");
+                return CreateActionResultInstance(_userService.GetById(userId));
+            return new UnauthorizedObjectResult(value:"Unauthorized");
         }
 
      
         [HttpPut]
         public async Task< IActionResult> Update([FromBody] UserDTO user)
         {
-            return Ok(await _userService.Update(user));
+            return CreateActionResultInstance(await _userService.Update(user));
         }
     }
 }

@@ -8,13 +8,15 @@ namespace MobUni.ApplicationCore.Result.Concrete
 {
     public class ErrorResult : Result
     {
-        public ErrorResult(string message) : base(message, false)
+        public ErrorResult(string message,int statusCode) : base(message, false,statusCode)
         {
         }
 
-        public ErrorResult():base(false)
+        public ErrorResult():base(false,400)
         {
 
         }
+        public ErrorResult(int statusCode):base(false,statusCode)
+        { }
     }
 }

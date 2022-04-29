@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces.Services;
+using MobUni.Infrastructure.Controllers;
 using MobUni.Infrastructure.Data.Contexts;
 
 namespace MobUni.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentController : ControllerBase
+    public class DepartmentController : MobUniControllerBase
     {
         private readonly IDepartmentService _departmentService;
 
@@ -24,13 +25,13 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateDepartmentDTO department)
         {
-            return Ok(await _departmentService.Add(department));
+            return CreateActionResultInstance(await _departmentService.Add(department));
         }
 
         [HttpGet("ALL")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok( await _departmentService.GetAll());
+            return CreateActionResultInstance(await _departmentService.GetAll());
         }
     }
 }

@@ -11,11 +11,11 @@ namespace MobUni.ApplicationCore.Result.Concrete
     {
         public T Data { get; set; }
 
-        public DataResult(string message, bool success, T data):base(message,success)
+        public DataResult(string message, bool success, T data,int statusCode):base(message,success,statusCode:statusCode)
         {
             Data = data;
         }
-        public DataResult(bool success,T data):base(success)
+        public DataResult(bool success,T data,int statusCode):base(success,statusCode)
         {
             Data=data;
         }
