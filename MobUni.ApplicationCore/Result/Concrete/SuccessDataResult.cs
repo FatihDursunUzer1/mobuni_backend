@@ -8,19 +8,19 @@ namespace MobUni.ApplicationCore.Result.Concrete
 {
     public class SuccessDataResult<T> : DataResult<T>
     {
-        public SuccessDataResult(string message, T data) : base(message, true, data)
+        public SuccessDataResult(string message, T data,int statusCode) : base(message, true, data,statusCode)
         {
 
         }
-        public SuccessDataResult(T data) : base("Success",true, data)
+        public SuccessDataResult(T data) : base("Success",true, data,200)
         {
             
         }
-        public SuccessDataResult(string message) : base(message, true, default)
+        public SuccessDataResult(string message,int statusCode) : base(message, true, default,statusCode)
         {//data degeri vermek istemediğimiz zaman default kullanabiliriz
 
         }
-        public SuccessDataResult() : base(true, default)
+        public SuccessDataResult() : base(true, default,200)
         { }
     }
 }

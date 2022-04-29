@@ -10,5 +10,6 @@ namespace MobUni.ApplicationCore.Result.Abstract
     {
         bool Success { get;  }
         string? Message { get;  }
+        int? StatusCode { get; }
     }
 }

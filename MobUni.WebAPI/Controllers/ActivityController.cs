@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.Infrastructure.Controllers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MobUni.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class ActivityController : Controller
+    [ApiController]
+    public class ActivityController : MobUniControllerBase
     {
         private readonly IActivityService _activtyService;
 
@@ -23,15 +25,15 @@ namespace MobUni.WebAPI.Controllers
    
 
         [HttpGet("GetAll")]
-        public  IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok( _activtyService.GetAll());
+            return CreateActionResultInstance(await _activtyService.GetAll());
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateActivityDTO activityDTO)
         {
-            return Ok(await _activtyService.Add(activityDTO));
+            return CreateActionResultInstance(await _activtyService.Add(activityDTO));
         }
 
     }

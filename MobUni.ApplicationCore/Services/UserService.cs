@@ -70,12 +70,12 @@ namespace MobUni.ApplicationCore.Services
             {
                 databaseUser = _userRepository.GetByEmail(userDto.Email);
                 if (databaseUser is null)
-                    return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış");
+                    return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış",422);
             }
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
             if (dtoPasswordBool)
                 return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(databaseUser));
-            else return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış");
+            else return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış",422);
         }
 
 
@@ -135,7 +135,7 @@ namespace MobUni.ApplicationCore.Services
         public async Task<IDataResult<Token>> Register(CreateUserDTO userDto)
         {
             if (userDto.Password.Length < 6)
-                return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.");
+                return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.",422);
             var user = await Add(userDto);
             if (user.Data == null)
                 return null;

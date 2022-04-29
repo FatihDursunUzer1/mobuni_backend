@@ -12,15 +12,18 @@ namespace MobUni.ApplicationCore.Result.Concrete
     {
         public bool Success { get; }
         public string? Message { get;  }
+        public int? StatusCode { get; }
 
-        public Result(string message,bool success=true)
+        public Result(string message,bool success=true,int statusCode=200)
         {
             Success = success;
             Message = message;
+            StatusCode = statusCode;
         }
-        public Result(bool success)
+        public Result(bool success,int statusCode)
         {
             Success = success;
+            StatusCode = statusCode;
         }
 
     }

@@ -8,11 +8,16 @@ namespace MobUni.ApplicationCore.Result.Concrete
 {
     public class SuccessResult:Result
     {
-        public SuccessResult(string message) : base(message,true)
+        public SuccessResult(string message,int statusCode) : base(message,true,statusCode)
         {
 
         }
-        public SuccessResult() : base(true)
+        public SuccessResult() : base(true,200)
+        {
+
+        }
+
+        public SuccessResult(int statusCode):base(true,statusCode)
         {
 
         }
