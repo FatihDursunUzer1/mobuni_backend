@@ -6,6 +6,8 @@ using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
+using MobUni.ApplicationCore.Result.Abstract;
+using MobUni.ApplicationCore.Result.Concrete;
 
 namespace MobUni.ApplicationCore.Services
 {
@@ -20,10 +22,10 @@ namespace MobUni.ApplicationCore.Services
             _mapper = mapper;
 		}
 
-        public async Task<ActivityDTO> Add(CreateActivityDTO dto)
+        public async Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto)
         {
             var activity = _mapper.Map<CreateActivityDTO, Activity>(dto);
-            return _mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity));
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity)););
         }
 
         public async Task<bool> Delete(ActivityDTO dto)
@@ -32,15 +34,15 @@ namespace MobUni.ApplicationCore.Services
             return await _activityRepository.Delete(activity);
         }
 
-        public async Task<List<ActivityDTO>> GetAll()
+        public async Task<IDataResult<List<ActivityDTO>>> GetAll()
         {
 
             var a =await  _activityRepository.GetAll();
             List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(a);
-            return activities;
+            return new SuccessDataResult<List<ActivityDTO>>(activities);
         }
 
-        public Task<ActivityDTO> Update(ActivityDTO dto)
+        public Task<IDataResult<ActivityDTO>> Update(ActivityDTO dto)
         {
             throw new NotImplementedException();
         }
