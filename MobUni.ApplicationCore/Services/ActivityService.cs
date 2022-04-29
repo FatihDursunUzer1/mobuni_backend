@@ -25,7 +25,7 @@ namespace MobUni.ApplicationCore.Services
         public async Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto)
         {
             var activity = _mapper.Map<CreateActivityDTO, Activity>(dto);
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity)););
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity)));
         }
 
         public async Task<bool> Delete(ActivityDTO dto)
