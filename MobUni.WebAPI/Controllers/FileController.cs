@@ -21,5 +21,12 @@ namespace MobUni.WebAPI.Controllers
         {
             await _storage.UploadFile(file);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetImage([FromQuery]string fileName)
+        {
+            var fileBytes=await _storage.GetFile(fileName);
+            return File(fileBytes, "image/webp");
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace MobUni.Infrastructure.Storage
     public interface IStorage
     {
         public Task UploadFile(IFormFile files);
+        public Task<byte[]> GetFile(string fileName);
     }
 }
