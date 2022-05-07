@@ -43,6 +43,20 @@ namespace MobUni.Infrastructure.Storage
                 throw;
             }
         }
+
+        public async Task<byte[]> GetFile(string fileName)
+        {
+            var blobContainer = _blobServiceClient.GetBlobContainerClient(_configuration["BlobContainerName"]);
+
+            var blobClient = blobContainer.GetBlobClient(fileName);
+            var downloadContent = await blobClient.DownloadAsync();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                await downloadContent.Value.Content.CopyToAsync(ms);
+                return ms.ToArray();
+            }
+        }
+
     }
-      
+
 }
