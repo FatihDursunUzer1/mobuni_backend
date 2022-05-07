@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using AutoMapper;
@@ -134,12 +135,30 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<Token>> Register(CreateUserDTO userDto)
         {
-            if (userDto.Password.Length < 6)
-                return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.",422);
-            var user = await Add(userDto);
-            if (user.Data == null)
-                return null;
-            return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
+
+            try
+            {
+                if (userDto.Password.Length < 6)
+                    return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.", 422);
+                var user = await Add(userDto);
+                if (user.Data == null)
+                    return new ErrorDataResult<Token>(message:"Kullanıcı belirlenemeyen bir nedenden dolayı eklenemedi",statusCode:500);
+                return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
+            }
+            catch(DbUpdateException ex)
+            {
+                var exMessage = ex.InnerException.Message;
+                if(exMessage.Contains("IXU_Users_Email"))
+                    return new ErrorDataResult<Token>(message: "Bu email adresi daha önceden alınmış", statusCode: 422);
+                else if(exMessage.Contains("IXU_Users_UserName"))
+                    return new ErrorDataResult<Token>(message: "Bu kullanıcı adı daha önceden alınmış", statusCode: 422);
+                return new ErrorDataResult<Token>(message: ex.InnerException.Message, statusCode: 500);
+                
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<Token>(message: ex.InnerException.Message, statusCode: 500);
+            }
         }
     }
 }
