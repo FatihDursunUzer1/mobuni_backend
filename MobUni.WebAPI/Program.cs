@@ -1,4 +1,5 @@
 using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.ApplicationCore.Services;
 using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
+using MobUni.Infrastructure.Storage;
 using MobUni.WebAPI;
 using System.Text;
 using System.Text.Json;
@@ -25,6 +27,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options=>options.Filters.Add<ActionFilter>());
 
 //builder.Services.AddDbContext<MobUniDbContext>(options=> options.UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+
+builder.Services.AddSingleton<IStorage, AzureStorage >();
 builder.Services.AddDbContext<MobUniDbContext>();
 builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
@@ -34,6 +38,7 @@ builder.Services.AddTransient<IDepartmentRepository,DepartmentRepository>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
 builder.Services.AddTransient<IJwtUtils, JwtUtils>();
+
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
