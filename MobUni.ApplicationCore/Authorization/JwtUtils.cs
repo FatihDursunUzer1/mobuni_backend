@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.UserAggregate;
 using System;
@@ -19,20 +20,20 @@ namespace MobUni.ApplicationCore.Authorization
     }
     public class JwtUtils:IJwtUtils
     {
-        //private readonly AppSettings _appSettings;
+        private readonly IConfiguration _configuration;
         
-        public JwtUtils()
+        public JwtUtils(IConfiguration configuration)
         {
-
+            _configuration = configuration;
         }
         public Token GenerateJwtToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MobUniMobilProgramxxxs"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretJWTkey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddMonths(3);
             var token = new JwtSecurityToken("mobuni",
              "mobuni",
-              claims: new Claim[] {new Claim("id",user.Id)},
+              claims: new Claim[] {new Claim("id",user.Id),new Claim("role",user.UserType.ToString())},
               expires: expires,
               signingCredentials: credentials);
 
@@ -49,7 +50,7 @@ namespace MobUni.ApplicationCore.Authorization
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("MobUniMobilProgramxxxs");
+            var key = Encoding.ASCII.GetBytes(_configuration["SecretJWTkey"]);
             try
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
