@@ -67,7 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = "mobuni",
             ValidAudience = "mobuni",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MobUniMobilProgramxxxs"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretJWTkey"]))
         };
         options.Events = new JwtBearerEvents
         {
