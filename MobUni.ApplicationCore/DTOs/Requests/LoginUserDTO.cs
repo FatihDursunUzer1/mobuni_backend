@@ -8,7 +8,7 @@ namespace MobUni.ApplicationCore.DTOs.Requests
 {
     public class LoginUserDTO
     {
-        public string EmailOrUserName { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }

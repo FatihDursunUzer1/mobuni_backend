@@ -17,17 +17,17 @@ using MobUni.ApplicationCore.Result.Concrete;
 
 namespace MobUni.ApplicationCore.Services
 {
-	public class UserService:IUserService
-	{
+    public class UserService : IUserService
+    {
         private readonly IUserRepository _userRepository;
-       // private readonly IUniversityRepository _universityRepository;
+        // private readonly IUniversityRepository _universityRepository;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IUniversityRepository _universityRepository;
         private readonly IMapper _mapper;
         private readonly IJwtUtils _jwtUtils;
-		public UserService(IUserRepository userRepository,IMapper mapper,IDepartmentRepository departmentRepository, IUniversityRepository universityRepository,
+        public UserService(IUserRepository userRepository, IMapper mapper, IDepartmentRepository departmentRepository, IUniversityRepository universityRepository,
             IJwtUtils jwtUtils)
-		{
+        {
             _userRepository = userRepository;
             _mapper = mapper;
             _departmentRepository = departmentRepository;
@@ -55,7 +55,7 @@ namespace MobUni.ApplicationCore.Services
                 var a = ex.Number;
                 throw;
             }
-            catch(DbUpdateException ex)
+            catch (DbUpdateException ex)
             {
                 var a = ex.Data;
                 var b = ex.Source;
@@ -64,15 +64,16 @@ namespace MobUni.ApplicationCore.Services
         }
         public IDataResult<Token> Login(LoginUserDTO userDto)
         {
-            var databaseUser=_userRepository.GetByEmailOrUserName(userDto.EmailOrUserName);
-           if(databaseUser is null)
+            var databaseUser = _userRepository.GetByEmailOrUserName(userDto.Email);
+            if (databaseUser is null)
             {
-                return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış",422);
+
+                return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
             }
-            var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
+            var dtoPasswordBool = VerifyPasswordHash(userDto.Password, databaseUser.PasswordHash, databaseUser.PasswordSalt);
             if (dtoPasswordBool)
                 return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(databaseUser));
-            else return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış",422);
+            else return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
         }
 
 
@@ -81,12 +82,12 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task< IDataResult<List<UserDTO>>> GetAll()
+        public async Task<IDataResult<List<UserDTO>>> GetAll()
         {
             return new SuccessDataResult<List<UserDTO>>(_mapper.Map<List<User>, List<UserDTO>>(await _userRepository.GetAll()));
         }
 
-        public  IDataResult<UserDTO> GetById(string userId)
+        public IDataResult<UserDTO> GetById(string userId)
         {
             return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(_userRepository.GetById(userId)));
         }
@@ -103,10 +104,10 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(dtoUser));
         }
 
-        private (byte[],byte[]) CreatePasswordHash(string password)
+        private (byte[], byte[]) CreatePasswordHash(string password)
         {
-            byte[] passwordHash,passwordSalt; 
-            
+            byte[] passwordHash, passwordSalt;
+
             using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
@@ -138,18 +139,18 @@ namespace MobUni.ApplicationCore.Services
                     return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.", 422);
                 var user = await Add(userDto);
                 if (user.Data == null)
-                    return new ErrorDataResult<Token>(message:"Kullanıcı belirlenemeyen bir nedenden dolayı eklenemedi",statusCode:500);
+                    return new ErrorDataResult<Token>(message: "Kullanıcı belirlenemeyen bir nedenden dolayı eklenemedi", statusCode: 500);
                 return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
             }
-            catch(DbUpdateException ex)
+            catch (DbUpdateException ex)
             {
                 var exMessage = ex.InnerException.Message;
-                if(exMessage.Contains("IXU_Users_Email"))
+                if (exMessage.Contains("IXU_Users_Email"))
                     return new ErrorDataResult<Token>(message: "Bu email adresi daha önceden alınmış", statusCode: 422);
-                else if(exMessage.Contains("IXU_Users_UserName"))
+                else if (exMessage.Contains("IXU_Users_UserName"))
                     return new ErrorDataResult<Token>(message: "Bu kullanıcı adı daha önceden alınmış", statusCode: 422);
                 return new ErrorDataResult<Token>(message: ex.InnerException.Message, statusCode: 500);
-                
+
             }
             catch (Exception ex)
             {
