@@ -10,6 +10,8 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 		User? GetByIdAsNoTracking(string id);
 		User? GetByUserName(string userName);
         User? GetByEmail(string? email);
-    }
+		User? GetByEmailOrUserName(string emailOrUserName);
+
+	}
 }
 

@@ -64,12 +64,10 @@ namespace MobUni.ApplicationCore.Services
         }
         public IDataResult<Token> Login(LoginUserDTO userDto)
         {
-            var databaseUser=_userRepository.GetByUserName(userDto.UserName);
+            var databaseUser=_userRepository.GetByEmailOrUserName(userDto.EmailOrUserName);
            if(databaseUser is null)
             {
-                databaseUser = _userRepository.GetByEmail(userDto.Email);
-                if (databaseUser is null)
-                    return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış",422);
+                return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış",422);
             }
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password,databaseUser.PasswordHash,databaseUser.PasswordSalt);
             if (dtoPasswordBool)
