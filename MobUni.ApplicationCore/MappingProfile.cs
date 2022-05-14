@@ -24,6 +24,7 @@ namespace MobUni.ApplicationCore
 			CreateMap<User, CreateUserDTO>()
 				.ForMember(dest => dest.UserType, opt => opt.MapFrom(src => (int)src.UserType)).ReverseMap();
 			CreateMap<User, LoginUserDTO>().ReverseMap();
+			CreateMap<CreateQuestionDTO, Question>().ReverseMap();
 		}
 	}
 }

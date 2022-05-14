@@ -45,8 +45,6 @@ namespace MobUni.ApplicationCore.Services
                 user.PasswordHash = hashFunction.Item1;
                 user.PasswordSalt = hashFunction.Item2;
                 user.CreateUserTime();
-                user.Department = _departmentRepository.GetById(dto.DepartmentId);
-                user.University = _universityRepository.GetById(dto.UniversityId);
                 await _userRepository.Add(user);
                 return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(user));
             }

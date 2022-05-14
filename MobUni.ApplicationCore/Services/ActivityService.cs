@@ -42,9 +42,19 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<List<ActivityDTO>>(activities);
         }
 
-        public Task<IDataResult<ActivityDTO>> Update(ActivityDTO dto)
+        public IDataResult<ActivityDTO> GetById(int id)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(_activityRepository.GetById(id)));
+        }
+
+        public async Task<IDataResult<ActivityDTO>> Update(ActivityDTO dto)
+        {
+            var activity = _mapper.Map<Activity>(dto);
+            var dbActivity=_activityRepository.GetById(activity.Id);
+            activity.CreatedTime = dbActivity.CreatedTime;
+            activity.UpdatedTime = DateTime.Now;
+            await _activityRepository.Update(activity, activity.Id);
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(activity));
         }
     }
 }

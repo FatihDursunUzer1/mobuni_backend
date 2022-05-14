@@ -10,7 +10,6 @@ namespace MobUni.ApplicationCore.Entities
     public class Comment:BaseEntity<int>
     {
         public string UserId { get; set; }
-        public virtual User User { get; set; }
         public int TableId { get; set; }
         public int TableType { get; set; }
         public string Content { get; set; }

@@ -31,6 +31,8 @@ builder.Services.AddControllers(options=>options.Filters.Add<ActionFilter>());
 builder.Services.AddSingleton<IStorage, AzureStorage >();
 builder.Services.AddDbContext<MobUniDbContext>();
 builder.Services.AddTransient<IActivityService, ActivityService>();
+builder.Services.AddTransient<IQuestionService, QuestionService>();
+builder.Services.AddTransient<IQuestionRepository,QuestionRepository>();
 builder.Services.AddTransient<IActivityRepository, ActivityRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();

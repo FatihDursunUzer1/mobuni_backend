@@ -27,8 +27,6 @@ namespace MobUni.Infrastructure.Repositories
             return true;
         }
 
-       
-
         public async Task<List<T>> GetAll()
         {
            return await _mobUniDbContext.Set<T>().ToListAsync();

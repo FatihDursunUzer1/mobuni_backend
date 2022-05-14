@@ -4,12 +4,11 @@ namespace MobUni.ApplicationCore.DTOs
 	public class ActivityDTO
 	{
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public UserDTO User { get; set; }
+        public string UserId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public string? Image { get; set; } = string.Empty;
-        public UniversityDTO University { get; set; }
+        public int UniversityId { get; set; }
         public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
         public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
 

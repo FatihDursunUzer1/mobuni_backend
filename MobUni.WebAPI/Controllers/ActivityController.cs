@@ -35,7 +35,16 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _activtyService.Add(activityDTO));
         }
-
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] ActivityDTO activityDTO)
+        {
+            return CreateActionResultInstance(await _activtyService.Update(activityDTO));
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            return CreateActionResultInstance(_activtyService.GetById(id));
+        }
     }
 }
 
