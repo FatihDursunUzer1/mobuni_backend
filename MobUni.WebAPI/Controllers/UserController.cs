@@ -28,7 +28,7 @@ namespace MobUni.WebAPI.Controllers
             
         }
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
         {
             return CreateActionResultInstance(_userService.Login(userDTO));
@@ -59,7 +59,6 @@ namespace MobUni.WebAPI.Controllers
                 return CreateActionResultInstance(_userService.GetById(userId));
             return new UnauthorizedObjectResult(value:"Unauthorized");
         }
-
      
         [HttpPut]
         public async Task< IActionResult> Update([FromBody] UserDTO user)

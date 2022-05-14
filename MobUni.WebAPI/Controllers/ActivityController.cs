@@ -40,8 +40,8 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _activtyService.Update(activityDTO));
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("GetByActivityId")]
+        public async Task<IActionResult> GetByActivityId([FromQuery] int id)
         {
             return CreateActionResultInstance(_activtyService.GetById(id));
         }

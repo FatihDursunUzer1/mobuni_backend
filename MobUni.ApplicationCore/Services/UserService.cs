@@ -67,7 +67,6 @@ namespace MobUni.ApplicationCore.Services
             var databaseUser = _userRepository.GetByEmailOrUserName(userDto.Email);
             if (databaseUser is null)
             {
-
                 return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
             }
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password, databaseUser.PasswordHash, databaseUser.PasswordSalt);
