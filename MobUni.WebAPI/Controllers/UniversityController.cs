@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
@@ -12,6 +13,7 @@ namespace MobUni.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class UniversityController : MobUniControllerBase
     {
         private readonly IUniversityService _universityService;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
@@ -10,6 +11,7 @@ namespace MobUni.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class DepartmentController : MobUniControllerBase
     {
         private readonly IDepartmentService _departmentService;
