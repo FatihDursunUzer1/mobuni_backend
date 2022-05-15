@@ -15,8 +15,8 @@ namespace MobUni.ApplicationCore.Entities
       [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public  T Id { get; set; }
-        public DateTime? CreatedTime { get; set; } = DateTime.Now;
-        public DateTime? UpdatedTime { get; set; }=DateTime.Now;
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
 
         public void CreateObject()
         {

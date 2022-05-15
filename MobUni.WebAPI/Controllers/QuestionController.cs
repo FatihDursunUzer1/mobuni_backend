@@ -39,5 +39,12 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _questionService.Update(question));
         }
+
+        [HttpPut("LikeQuestion")]
+        public async Task<IActionResult> LikeQuestion(int questionId)
+        {
+            var userId = HttpContext.Items["UserId"]?.ToString();
+           return CreateActionResultInstance(await _questionService.LikeQuestion(questionId, userId));
+        }
     }
 }

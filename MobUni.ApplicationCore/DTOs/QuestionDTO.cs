@@ -10,6 +10,8 @@ namespace MobUni.ApplicationCore.DTOs
         public int UniversityId { get; set; }
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
+        public bool IsLiked { get; set; }
+    
     }
 }
 

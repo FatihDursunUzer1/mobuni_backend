@@ -21,5 +21,6 @@ namespace MobUni.ApplicationCore.DTOs.Requests
 
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
+     
     }
 }
