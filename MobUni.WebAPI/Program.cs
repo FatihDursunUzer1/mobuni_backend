@@ -40,6 +40,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IDepartmentRepository,DepartmentRepository>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 builder.Services.AddTransient<IUniversityRepository, UniversityRepository>();
+builder.Services.AddTransient<IUniversityService,UniversityService>();
 builder.Services.AddTransient<IJwtUtils, JwtUtils>();
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
