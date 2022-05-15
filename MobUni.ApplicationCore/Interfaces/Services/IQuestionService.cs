@@ -8,6 +8,7 @@ namespace MobUni.ApplicationCore.Interfaces
 	public interface IQuestionService:IService<QuestionDTO,CreateQuestionDTO>
 	{
 		public Task<IDataResult<bool>> LikeQuestion(int questionId, string userId);
+		Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId);
 	}
 }
 

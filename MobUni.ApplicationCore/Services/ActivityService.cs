@@ -36,10 +36,15 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<ActivityDTO>>> GetAll()
         {
-
             var a =await  _activityRepository.GetAll();
             List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(a);
             return new SuccessDataResult<List<ActivityDTO>>(activities);
+        }
+        public async Task<IDataResult<List<ActivityDTO>>> GetActivitiesByUniversityId(int universityId)
+        {
+            var activities = await _activityRepository.GetAll(x=>x.UniversityId==universityId);
+            List<ActivityDTO> activityDtos = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
+            return new SuccessDataResult<List<ActivityDTO>>(activityDtos);
         }
 
         public IDataResult<ActivityDTO> GetById(int id)
@@ -56,6 +61,7 @@ namespace MobUni.ApplicationCore.Services
             await _activityRepository.Update(activity, activity.Id);
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(activity));
         }
+
     }
 }
 
