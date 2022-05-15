@@ -14,11 +14,13 @@ namespace MobUni.ApplicationCore.Services
     {
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
+        private readonly ILikeQuestionRepository _likeQuestionRepository;
 
-        public QuestionService(IMapper mapper,IQuestionRepository questionRepository)
+        public QuestionService(IMapper mapper, IQuestionRepository questionRepository, ILikeQuestionRepository likeQuestionRepository)
         {
-           _mapper = mapper;
-           _questionRepository = questionRepository;
+            _mapper = mapper;
+            _questionRepository = questionRepository;
+            _likeQuestionRepository = likeQuestionRepository;
         }
         public async Task<IDataResult<QuestionDTO>> Add(CreateQuestionDTO dto)
         {
@@ -34,12 +36,21 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<QuestionDTO>>> GetAll()
         {
-            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<Question>, List<QuestionDTO>>(await _questionRepository.GetAll()));
+            var questionDtos = _mapper.Map<List<Question>, List<QuestionDTO>>(await _questionRepository.GetAll());
+            CheckLikedQuestions(questionDtos);
+            return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
 
         public IDataResult<QuestionDTO> GetById(int id)
         {
-            return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question,QuestionDTO>(_questionRepository.GetById(id)));
+            var questionDTO = _mapper.Map<Question, QuestionDTO>(_questionRepository.GetById(id));
+            CheckLikedQuestion(questionDTO);
+            return new SuccessDataResult<QuestionDTO>();
+        }
+
+        public async Task<IDataResult<bool>> LikeQuestion(int questionId, string userId)
+        {
+            return new SuccessDataResult<bool>(await _likeQuestionRepository.ChangeStatus(questionId, userId));
         }
 
         public async Task<IDataResult<QuestionDTO>> Update(QuestionDTO dto)
@@ -51,6 +62,17 @@ namespace MobUni.ApplicationCore.Services
 
             await _questionRepository.Update(question, question.Id);
             return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
+        }
+        private void CheckLikedQuestion(QuestionDTO questionDTO)
+        {
+            if(_likeQuestionRepository.GetByQuestionId(questionDTO.Id)!=null)
+                questionDTO.IsLiked=true;
+        }
+        private void CheckLikedQuestions(List<QuestionDTO> questionDTOs)
+        {
+            questionDTOs.ForEach(x => { if (_likeQuestionRepository.GetByQuestionId(x.Id) != null)
+                x.IsLiked = true;
+                });
         }
     }
 }

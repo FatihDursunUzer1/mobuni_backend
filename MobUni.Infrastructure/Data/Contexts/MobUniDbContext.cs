@@ -30,6 +30,7 @@ namespace MobUni.Infrastructure.Data.Contexts
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<University> Universities { get; set; }
+        public DbSet<LikeQuestion> LikeQuestion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

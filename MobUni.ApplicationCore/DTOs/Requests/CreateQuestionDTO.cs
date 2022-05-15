@@ -16,5 +16,6 @@ namespace MobUni.ApplicationCore.DTOs.Requests
        public int UniversityId { get; set; }
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
+      
     }
 }

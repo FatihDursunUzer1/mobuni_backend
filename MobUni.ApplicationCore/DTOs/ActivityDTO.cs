@@ -11,9 +11,9 @@ namespace MobUni.ApplicationCore.DTOs
         public int UniversityId { get; set; }
         public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
         public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
-
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
+
     }
 }
 
