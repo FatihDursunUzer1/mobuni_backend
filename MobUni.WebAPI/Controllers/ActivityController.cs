@@ -43,7 +43,13 @@ namespace MobUni.WebAPI.Controllers
         [HttpGet("GetByActivityId")]
         public async Task<IActionResult> GetByActivityId([FromQuery] int id)
         {
-            return CreateActionResultInstance(_activtyService.GetById(id));
+            return CreateActionResultInstance( _activtyService.GetById(id));
+        }
+
+        [HttpGet("GetActivitiesByUniversityId")]
+        public async Task<IActionResult> GetActivitiesByUniversityId([FromQuery] int id)
+        {
+            return CreateActionResultInstance(await _activtyService.GetActivitiesByUniversityId(id));
         }
     }
 }

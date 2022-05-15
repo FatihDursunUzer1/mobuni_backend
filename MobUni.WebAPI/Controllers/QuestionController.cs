@@ -46,5 +46,10 @@ namespace MobUni.WebAPI.Controllers
             var userId = HttpContext.Items["UserId"]?.ToString();
            return CreateActionResultInstance(await _questionService.LikeQuestion(questionId, userId));
         }
+        [HttpGet("GetByUniversityId")]
+        public async Task<IActionResult> GetQuestionsByUniversityId(int universityId)
+        {
+            return CreateActionResultInstance(await _questionService.GetByUniversityId(universityId));
+        }
     }
 }

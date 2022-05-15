@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces;
@@ -27,8 +28,10 @@ namespace MobUni.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<List<T>> GetAll()
+        public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
         {
+            if(exp!=null)
+                return await _mobUniDbContext.Set<T>().Where(exp).ToListAsync();
            return await _mobUniDbContext.Set<T>().ToListAsync();
         }
 
