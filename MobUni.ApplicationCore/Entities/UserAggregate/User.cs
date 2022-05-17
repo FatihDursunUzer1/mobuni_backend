@@ -20,7 +20,10 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public UserType UserType { get; set; }
         public string? Image { get; set; }=String.Empty;
        public int UniversityId { get; set; }
+        public virtual University University { get; set; }
        public int DepartmentId { get; set; }
+
+        public virtual Department Department { get; set; }
 
        public void CreateUserTime()
         {

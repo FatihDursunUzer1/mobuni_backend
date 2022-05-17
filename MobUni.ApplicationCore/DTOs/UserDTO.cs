@@ -14,8 +14,10 @@ namespace MobUni.ApplicationCore.DTOs
         public string? Image { get; set; } = String.Empty;
         //UniversityId foreignKey. UniversityId is nullable because each user not have University
         public int UniversityId { get; set; }
+        public UniversityDTO University { get; set; }
         //University DepartmentId foreignKey. DepartmentId is nullable
         public int DepartmentId { get; set; }
+        public DepartmentDTO Department { get; set; }
     }
 }
 

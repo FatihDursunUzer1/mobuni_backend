@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MobUni.ApplicationCore.Entities.UserAggregate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace MobUni.ApplicationCore.Entities
 {
     public class LikeQuestion:BaseEntity<int>
     {
+        public virtual User User { get; set; }
         public string UserId { get; set; }
         public int QuestionId { get; set; }
         public bool IsActive { get; set; }

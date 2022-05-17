@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
@@ -30,6 +31,7 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(_questionService.GetById(id));
         }
         [HttpGet("GetAll")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             return CreateActionResultInstance(await _questionService.GetAll());
