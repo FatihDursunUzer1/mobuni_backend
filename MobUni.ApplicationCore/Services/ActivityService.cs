@@ -22,9 +22,11 @@ namespace MobUni.ApplicationCore.Services
             _mapper = mapper;
 		}
 
-        public async Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto)
+        public async Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null)
         {
             var activity = _mapper.Map<CreateActivityDTO, Activity>(dto);
+            if(userId is not null)
+                activity.UserId = userId;
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity)));
         }
 

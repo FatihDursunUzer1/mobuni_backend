@@ -22,7 +22,8 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateQuestionDTO questionDTO)
         {
-            return CreateActionResultInstance(await _questionService.Add(questionDTO));
+            var userId = HttpContext.Items["UserId"]?.ToString();
+            return CreateActionResultInstance(await _questionService.Add(questionDTO,userId));
         }
 
         [HttpGet("GetByQuestionId")]

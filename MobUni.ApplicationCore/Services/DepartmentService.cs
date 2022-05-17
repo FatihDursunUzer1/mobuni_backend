@@ -25,7 +25,7 @@ namespace MobUni.ApplicationCore.Services
             _mapper = mapper;
             _departmentRepository= departmentRepository;
         }
-        public async Task<IDataResult<DepartmentDTO>> Add(CreateDepartmentDTO dto)
+        public async Task<IDataResult<DepartmentDTO>> Add(CreateDepartmentDTO dto, string? userId=null)
         {
             var department = _mapper.Map<CreateDepartmentDTO, Department>(dto);
             department.CreateObject();
