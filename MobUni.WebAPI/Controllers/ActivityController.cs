@@ -33,7 +33,8 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateActivityDTO activityDTO)
         {
-            return CreateActionResultInstance(await _activtyService.Add(activityDTO));
+            var userId = HttpContext.Items["UserId"]?.ToString();
+            return CreateActionResultInstance(await _activtyService.Add(activityDTO,userId));
         }
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] ActivityDTO activityDTO)

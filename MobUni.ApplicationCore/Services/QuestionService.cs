@@ -22,9 +22,11 @@ namespace MobUni.ApplicationCore.Services
             _questionRepository = questionRepository;
             _likeQuestionRepository = likeQuestionRepository;
         }
-        public async Task<IDataResult<QuestionDTO>> Add(CreateQuestionDTO dto)
+        public async Task<IDataResult<QuestionDTO>> Add(CreateQuestionDTO dto,string? userId=null)
         {
             var question= _mapper.Map<Question>(dto);
+            if (userId is not null)
+                question.UserId = userId;
             await _questionRepository.Add(question);
             return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
         }

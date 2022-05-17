@@ -9,7 +9,7 @@ namespace MobUni.ApplicationCore.Interfaces
 	public interface IActivityService
 	{
 		public Task<bool> Delete(ActivityDTO dto);
-		public Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto);
+		public Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null);
 		public Task<IDataResult<ActivityDTO>> Update(ActivityDTO dto);
 		public Task<IDataResult<List<ActivityDTO>>> GetAll();
 		public Task<IDataResult<List<ActivityDTO>>> GetActivitiesByUniversityId(int universityId);

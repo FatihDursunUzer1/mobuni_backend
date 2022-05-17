@@ -35,7 +35,7 @@ namespace MobUni.ApplicationCore.Services
             _jwtUtils = jwtUtils;
         }
 
-        public async Task<IDataResult<UserDTO>> Add(CreateUserDTO dto)
+        public async Task<IDataResult<UserDTO>> Add(CreateUserDTO dto,string? userId=null)
         {
 
             try
