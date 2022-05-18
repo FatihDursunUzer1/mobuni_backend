@@ -30,13 +30,14 @@ namespace MobUni.ApplicationCore.Services
             var activity = _mapper.Map<CreateActivityDTO, Activity>(dto);
             if(userId is not null)
                 activity.UserId = userId;
+            await _activityRepository.Add(activity, activity => activity.University, activity => activity.User);
             if (dto.Image != null)
             {
                 var path = await _storage.UploadActivityImage(dto.Image, activity.Id);
                 activity.Image = path;
                 await _activityRepository.Update(activity);
             }
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity,a=>a.University,a=>a.User)));
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(activity));
         }
 
         public async Task<bool> Delete(ActivityDTO dto)

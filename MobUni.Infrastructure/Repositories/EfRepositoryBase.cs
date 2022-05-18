@@ -48,7 +48,6 @@ namespace MobUni.Infrastructure.Repositories
             }
         }
 
-
         public async Task<bool> Delete(T entity) { _mobUniDbContext.Remove<T>(entity);
             await _mobUniDbContext.SaveChangesAsync();
             return true;
