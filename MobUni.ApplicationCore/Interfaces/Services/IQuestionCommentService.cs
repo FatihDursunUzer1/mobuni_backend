@@ -1,5 +1,6 @@
 ﻿using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
+using MobUni.ApplicationCore.Result.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace MobUni.ApplicationCore.Interfaces.Services
 {
     public interface IQuestionCommentService:IService<QuestionCommentDTO,CreateQuestionCommentDTO>
     {
+        Task<IDataResult<List<QuestionCommentDTO>>> GetByQuestionId(int questionId);
     }
 }

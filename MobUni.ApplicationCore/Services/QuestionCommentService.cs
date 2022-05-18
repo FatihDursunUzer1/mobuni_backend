@@ -27,6 +27,8 @@ namespace MobUni.ApplicationCore.Services
         public async Task<IDataResult<QuestionCommentDTO>> Add(CreateQuestionCommentDTO dto, string? userId = null)
         {
             var questionComment = _mapper.Map<QuestionComment>(dto);
+            if(userId != null)
+                questionComment.UserId = userId;
             await _questionCommentRepository.Add(questionComment,questionComment=>questionComment.Question,questionComment=>questionComment.User);
             return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(questionComment));
         }
@@ -46,6 +48,13 @@ namespace MobUni.ApplicationCore.Services
         public IDataResult<QuestionCommentDTO> GetById(int id)
         {
             return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(_questionCommentRepository.GetById(id)));
+        }
+
+        public async Task<IDataResult<List<QuestionCommentDTO>>> GetByQuestionId(int questionId)
+        {
+            var a = await _questionCommentRepository.GetAll(question=>question.QuestionId==questionId);
+            List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
+            return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
         }
 
         public async Task<IDataResult<QuestionCommentDTO>> Update(QuestionCommentDTO dto)
