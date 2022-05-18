@@ -26,7 +26,7 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost("ActivityImage")]
         public async Task<string> UploadActivityImage([FromForm] IFormFile file)
         {
-            return await _storage.UploadQuestionImage(file);
+            return await _storage.UploadActivityImage(file);
         }
 
         [HttpGet]
