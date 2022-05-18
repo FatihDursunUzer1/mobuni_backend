@@ -15,6 +15,7 @@ namespace MobUni.ApplicationCore.Entities.QuestionAggregate
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public string Text { get; set; }
+        public string? Image { get; set; }
         public int UniversityId { get; set; }
         public virtual University University { get; set; }
         public int CommentCount { get; set; }

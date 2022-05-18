@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
@@ -14,12 +15,14 @@ namespace MobUni.ApplicationCore.Services
 	public class ActivityService:IActivityService
 	{
         private readonly IActivityRepository _activityRepository;
+        private readonly IStorage _storage;
 
         private readonly IMapper _mapper;
-		public ActivityService(IActivityRepository activityRepository,IMapper mapper)
+		public ActivityService(IActivityRepository activityRepository,IMapper mapper,IStorage storage)
 		{
             _activityRepository = activityRepository;
             _mapper = mapper;
+            _storage= storage;
 		}
 
         public async Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null)
@@ -27,6 +30,12 @@ namespace MobUni.ApplicationCore.Services
             var activity = _mapper.Map<CreateActivityDTO, Activity>(dto);
             if(userId is not null)
                 activity.UserId = userId;
+            if (dto.Image != null)
+            {
+                var path = await _storage.UploadActivityImage(dto.Image, activity.Id);
+                activity.Image = path;
+                await _activityRepository.Update(activity);
+            }
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity,a=>a.University,a=>a.User)));
         }
 

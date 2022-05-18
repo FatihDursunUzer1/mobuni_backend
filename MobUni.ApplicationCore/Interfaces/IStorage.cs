@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobUni.Infrastructure.Storage
+namespace MobUni.ApplicationCore
 {
     public interface IStorage
     {
-        public Task<string> UploadQuestionImage(IFormFile files);
-        public Task<string> UploadActivityImage(IFormFile files);
-        public Task<string> UploadProfileImage(IFormFile files);
+        public Task<string> UploadQuestionImage(IFormFile files,int id);
+        public Task<string> UploadActivityImage(IFormFile files,int id);
+        public Task<string> UploadProfileImage(IFormFile files,int id);
         public Task<byte[]> GetFile(string fileName);
     }
 }
