@@ -27,7 +27,7 @@ namespace MobUni.ApplicationCore.Services
             var question= _mapper.Map<Question>(dto);
             if (userId is not null)
                 question.UserId = userId;
-            await _questionRepository.Add(question);
+            await _questionRepository.Add(question,q=>q.User,q=>q.University);
             return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
         }
 
@@ -57,7 +57,7 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
 
-        public async Task<IDataResult<bool>> LikeQuestion(int questionId, string userId)
+        public async Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null)
         {
             return new SuccessDataResult<bool>(await _likeQuestionRepository.ChangeStatus(questionId, userId));
         }
@@ -69,7 +69,7 @@ namespace MobUni.ApplicationCore.Services
             question.UpdatedTime = DateTime.Now;
             question.CreatedTime = dbQuestion.CreatedTime;
 
-            await _questionRepository.Update(question, question.Id);
+            await _questionRepository.Update(question);
             return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
         }
         private void CheckLikedQuestion(QuestionDTO questionDTO)

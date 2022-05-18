@@ -21,7 +21,7 @@ namespace MobUni.Infrastructure.Repositories
             if (questionLike != null)
             {
                 questionLike.IsActive = !questionLike.IsActive;
-                await Update(questionLike, questionLike.Id);
+                await Update(questionLike);
                 return true;
             }
             else

@@ -27,7 +27,7 @@ namespace MobUni.ApplicationCore.Services
             var activity = _mapper.Map<CreateActivityDTO, Activity>(dto);
             if(userId is not null)
                 activity.UserId = userId;
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity)));
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(await _activityRepository.Add(activity,a=>a.University,a=>a.User)));
         }
 
         public async Task<bool> Delete(ActivityDTO dto)
@@ -60,7 +60,7 @@ namespace MobUni.ApplicationCore.Services
             var dbActivity=_activityRepository.GetById(activity.Id);
             activity.CreatedTime = dbActivity.CreatedTime;
             activity.UpdatedTime = DateTime.Now;
-            await _activityRepository.Update(activity, activity.Id);
+            await _activityRepository.Update(activity);
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(activity));
         }
 

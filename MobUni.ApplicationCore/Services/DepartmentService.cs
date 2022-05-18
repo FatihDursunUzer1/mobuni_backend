@@ -32,7 +32,6 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Add(department))); 
 
         }
-
         public Task<bool> Delete(DepartmentDTO dto)
         {
             throw new NotImplementedException();
@@ -52,7 +51,8 @@ namespace MobUni.ApplicationCore.Services
         {
             var department = _mapper.Map<DepartmentDTO, Department>(dto);
 
-            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department, department.Id)));
+            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department)));
         }
+
     }
 }
