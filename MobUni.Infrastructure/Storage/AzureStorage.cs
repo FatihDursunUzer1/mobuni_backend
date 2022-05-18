@@ -28,11 +28,10 @@ namespace MobUni.Infrastructure.Storage
             string connectionString = _configuration["BlobConnectionString"];
             try
             {
-                var blobContainer = _blobServiceClient.GetBlobContainerClient(userId);
+                var blobContainer = _blobServiceClient.GetBlobContainerClient("root");
                 await blobContainer.CreateIfNotExistsAsync();
-                var blobClient = blobContainer.GetBlobClient(pathName+"/"+files.FileName);
+                var blobClient = blobContainer.GetBlobClient(userId+"/"+pathName + "/"+files.FileName);
 
-                // Upload file data
                 await blobClient.UploadAsync(files.OpenReadStream());
 
                 // Verify we uploaded some content
