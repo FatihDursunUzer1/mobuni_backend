@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
@@ -15,21 +16,42 @@ namespace MobUni.ApplicationCore.Services
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
         private readonly ILikeQuestionRepository _likeQuestionRepository;
+        private  readonly IStorage _storage;
 
-        public QuestionService(IMapper mapper, IQuestionRepository questionRepository, ILikeQuestionRepository likeQuestionRepository)
+        public QuestionService(IMapper mapper, IQuestionRepository questionRepository, ILikeQuestionRepository likeQuestionRepository,IStorage storage)
         {
             _mapper = mapper;
             _questionRepository = questionRepository;
             _likeQuestionRepository = likeQuestionRepository;
+            _storage = storage;
         }
-        public async Task<IDataResult<QuestionDTO>> Add(CreateQuestionDTO dto,string? userId=null)
+        public async Task<IDataResult<QuestionDTO>> Add( CreateQuestionDTO dto,string? userId=null)
         {
-            var question= _mapper.Map<Question>(dto);
-            if (userId is not null)
-                question.UserId = userId;
-            await _questionRepository.Add(question,q=>q.User,q=>q.University);
-            return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
+            try
+            {
+                var question = _mapper.Map<Question>(dto);
+                if (userId is not null)
+                    question.UserId = userId;
+                await _questionRepository.Add(question, q => q.User, q => q.University);
+
+                if (dto.Image != null)
+                {
+                    var path = await _storage.UploadQuestionImage(dto.Image, question.Id);
+                    question.Image = path;
+                    await _questionRepository.Update(question);
+
+                }
+                return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+           
+            
         }
+
 
         public Task<bool> Delete(QuestionDTO dto)
         {

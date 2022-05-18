@@ -11,6 +11,7 @@ namespace MobUni.ApplicationCore.DTOs.Requests
        // public UserDTO User { get; set; }
         public string UserId { get; set; }
         public string Content { get; set; }
+
         public int LikeCount { get; set; }
     }
 }

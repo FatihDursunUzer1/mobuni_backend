@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MobUni.ApplicationCore.ModelBinder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +11,27 @@ namespace MobUni.ApplicationCore.DTOs.Requests
 {
     public class CreateActivityDTO: BaseCreateDTO<int>
     {
-       // public UserDTO User { get; set; }
-       public int Id { get; set; }
+        // public UserDTO User { get; set; }
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public string Text { get; set; }
-        public string? Image { get; set; } = string.Empty;
         //public UniversityDTO University { get; set; }
+
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int UniversityId { get; set; }
+
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
+
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
 
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int CommentCount { get; set; }
+
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int LikeCount { get; set; }
+
+        public IFormFile? Image { get; set; }
      
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MobUni.ApplicationCore;
 using MobUni.Infrastructure.Storage;
 
 namespace MobUni.WebAPI.Controllers
@@ -18,14 +19,14 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost("QuestionImage")]
         public async Task<string> UploadQuestionImage([FromForm]IFormFile file)
         {
-            return await _storage.UploadQuestionImage(file);
+            return await _storage.UploadQuestionImage(file,0);
         }
 
 
         [HttpPost("ActivityImage")]
         public async Task<string> UploadActivityImage([FromForm] IFormFile file)
         {
-            return await _storage.UploadActivityImage(file);
+            return await _storage.UploadActivityImage(file,0);
         }
 
         [HttpGet]

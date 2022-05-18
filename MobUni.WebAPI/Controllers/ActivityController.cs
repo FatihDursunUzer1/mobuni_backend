@@ -31,7 +31,7 @@ namespace MobUni.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateActivityDTO activityDTO)
+        public async Task<IActionResult> Post([FromForm]CreateActivityDTO activityDTO)
         {
             var userId = HttpContext.Items["UserId"]?.ToString();
             return CreateActionResultInstance(await _activtyService.Add(activityDTO,userId));

@@ -20,7 +20,7 @@ namespace MobUni.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CreateQuestionDTO questionDTO)
+        public async Task<IActionResult> Add([FromForm] CreateQuestionDTO questionDTO)
         {
             var userId = HttpContext.Items["UserId"]?.ToString();
             return CreateActionResultInstance(await _questionService.Add(questionDTO,userId));
