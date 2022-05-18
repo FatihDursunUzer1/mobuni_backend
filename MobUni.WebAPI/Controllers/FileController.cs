@@ -10,7 +10,6 @@ namespace MobUni.WebAPI.Controllers
     public class FileController : ControllerBase
     {
         private readonly IStorage _storage;
-
         public FileController(IStorage storage)
         {
             _storage = storage;
