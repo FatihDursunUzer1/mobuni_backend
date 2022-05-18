@@ -13,7 +13,10 @@ namespace MobUni.ApplicationCore.DTOs.Requests
     {
         // public UserDTO User { get; set; }
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public string Text { get; set; }
+        public string Title { get; set; }
+
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
+        public string Content { get; set; }
         //public UniversityDTO University { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
