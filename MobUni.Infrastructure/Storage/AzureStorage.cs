@@ -12,43 +12,47 @@ namespace MobUni.Infrastructure.Storage
 {
     public class AzureStorage:IStorage
     {
-
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IConfiguration _configuration;
         private readonly BlobServiceClient _blobServiceClient;
-        public AzureStorage(IConfiguration configuration)
+        public AzureStorage(IConfiguration configuration,IHttpContextAccessor contextAccessor)
         {
             _configuration = configuration;
+            _contextAccessor = contextAccessor;
             _blobServiceClient = new BlobServiceClient(_configuration["BlobConnectionString"]);
         }
 
-        public async Task UploadFile(IFormFile files)
+        private async Task<string> UploadFile(IFormFile files, string pathName)
         {
-            
+           var userId=_contextAccessor.HttpContext.Items["UserId"]?.ToString();
             string connectionString = _configuration["BlobConnectionString"];
             try
             {
-                // Get a reference to a blob
-                var blobContainer = _blobServiceClient.GetBlobContainerClient(_configuration["BlobContainerName"]);
-
-                var blobClient = blobContainer.GetBlobClient(files.FileName);
+                var blobContainer = _blobServiceClient.GetBlobContainerClient(userId);
+                await blobContainer.CreateIfNotExistsAsync();
+                var blobClient = blobContainer.GetBlobClient(pathName+"/"+files.FileName);
 
                 // Upload file data
                 await blobClient.UploadAsync(files.OpenReadStream());
 
                 // Verify we uploaded some content
                 BlobProperties properties = await blobClient.GetPropertiesAsync();
+
+                return blobClient.BlobContainerName + "/"+blobClient.Name;
             }
             catch(Exception ex)
             {
                 throw;
             }
+           
         }
 
-        public async Task<byte[]> GetFile(string fileName)
+        public async Task<byte[]> GetFile(string fullpath)
         {
-            var blobContainer = _blobServiceClient.GetBlobContainerClient(_configuration["BlobContainerName"]);
+            var list = fullpath.Split('/');
+            var blobContainer = _blobServiceClient.GetBlobContainerClient(list[0]);
 
-            var blobClient = blobContainer.GetBlobClient(fileName);
+            var blobClient = blobContainer.GetBlobClient(list[1] + "/" + list[2]);
             var downloadContent = await blobClient.DownloadAsync();
             using (MemoryStream ms = new MemoryStream())
             {
@@ -57,6 +61,20 @@ namespace MobUni.Infrastructure.Storage
             }
         }
 
+        public async Task<string> UploadQuestionImage(IFormFile files)
+        {
+             return await UploadFile(files,"question");
+        }
+
+        public async Task<string> UploadActivityImage(IFormFile files)
+        {
+            return await UploadFile(files, "activity");
+        }
+
+        public async Task<string> UploadProfileImage(IFormFile files)
+        {
+             return await UploadFile(files, "profile");
+        }
     }
 
 }
