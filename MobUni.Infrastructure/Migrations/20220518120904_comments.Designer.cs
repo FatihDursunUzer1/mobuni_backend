@@ -12,8 +12,8 @@ using MobUni.Infrastructure.Data.Contexts;
 namespace MobUni.Infrastructure.Migrations
 {
     [DbContext(typeof(MobUniDbContext))]
-    [Migration("20220514163016_mobuniDefault")]
-    partial class mobuniDefault
+    [Migration("20220518120904_comments")]
+    partial class comments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,10 +41,6 @@ namespace MobUni.Infrastructure.Migrations
                     b.Property<int>("CommentCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -54,7 +50,7 @@ namespace MobUni.Infrastructure.Migrations
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -66,20 +62,31 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UniversityId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("MobUni.ApplicationCore.Entities.Comment", b =>
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.ActivityAggregate.ActivityComment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ActivityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ActivityId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -91,22 +98,20 @@ namespace MobUni.Infrastructure.Migrations
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("TableId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TableType")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments");
+                    b.HasIndex("ActivityId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActivityComments");
                 });
 
             modelBuilder.Entity("MobUni.ApplicationCore.Entities.Department", b =>
@@ -132,6 +137,37 @@ namespace MobUni.Infrastructure.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.LikeQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LikeQuestion");
+                });
+
             modelBuilder.Entity("MobUni.ApplicationCore.Entities.QuestionAggregate.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -143,17 +179,13 @@ namespace MobUni.Infrastructure.Migrations
                     b.Property<int>("CommentCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreatedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -165,11 +197,52 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UniversityId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.QuestionAggregate.QuestionComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuestionComments");
                 });
 
             modelBuilder.Entity("MobUni.ApplicationCore.Entities.University", b =>
@@ -265,7 +338,119 @@ namespace MobUni.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId")
+                        .IsUnique();
+
+                    b.HasIndex("UniversityId")
+                        .IsUnique();
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.ActivityAggregate.Activity", b =>
+                {
+                    b.HasOne("MobUni.ApplicationCore.Entities.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("University");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.ActivityAggregate.ActivityComment", b =>
+                {
+                    b.HasOne("MobUni.ApplicationCore.Entities.ActivityAggregate.Activity", "Activity")
+                        .WithMany()
+                        .HasForeignKey("ActivityId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.LikeQuestion", b =>
+                {
+                    b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.QuestionAggregate.Question", b =>
+                {
+                    b.HasOne("MobUni.ApplicationCore.Entities.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("University");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.QuestionAggregate.QuestionComment", b =>
+                {
+                    b.HasOne("MobUni.ApplicationCore.Entities.QuestionAggregate.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MobUni.ApplicationCore.Entities.UserAggregate.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MobUni.ApplicationCore.Entities.UserAggregate.User", b =>
+                {
+                    b.HasOne("MobUni.ApplicationCore.Entities.Department", "Department")
+                        .WithOne()
+                        .HasForeignKey("MobUni.ApplicationCore.Entities.UserAggregate.User", "DepartmentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("MobUni.ApplicationCore.Entities.University", "University")
+                        .WithOne()
+                        .HasForeignKey("MobUni.ApplicationCore.Entities.UserAggregate.User", "UniversityId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("University");
                 });
 #pragma warning restore 612, 618
         }

@@ -27,10 +27,12 @@ namespace MobUni.Infrastructure.Data.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        //public DbSet<Comment> Comments { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<University> Universities { get; set; }
         public DbSet<LikeQuestion> LikeQuestion { get; set; }
+        public DbSet<ActivityComment> ActivityComments { get; set; }
+        public DbSet<QuestionComment> QuestionComments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

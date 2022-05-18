@@ -49,10 +49,10 @@ namespace MobUni.Infrastructure.Storage
 
         public async Task<byte[]> GetFile(string fullpath)
         {
-            var list = fullpath.Split('/');
-            var blobContainer = _blobServiceClient.GetBlobContainerClient(list[0]);
+            var documentPath = fullpath.Split('/');
+            var blobContainer = _blobServiceClient.GetBlobContainerClient(documentPath[0]);
 
-            var blobClient = blobContainer.GetBlobClient(list[1] + "/" + list[2]);
+            var blobClient = blobContainer.GetBlobClient(documentPath[1] + "/" + documentPath[2]);
             var downloadContent = await blobClient.DownloadAsync();
             using (MemoryStream ms = new MemoryStream())
             {
