@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.UserAggregate;
 using System;
@@ -14,19 +16,21 @@ namespace MobUni.ApplicationCore.Authorization
 {
     public interface IJwtUtils
     {
-        public Token GenerateJwtToken(User user);
+        public TokenDTO GenerateJwtToken(User user);
         public string? ValidateJwtToken(string token);
         //public RefreshToken GenerateRefreshToken(string ipAddress);
     }
     public class JwtUtils:IJwtUtils
     {
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
-        
-        public JwtUtils(IConfiguration configuration)
+
+        public JwtUtils(IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
+            _mapper = mapper;
         }
-        public Token GenerateJwtToken(User user)
+        public TokenDTO GenerateJwtToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretJWTkey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -37,10 +41,11 @@ namespace MobUni.ApplicationCore.Authorization
               expires: expires,
               signingCredentials: credentials);
 
-            return new Token
+            return new TokenDTO
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 ExpiresIn = expires,
+                User=_mapper.Map<UserDTO>(user)
             };
         }
 
