@@ -44,6 +44,8 @@ builder.Services.AddTransient<IUniversityService,UniversityService>();
 builder.Services.AddTransient<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<ILikeQuestionRepository, LikeQuestionRepository>();
 builder.Services.AddTransient<IHttpContextAccessor,HttpContextAccessor>();
+builder.Services.AddTransient<IQuestionCommentRepository, QuestionCommentRepository>();
+builder.Services.AddTransient<IQuestionCommentService,QuestionCommentService>();
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 {
