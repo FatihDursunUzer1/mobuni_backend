@@ -16,10 +16,17 @@ namespace MobUni.WebAPI.Controllers
             _storage = storage;
         }
 
-        [HttpPost]
-        public async Task<string> UploadImage([FromForm]IFormFile file)
+        [HttpPost("QuestionImage")]
+        public async Task<string> UploadQuestionImage([FromForm]IFormFile file)
         {
             return await _storage.UploadQuestionImage(file);
+        }
+
+
+        [HttpPost("ActivityImage")]
+        public async Task<string> UploadActivityImage([FromForm] IFormFile file)
+        {
+            return await _storage.UploadActivityImage(file);
         }
 
         [HttpGet]
