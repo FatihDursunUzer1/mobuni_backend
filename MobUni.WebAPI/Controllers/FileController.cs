@@ -17,15 +17,15 @@ namespace MobUni.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task UploadImage([FromForm]IFormFile file)
+        public async Task<string> UploadImage([FromForm]IFormFile file)
         {
-            await _storage.UploadFile(file);
+            return await _storage.UploadQuestionImage(file);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetImage([FromQuery]string fileName)
+        public async Task<IActionResult> GetImage([FromQuery]string filepath)
         {
-            var fileBytes=await _storage.GetFile(fileName);
+            var fileBytes=await _storage.GetFile(filepath);
             return File(fileBytes, "image/webp");
         }
     }
