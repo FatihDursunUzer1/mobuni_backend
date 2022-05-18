@@ -9,8 +9,8 @@ namespace MobUni.ApplicationCore.Interfaces
 	public interface IUserService:IService<UserDTO,CreateUserDTO>
 	{
 		IDataResult<UserDTO> GetById(string userId);
-		IDataResult<Token> Login(LoginUserDTO userDto);
-        Task<IDataResult<Token>> Register(CreateUserDTO userDto);
+		IDataResult<TokenDTO> Login(LoginUserDTO userDto);
+        Task<IDataResult<TokenDTO>> Register(CreateUserDTO userDto);
     }
 }
 

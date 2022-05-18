@@ -27,7 +27,8 @@ namespace MobUni.ApplicationCore
 			CreateMap<CreateQuestionDTO, Question>().ReverseMap();
 			CreateMap<CreateUniversityDTO, University>().ReverseMap();
 			CreateMap<CreateQuestionCommentDTO, QuestionComment>().ReverseMap();
-			CreateMap<QuestionCommentDTO, QuestionComment>().ReverseMap();	
+			CreateMap<QuestionCommentDTO, QuestionComment>().ReverseMap();
+			CreateMap<TokenDTO, Token>().ReverseMap();
 		}
 	}
 }

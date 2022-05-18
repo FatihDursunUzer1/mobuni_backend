@@ -62,19 +62,18 @@ namespace MobUni.ApplicationCore.Services
                 throw;
             }
         }
-        public IDataResult<Token> Login(LoginUserDTO userDto)
+        public IDataResult<TokenDTO> Login(LoginUserDTO userDto)
         {
             var databaseUser = _userRepository.GetByEmailOrUserName(userDto.Email);
             if (databaseUser is null)
             {
-                return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
+                return new ErrorDataResult<TokenDTO>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
             }
             var dtoPasswordBool = VerifyPasswordHash(userDto.Password, databaseUser.PasswordHash, databaseUser.PasswordSalt);
             if (dtoPasswordBool)
-                return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(databaseUser));
-            else return new ErrorDataResult<Token>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
+                return new SuccessDataResult<TokenDTO>(_jwtUtils.GenerateJwtToken(databaseUser));
+            else return new ErrorDataResult<TokenDTO>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
         }
-
 
         public Task<bool> Delete(UserDTO dto)
         {
@@ -129,31 +128,31 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<Token>> Register(CreateUserDTO userDto)
+        public async Task<IDataResult<TokenDTO>> Register(CreateUserDTO userDto)
         {
 
             try
             {
                 if (userDto.Password.Length < 6)
-                    return new ErrorDataResult<Token>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.", 422);
+                    return new ErrorDataResult<TokenDTO>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.", 422);
                 var user = await Add(userDto);
                 if (user.Data == null)
-                    return new ErrorDataResult<Token>(message: "Kullanıcı belirlenemeyen bir nedenden dolayı eklenemedi", statusCode: 500);
-                return new SuccessDataResult<Token>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
+                    return new ErrorDataResult<TokenDTO>(message: "Kullanıcı belirlenemeyen bir nedenden dolayı eklenemedi", statusCode: 500);
+                return new SuccessDataResult<TokenDTO>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
             }
             catch (DbUpdateException ex)
             {
                 var exMessage = ex.InnerException.Message;
                 if (exMessage.Contains("IXU_Users_Email"))
-                    return new ErrorDataResult<Token>(message: "Bu email adresi daha önceden alınmış", statusCode: 422);
+                    return new ErrorDataResult<TokenDTO>(message: "Bu email adresi daha önceden alınmış", statusCode: 422);
                 else if (exMessage.Contains("IXU_Users_UserName"))
-                    return new ErrorDataResult<Token>(message: "Bu kullanıcı adı daha önceden alınmış", statusCode: 422);
-                return new ErrorDataResult<Token>(message: ex.InnerException.Message, statusCode: 500);
+                    return new ErrorDataResult<TokenDTO>(message: "Bu kullanıcı adı daha önceden alınmış", statusCode: 422);
+                return new ErrorDataResult<TokenDTO>(message: ex.InnerException.Message, statusCode: 500);
 
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<Token>(message: ex.InnerException.Message, statusCode: 500);
+                return new ErrorDataResult<TokenDTO>(message: ex.InnerException.Message, statusCode: 500);
             }
         }
     }
