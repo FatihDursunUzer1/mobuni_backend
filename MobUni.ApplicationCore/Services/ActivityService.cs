@@ -73,6 +73,10 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(activity));
         }
 
+        public async Task<IDataResult<List<ActivityDTO>>> GetMyActivities(string userId)
+        {
+            return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<ActivityDTO>>(await _activityRepository.GetAll(activity=>activity.UserId==userId)));
+        }
     }
 }
 

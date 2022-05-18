@@ -15,6 +15,8 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<IDataResult<List<ActivityDTO>>> GetAll();
 		public Task<IDataResult<List<ActivityDTO>>> GetActivitiesByUniversityId(int universityId);
 		public IDataResult<ActivityDTO> GetById(int id);
+
+		public Task<IDataResult<List<ActivityDTO>>> GetMyActivities(string userId);
 	}
 }
 

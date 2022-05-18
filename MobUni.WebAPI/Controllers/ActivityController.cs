@@ -52,6 +52,13 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _activtyService.GetActivitiesByUniversityId(id));
         }
+
+        [HttpGet("GetMyActivities")]
+        public async Task<IActionResult> GetMyActivities()
+        {
+            var userId = HttpContext.Items["UserId"]?.ToString();
+            return CreateActionResultInstance(await _activtyService.GetMyActivities(userId));
+        }
     }
 }
 
