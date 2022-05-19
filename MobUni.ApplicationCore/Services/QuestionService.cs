@@ -130,11 +130,11 @@ namespace MobUni.ApplicationCore.Services
                 });
         }
 
-        /* public IDataResult<List<LikeQuestionDTO>> GetMyLikedQuestions(string userId)
+         public IDataResult<List<LikeQuestionDTO>> GetMyLikedQuestions(string userId)
         {
             var likeQuestion = _likeQuestionRepository.GetLikedByUserId(userId);
             return new SuccessDataResult<List<LikeQuestionDTO>>(_mapper.Map<List<LikeQuestionDTO>>(likeQuestion));
-        } */
+        } 
     }
 }
 

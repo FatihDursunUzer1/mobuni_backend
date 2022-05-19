@@ -23,7 +23,7 @@ namespace MobUni.Infrastructure.Storage
             _blobServiceClient = new BlobServiceClient(_configuration["BlobConnectionString"]);
         }
 
-        private async Task<string> UploadFile(IFormFile files, string pathName, int id)
+        private async Task<string> UploadFile(IFormFile files, string pathName, int? id=null)
         {
            var userId=_contextAccessor.HttpContext.Items["UserId"]?.ToString();
             string connectionString = _configuration["BlobConnectionString"];
@@ -32,11 +32,21 @@ namespace MobUni.Infrastructure.Storage
                 var blobContainer = _blobServiceClient.GetBlobContainerClient("root");
                 await blobContainer.CreateIfNotExistsAsync();
                 var blobClient = blobContainer.GetBlobClient(userId+"/"+pathName + "/"+id.ToString()+"/"+files.FileName);
+                var blobClientWithOutId= blobContainer.GetBlobClient(userId + "/" + pathName + "/" + files.FileName);
+                if (id != null)
+                {
+                    await blobClient.UploadAsync(files.OpenReadStream());
+                    BlobProperties properties = await blobClient.GetPropertiesAsync();
 
-                await blobClient.UploadAsync(files.OpenReadStream());
-                BlobProperties properties = await blobClient.GetPropertiesAsync();
+                    return blobClient.Uri.AbsoluteUri;
+                }
+                else
+                {
+                    await blobClientWithOutId.UploadAsync(files.OpenReadStream());
+                    BlobProperties properties = await blobClientWithOutId.GetPropertiesAsync();
 
-                return blobClient.Uri.AbsoluteUri;
+                    return blobClientWithOutId.Uri.AbsoluteUri;
+                }
             }
             catch(Exception ex)
             {
@@ -69,10 +79,11 @@ namespace MobUni.Infrastructure.Storage
             return await UploadFile(files, "activity",id);
         }
 
-        public async Task<string> UploadProfileImage(IFormFile files, int id)
+        public async Task<string> UploadProfileImage(IFormFile files)
         {
-             return await UploadFile(files, "profile",id);
+             return await UploadFile(files, "profile");
         }
+
     }
 
 }

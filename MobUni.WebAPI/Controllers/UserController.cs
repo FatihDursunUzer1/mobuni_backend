@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MobUni.ApplicationCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
@@ -13,7 +14,7 @@ namespace MobUni.WebAPI.Controllers
     [ApiController]
     public class UserController : MobUniControllerBase
     {
-
+       
         private readonly IUserService _userService;
         public UserController(IUserService userService)
         {
@@ -64,6 +65,12 @@ namespace MobUni.WebAPI.Controllers
         public async Task< IActionResult> Update([FromBody] UserDTO user)
         {
             return CreateActionResultInstance(await _userService.Update(user));
+        }
+
+        [HttpPost("UploadProfileImage")]
+        public  async Task<IActionResult> UploadProfileImage([FromForm] IFormFile image)
+        {
+            return CreateActionResultInstance(await _userService.UpdateProfileImage(image));
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.Authorization;
 using MobUni.ApplicationCore.DTOs;
@@ -25,14 +26,18 @@ namespace MobUni.ApplicationCore.Services
         private readonly IUniversityRepository _universityRepository;
         private readonly IMapper _mapper;
         private readonly IJwtUtils _jwtUtils;
+        private readonly IStorage _storage;
+        private readonly IHttpContextAccessor _contextAccessor;
         public UserService(IUserRepository userRepository, IMapper mapper, IDepartmentRepository departmentRepository, IUniversityRepository universityRepository,
-            IJwtUtils jwtUtils)
+            IJwtUtils jwtUtils, IHttpContextAccessor contextAccessor,IStorage storage)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _departmentRepository = departmentRepository;
             _universityRepository = universityRepository;
             _jwtUtils = jwtUtils;
+            _storage = storage;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<IDataResult<UserDTO>> Add(CreateUserDTO dto,string? userId=null)
@@ -153,6 +158,24 @@ namespace MobUni.ApplicationCore.Services
             catch (Exception ex)
             {
                 return new ErrorDataResult<TokenDTO>(message: ex.InnerException.Message, statusCode: 500);
+            }
+        }
+
+        public async Task<IDataResult<bool>> UpdateProfileImage(IFormFile image)
+        {
+            try
+            {
+                
+                var path = await _storage.UploadProfileImage(image);
+                var user = _userRepository.GetById(_contextAccessor.HttpContext.Items["UserId"].ToString());
+                user.Image = path;
+                await _userRepository.Update(user);
+                return new SuccessDataResult<bool>(true);
+
+            }
+            catch(Exception ex)
+            {
+                throw;
             }
         }
     }
