@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
+using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
@@ -128,6 +129,12 @@ namespace MobUni.ApplicationCore.Services
                 else x.IsLiked = false;
                 });
         }
+
+        /* public IDataResult<List<LikeQuestionDTO>> GetMyLikedQuestions(string userId)
+        {
+            var likeQuestion = _likeQuestionRepository.GetLikedByUserId(userId);
+            return new SuccessDataResult<List<LikeQuestionDTO>>(_mapper.Map<List<LikeQuestionDTO>>(likeQuestion));
+        } */
     }
 }
 
