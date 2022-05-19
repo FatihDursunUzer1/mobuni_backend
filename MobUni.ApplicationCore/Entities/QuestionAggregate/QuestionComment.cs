@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MobUni.ApplicationCore.Entities.ActivityAggregate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,11 @@ namespace MobUni.ApplicationCore.Entities.QuestionAggregate
 {
     public class QuestionComment:Comment
     {
-        public int QuestionId { get; set; }
-        public virtual Question Question { get; set; }
+        public int? QuestionId { get; set; }
+        public virtual Question? Question { get; set; }
+
+        public int? ActivityId { get; set; }
+
+        public virtual Activity? Activity { get; set; }
     }
 }

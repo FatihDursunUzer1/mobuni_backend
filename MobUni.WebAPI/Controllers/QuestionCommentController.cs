@@ -21,7 +21,7 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> Add([FromBody] CreateQuestionCommentDTO createQuestionCommentDTO)
         {
             var userId = HttpContext.Items["UserId"].ToString();
-            return CreateActionResultInstance(await _questionCommentService.Add(createQuestionCommentDTO,userId));
+            return CreateActionResultInstance(await _questionCommentService.AddComment(createQuestionCommentDTO,userId));
         }
 
         [HttpGet("{id}")]
@@ -34,6 +34,12 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> GetByQuestionId(int questionId)
         {
             return CreateActionResultInstance(await _questionCommentService.GetByQuestionId(questionId));
+        }
+
+        [HttpGet("GetByActivityId/{activityId}")]
+        public async Task<IActionResult> GetByActivityId(int activityId)
+        {
+            return CreateActionResultInstance(await _questionCommentService.GetByActivityId(activityId));
         }
     }
 }

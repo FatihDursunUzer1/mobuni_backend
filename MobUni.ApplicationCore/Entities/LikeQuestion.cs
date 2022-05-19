@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.Entities
 {
-    public class LikeQuestion:BaseEntity<int>
+    public class LikeQuestion : BaseEntity<int>
     {
         public virtual User User { get; set; }
         public string UserId { get; set; }
-        public int QuestionId { get; set; }
-        public virtual Question Question { get; set; }
+        public int? QuestionId { get; set; }
+        public virtual Question? Question { get; set; }
+        public int? QuestionCommentId { get; set; }
+        public virtual QuestionComment? QuestionComment {get;set;} 
         public bool IsActive { get; set; }
     }
 }

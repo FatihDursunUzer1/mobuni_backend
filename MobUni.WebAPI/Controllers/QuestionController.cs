@@ -36,6 +36,7 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(_questionService.GetById(id));
         }
+
         [HttpGet("GetAll")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()
