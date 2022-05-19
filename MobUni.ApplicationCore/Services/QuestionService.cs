@@ -91,7 +91,16 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null)
         {
-            return new SuccessDataResult<bool>(await _likeQuestionRepository.ChangeStatus(questionId, userId));
+            try
+            {
+                await _likeQuestionRepository.LikeQuestion(questionId, userId);
+                await _questionRepository.LikeCount(questionId);
+                return new SuccessDataResult<bool>(true);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<IDataResult<QuestionDTO>> Update(QuestionDTO dto)

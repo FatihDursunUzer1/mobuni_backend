@@ -8,6 +8,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 		int GetQuestionCountByUniversityId(int universityId);
 		IQueryable<Question> GetAllQuestions();
 		IQueryable<Question> GetAllQuestionsByUniversityId(int universityId);
+		Task<bool> LikeCount(int questionId);
 	}
 }
 

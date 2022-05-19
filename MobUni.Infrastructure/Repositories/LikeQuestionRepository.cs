@@ -33,6 +33,14 @@ namespace MobUni.Infrastructure.Repositories
             }
         }
 
+        public async Task<bool> LikeQuestion(int questionId,string userId)
+        {
+            var question = new LikeQuestion { QuestionId = questionId, UserId = userId, IsActive = true };
+            question.CreateObject();
+            await Add(question);
+            return true;
+        }
+
         public LikeQuestion? GetByQuestionId(int questionId)
         {
             return _mobUniDbContext.LikeQuestion.Where(question=>question.QuestionId == questionId && question.IsActive).FirstOrDefault();

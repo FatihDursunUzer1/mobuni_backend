@@ -27,6 +27,14 @@ namespace MobUni.Infrastructure.Repositories
         {
             return GetAllQuestions().Where(question => question.UniversityId == universityId);
         }
+
+        public async Task<bool> LikeCount(int questionId)
+        {
+            var question=GetById(questionId);
+            question.LikeCount++;
+            await Update(question);
+            return true;
+        }
     }
 }
 
