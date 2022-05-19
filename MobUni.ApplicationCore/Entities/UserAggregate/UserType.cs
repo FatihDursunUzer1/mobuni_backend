@@ -8,8 +8,8 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
 {
     public enum UserType
     {
-        ADMIN=1,
-        UNIVERSİTY=2,
-        HIGHSCHOOL=3
+        ADMIN,
+        UNIVERSİTY,
+        HIGHSCHOOL
     }
 }
