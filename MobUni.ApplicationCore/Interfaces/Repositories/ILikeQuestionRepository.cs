@@ -13,5 +13,6 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
         LikeQuestion? GetByQuestionId(int questionId);
         List<LikeQuestion> GetLiked();
         List<LikeQuestion> GetLikedByUserId(string userId);
+       Task<bool> LikeQuestion(int questionId, string userId);
     }
 }

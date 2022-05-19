@@ -13,17 +13,22 @@ namespace MobUni.WebAPI.Controllers
     public class QuestionController : MobUniControllerBase
     {
         private readonly IQuestionService _questionService;
+        private  readonly string? _userId;
+        private IHttpContextAccessor _contextAccessor;
 
-        public QuestionController(IQuestionService questionService)
+        public QuestionController(IQuestionService questionService, IHttpContextAccessor contextAccessor = null)
         {
             _questionService = questionService;
+            
+            _contextAccessor = contextAccessor;
+            _userId = _contextAccessor.HttpContext.Items["UserId"].ToString();
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] CreateQuestionDTO questionDTO)
         {
-            var userId = HttpContext.Items["UserId"]?.ToString();
-            return CreateActionResultInstance(await _questionService.Add(questionDTO,userId));
+            
+            return CreateActionResultInstance(await _questionService.Add(questionDTO,_userId));
         }
 
         [HttpGet("GetByQuestionId")]
@@ -41,8 +46,8 @@ namespace MobUni.WebAPI.Controllers
         [HttpGet("GetMyQuestions")]
         public async Task<IActionResult> GetMyQuestions()
         {
-            var userId = HttpContext.Items["UserId"].ToString();
-            return CreateActionResultInstance(await _questionService.GetMyQuestions(userId));
+            
+            return CreateActionResultInstance(await _questionService.GetMyQuestions(_userId));
         }
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] QuestionDTO question)
@@ -53,8 +58,7 @@ namespace MobUni.WebAPI.Controllers
         [HttpPut("LikeQuestion")]
         public async Task<IActionResult> LikeQuestion(int questionId)
         {
-            var userId = HttpContext.Items["UserId"]?.ToString();
-           return CreateActionResultInstance(await _questionService.LikeQuestion(questionId, userId));
+           return CreateActionResultInstance(await _questionService.LikeQuestion(questionId, _userId));
         }
         [HttpGet("GetByUniversityId")]
         public async Task<IActionResult> GetQuestionsByUniversityId(int universityId)
