@@ -46,6 +46,12 @@ namespace MobUni.Infrastructure.Repositories
             return _mobUniDbContext.LikeQuestion.Where(question=>question.QuestionId == questionId && question.IsActive).FirstOrDefault();
         }
 
+        public LikeQuestion? GetUserLikedQuestion(int questionId, string userId)
+        {
+            var a=_mobUniDbContext.LikeQuestion.Where(question => question.QuestionId == questionId && question.IsActive && question.UserId==userId).FirstOrDefault();
+            return a;
+        }
+
         public List<LikeQuestion> GetLiked()
         {
             return _mobUniDbContext.LikeQuestion.Where(question => question.IsActive).ToList();

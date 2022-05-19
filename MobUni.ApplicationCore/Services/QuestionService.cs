@@ -18,13 +18,16 @@ namespace MobUni.ApplicationCore.Services
         private readonly IQuestionRepository _questionRepository;
         private readonly ILikeQuestionRepository _likeQuestionRepository;
         private  readonly IStorage _storage;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public QuestionService(IMapper mapper, IQuestionRepository questionRepository, ILikeQuestionRepository likeQuestionRepository,IStorage storage)
+        public QuestionService(IMapper mapper, IQuestionRepository questionRepository, ILikeQuestionRepository likeQuestionRepository,
+            IStorage storage,IHttpContextAccessor contextAccessor)
         {
             _mapper = mapper;
             _questionRepository = questionRepository;
             _likeQuestionRepository = likeQuestionRepository;
             _storage = storage;
+            _contextAccessor = contextAccessor;
         }
         public async Task<IDataResult<QuestionDTO>> Add( CreateQuestionDTO dto,string? userId=null)
         {
@@ -93,8 +96,8 @@ namespace MobUni.ApplicationCore.Services
         {
             try
             {
-                await _likeQuestionRepository.LikeQuestion(questionId, userId);
-                await _questionRepository.LikeCount(questionId);
+                // await _likeQuestionRepository.LikeQuestion(questionId, userId);
+               await _questionRepository.LikeOrDislikeQuestion(questionId, userId);
                 return new SuccessDataResult<bool>(true);
             }
             catch (Exception ex)
@@ -115,13 +118,14 @@ namespace MobUni.ApplicationCore.Services
         }
         private void CheckLikedQuestion(QuestionDTO questionDTO)
         {
-            if(_likeQuestionRepository.GetByQuestionId(questionDTO.Id)!=null)
+            if(_likeQuestionRepository.GetUserLikedQuestion(questionDTO.Id,_contextAccessor.HttpContext.Items["UserId"]?.ToString()) != null)
                 questionDTO.IsLiked=true;
         }
         private void CheckLikedQuestions(List<QuestionDTO> questionDTOs)
         {
-            questionDTOs.ForEach(x => { if (_likeQuestionRepository.GetByQuestionId(x.Id) != null)
-                x.IsLiked = true;
+            questionDTOs.ForEach(x => { if (_likeQuestionRepository.GetUserLikedQuestion(x.Id, _contextAccessor.HttpContext.Items["UserId"]?.ToString()) != null)
+                    x.IsLiked = true;
+                else x.IsLiked = false;
                 });
         }
     }
