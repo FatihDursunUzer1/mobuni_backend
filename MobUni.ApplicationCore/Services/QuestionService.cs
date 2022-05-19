@@ -134,7 +134,13 @@ namespace MobUni.ApplicationCore.Services
         {
             var likeQuestion = _likeQuestionRepository.GetLikedByUserId(userId);
             return new SuccessDataResult<List<LikeQuestionDTO>>(_mapper.Map<List<LikeQuestionDTO>>(likeQuestion));
-        } 
+        }
+
+        public async Task<IDataResult<List<QuestionDTO>>> GetQuestionsByUserId(string userId)
+        {
+            var questions = await _questionRepository.GetByUserId(userId);
+            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(questions));
+        }
     }
 }
 

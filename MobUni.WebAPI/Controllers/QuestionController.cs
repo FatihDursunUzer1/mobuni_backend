@@ -42,13 +42,6 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _questionService.GetAll());
         }
-
-        [HttpGet("GetMyQuestions")]
-        public async Task<IActionResult> GetMyQuestions()
-        {
-            
-            return CreateActionResultInstance(await _questionService.GetMyQuestions(_userId));
-        }
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] QuestionDTO question)
         {
@@ -76,6 +69,12 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> GetQuestionCountByUniversityId(int universityId)
         {
             return CreateActionResultInstance(_questionService.GetQuestionCountByUniversityId(universityId));
+        }
+
+        [HttpGet("GetQuestionsByUserId/{userId}")]
+        public async Task<IActionResult> GetQuestionsByUserId(string userId)
+        {
+            return CreateActionResultInstance(await _questionService.GetQuestionsByUserId(userId));
         }
     }
 }

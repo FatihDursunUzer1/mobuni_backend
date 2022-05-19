@@ -12,7 +12,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null);
 		Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId);
 		Task<IDataResult<List<QuestionDTO>>> GetMyQuestions(string userId);
-
+		Task<IDataResult<List<QuestionDTO>>> GetQuestionsByUserId(string userId);
 		IDataResult<List<LikeQuestionDTO>> GetMyLikedQuestions(string userId);
 
 		IDataResult<int> GetQuestionCountByUniversityId(int universityId);

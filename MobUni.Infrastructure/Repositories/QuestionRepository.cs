@@ -57,6 +57,11 @@ namespace MobUni.Infrastructure.Repositories
                 return await LikeCount(questionId,true);
             }
         }
+
+        public async Task<List<Question>> GetByUserId(string userId)
+        {
+            return await _mobUniDbContext.Questions.Where(question=>question.UserId==userId).Include(question => question.User).ToListAsync();
+        }
     }
 }
 
