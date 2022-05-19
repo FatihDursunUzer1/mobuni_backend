@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
@@ -11,6 +12,9 @@ namespace MobUni.ApplicationCore.Interfaces
 		IDataResult<UserDTO> GetById(string userId);
 		IDataResult<TokenDTO> Login(LoginUserDTO userDto);
         Task<IDataResult<TokenDTO>> Register(CreateUserDTO userDto);
+		Task<IDataResult<bool>> UpdateProfileImage(IFormFile image);
+
+
     }
 }
 

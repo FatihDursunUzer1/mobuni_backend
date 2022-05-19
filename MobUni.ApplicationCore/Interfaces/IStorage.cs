@@ -11,7 +11,7 @@ namespace MobUni.ApplicationCore
     {
         public Task<string> UploadQuestionImage(IFormFile files,int id);
         public Task<string> UploadActivityImage(IFormFile files,int id);
-        public Task<string> UploadProfileImage(IFormFile files,int id);
+        public Task<string> UploadProfileImage(IFormFile files);
         public Task<byte[]> GetFile(string fileName);
     }
 }
