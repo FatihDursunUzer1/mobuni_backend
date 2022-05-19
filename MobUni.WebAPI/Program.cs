@@ -46,6 +46,8 @@ builder.Services.AddTransient<ILikeQuestionRepository, LikeQuestionRepository>()
 builder.Services.AddTransient<IHttpContextAccessor,HttpContextAccessor>();
 builder.Services.AddTransient<IQuestionCommentRepository, QuestionCommentRepository>();
 builder.Services.AddTransient<IQuestionCommentService,QuestionCommentService>();
+builder.Services.AddTransient<ILikeQuestionRepository,LikeQuestionRepository>();
+builder.Services.AddTransient<ILikeService,LikeService>();
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 {

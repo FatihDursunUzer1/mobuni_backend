@@ -25,7 +25,6 @@ namespace MobUni.ApplicationCore.Authorization
             {
                 // attach user to context on successful jwt validation
                 context.Items["UserId"] = userId;
-
             }
 
             await _next(context);

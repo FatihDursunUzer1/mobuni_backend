@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.DTOs.Requests
 {
-    public class CreateQuestionCommentDTO:CreateCommentDTO
+    public class CreateLikeDTO
     {
-        public int? QuestionId { get; set; }
-        public int? ActivityId { get; set; }
+        public int TableType { get; set; }
+
+        public int Id { get; set; }
     }
 }
