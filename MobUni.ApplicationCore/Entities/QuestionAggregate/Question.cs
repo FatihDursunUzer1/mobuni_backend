@@ -12,7 +12,6 @@ namespace MobUni.ApplicationCore.Entities.QuestionAggregate
     public class Question:BaseEntity<int>,IAggregateRoot
     {
         public string UserId { get; set; }
-        [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public string Text { get; set; }
         public string? Image { get; set; }

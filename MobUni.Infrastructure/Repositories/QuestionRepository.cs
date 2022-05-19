@@ -11,6 +11,11 @@ namespace MobUni.Infrastructure.Repositories
         {
 
         }
-	}
+
+        public int GetQuestionCountByUniversityId(int universityId)
+        {
+            return _mobUniDbContext.Questions.Where(question=>question.University.Id== universityId).Count();
+        }
+    }
 }
 

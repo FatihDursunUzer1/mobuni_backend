@@ -61,5 +61,11 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _questionService.GetByUniversityId(universityId));
         }
+
+         [HttpGet("GetQuestionCountsByUniversityId")]
+        public async Task<IActionResult> GetQuestionCountByUniversityId(int universityId)
+        {
+            return CreateActionResultInstance(_questionService.GetQuestionCountByUniversityId(universityId));
+        }
     }
 }

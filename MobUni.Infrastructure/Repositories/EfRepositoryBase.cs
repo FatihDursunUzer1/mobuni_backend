@@ -57,7 +57,8 @@ namespace MobUni.Infrastructure.Repositories
         {
             if(exp!=null)
                 return await _mobUniDbContext.Set<T>().Where(exp).ToListAsync();
-           return await _mobUniDbContext.Set<T>().ToListAsync();
+           var a= await _mobUniDbContext.Set<T>().ToListAsync();
+            return a;
         }
 
         public  T GetById(int id)

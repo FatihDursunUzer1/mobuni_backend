@@ -48,10 +48,7 @@ namespace MobUni.ApplicationCore.Services
             {
                 throw;
             }
-           
-            
         }
-
 
         public Task<bool> Delete(QuestionDTO dto)
         {
@@ -60,7 +57,7 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<QuestionDTO>>> GetAll()
         {
-            var questionDtos = _mapper.Map<List<Question>, List<QuestionDTO>>(await _questionRepository.GetAll());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
@@ -69,14 +66,20 @@ namespace MobUni.ApplicationCore.Services
         {
             var questionDTO = _mapper.Map<Question, QuestionDTO>(_questionRepository.GetById(id));
             CheckLikedQuestion(questionDTO);
-            return new SuccessDataResult<QuestionDTO>();
+            return new SuccessDataResult<QuestionDTO>(questionDTO);
         }
 
         public async Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId)
         {
-            var questionDtos = _mapper.Map<List<Question>, List<QuestionDTO>>(await _questionRepository.GetAll(x=>x.UniversityId==universityId));
+            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll(x=>x.UniversityId==universityId));
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
+        }
+
+        public IDataResult<int> GetQuestionCountByUniversityId(int universityId)
+        {
+            var questionCount = _questionRepository.GetQuestionCountByUniversityId(universityId);
+            return new SuccessDataResult<int>(questionCount);
         }
 
         public async Task<IDataResult<List<QuestionDTO>>> GetMyQuestions(string userId)
