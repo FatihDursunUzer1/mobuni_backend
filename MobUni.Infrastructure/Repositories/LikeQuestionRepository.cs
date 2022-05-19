@@ -1,4 +1,5 @@
-﻿using MobUni.ApplicationCore.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.Infrastructure.Data.Contexts;
 using System;
@@ -59,7 +60,7 @@ namespace MobUni.Infrastructure.Repositories
 
         public List<LikeQuestion> GetLikedByUserId(string userId)
         {
-            return _mobUniDbContext.LikeQuestion.Where(question => question.UserId == userId && question.IsActive).ToList();
+            return _mobUniDbContext.LikeQuestion.Where(question => question.UserId == userId && question.IsActive).Include(likeQuestion=>likeQuestion.User).ToList();
         }
     }
 }

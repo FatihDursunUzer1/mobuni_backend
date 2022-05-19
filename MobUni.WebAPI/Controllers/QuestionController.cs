@@ -60,6 +60,12 @@ namespace MobUni.WebAPI.Controllers
         {
            return CreateActionResultInstance(await _questionService.LikeQuestion(questionId, _userId));
         }
+
+        [HttpGet("GetMyLikedQuestion")]
+        public IActionResult GetMyLikesQuestion()
+        {
+            return CreateActionResultInstance(_questionService.GetMyLikedQuestions(_userId));
+        }
         [HttpGet("GetByUniversityId")]
         public async Task<IActionResult> GetQuestionsByUniversityId(int universityId)
         {

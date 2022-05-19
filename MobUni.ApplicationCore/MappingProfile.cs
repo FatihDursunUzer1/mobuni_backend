@@ -29,6 +29,7 @@ namespace MobUni.ApplicationCore
 			CreateMap<CreateQuestionCommentDTO, QuestionComment>().ReverseMap();
 			CreateMap<QuestionCommentDTO, QuestionComment>().ReverseMap();
 			CreateMap<TokenDTO, Token>().ReverseMap();
+			CreateMap<LikeQuestionDTO, LikeQuestion>().ReverseMap();
 		}
 	}
 }
