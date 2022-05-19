@@ -6,6 +6,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 	public interface IQuestionRepository:IRepository<Question>
 	{
 		int GetQuestionCountByUniversityId(int universityId);
+		IQueryable<Question> GetAllQuestions();
 	}
 }
 

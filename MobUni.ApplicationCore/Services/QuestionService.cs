@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
@@ -57,7 +58,8 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<QuestionDTO>>> GetAll()
         {
-            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll());
+            // var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>( await _questionRepository.GetAllQuestions().ToListAsync());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }

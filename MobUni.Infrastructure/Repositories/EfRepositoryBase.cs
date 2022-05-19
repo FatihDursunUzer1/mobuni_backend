@@ -55,10 +55,11 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
         {
-            if(exp!=null)
-                return await _mobUniDbContext.Set<T>().Where(exp).ToListAsync();
-           var a= await _mobUniDbContext.Set<T>().ToListAsync();
-            return a;
+            /*if (exp != null)
+                return _mobUniDbContext.Set<T>().Where(exp); */
+            var a =  _mobUniDbContext.Set<T>();
+            var b=a.ToList();
+            return b;
         }
 
         public  T GetById(int id)

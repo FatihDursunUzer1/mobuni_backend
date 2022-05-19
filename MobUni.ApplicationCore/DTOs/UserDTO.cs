@@ -8,6 +8,8 @@ namespace MobUni.ApplicationCore.DTOs
         public string Email { get; set; }
         public string? PhoneNumber { get; set; } = String.Empty;
         public string Name { get; set; }
+
+        //public List<QuestionDTO> Questions { get; set; }
         public string Surname { get; set; }
         // at mappingprofile to UserType
         public int UserType { get; set; }

@@ -15,7 +15,7 @@ namespace MobUni.ApplicationCore.Entities.ActivityAggregate
         public virtual User User { get; set; }
         public string Content { get; set; }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public string? Image { get; set; } = string.Empty;
         public int UniversityId { get; set; }
         public virtual University University { get; set; }

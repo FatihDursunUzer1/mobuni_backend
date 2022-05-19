@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MobUni.ApplicationCore.Entities.QuestionAggregate;
 using MobUni.ApplicationCore.Interfaces;
 
 namespace MobUni.ApplicationCore.Entities.UserAggregate
@@ -23,6 +24,7 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public virtual University University { get; set; }
        public int DepartmentId { get; set; }
 
+        public virtual ICollection<Question> Questions { get; set; }
         public virtual Department Department { get; set; }
 
        public void CreateUserTime()
