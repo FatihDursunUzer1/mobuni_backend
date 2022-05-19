@@ -22,6 +22,11 @@ namespace MobUni.Infrastructure.Repositories
         {
             return _mobUniDbContext.Questions.Include(question => question.User).AsQueryable();
         }
+
+        public IQueryable<Question> GetAllQuestionsByUniversityId(int universityId)
+        {
+            return GetAllQuestions().Where(question => question.UniversityId == universityId);
+        }
     }
 }
 

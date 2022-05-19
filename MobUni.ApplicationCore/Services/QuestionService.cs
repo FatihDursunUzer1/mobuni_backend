@@ -73,7 +73,7 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId)
         {
-            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll(x=>x.UniversityId==universityId));
+            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAllQuestionsByUniversityId(universityId).ToListAsync());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
