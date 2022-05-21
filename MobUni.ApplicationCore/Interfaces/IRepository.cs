@@ -12,7 +12,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<T> Add(T entity);
 
 		public Task<bool> Delete(T entity);
-		public Task<T> Update(T entity);
+		public Task<T> Update(T entity, int entityId);
 		//public Task<T> AddOrUpdateAsync(T entity);
 	}
 }

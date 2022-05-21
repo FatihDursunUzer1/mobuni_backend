@@ -112,7 +112,7 @@ namespace MobUni.ApplicationCore.Services
         {
             var questionComment= _mapper.Map<QuestionComment>(dto);
             questionComment.UpdatedTime = DateTime.Now;
-            await _questionCommentRepository.Update(questionComment);
+            await _questionCommentRepository.Update(questionComment, questionComment.Id);
             return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(questionComment));
         }
     }

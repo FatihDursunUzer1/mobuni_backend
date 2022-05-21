@@ -35,7 +35,7 @@ namespace MobUni.ApplicationCore.Services
             {
                 var path = await _storage.UploadActivityImage(dto.Image, activity.Id);
                 activity.Image = path;
-                await _activityRepository.Update(activity);
+                await _activityRepository.Update(activity, activity.Id);
             }
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(activity));
         }
@@ -70,7 +70,7 @@ namespace MobUni.ApplicationCore.Services
             var dbActivity=_activityRepository.GetById(activity.Id);
             activity.CreatedTime = dbActivity.CreatedTime;
             activity.UpdatedTime = DateTime.Now;
-            await _activityRepository.Update(activity);
+            await _activityRepository.Update(activity, activity.Id);
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(activity));
         }
 

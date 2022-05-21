@@ -43,7 +43,7 @@ namespace MobUni.ApplicationCore.Services
                 {
                     var path = await _storage.UploadQuestionImage(dto.Image, question.Id);
                     question.Image = path;
-                    await _questionRepository.Update(question);
+                    await _questionRepository.Update(question, question.Id);
 
                 }
                 return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
@@ -114,7 +114,7 @@ namespace MobUni.ApplicationCore.Services
             question.UpdatedTime = DateTime.Now;
             question.CreatedTime = dbQuestion.CreatedTime;
 
-            await _questionRepository.Update(question);
+            await _questionRepository.Update(question, question.Id);
             return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
         }
         private void CheckLikedQuestion(QuestionDTO questionDTO)

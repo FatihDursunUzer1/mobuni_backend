@@ -36,7 +36,7 @@ namespace MobUni.Infrastructure.Repositories
                 question.LikeCount++;
             else
                 question.LikeCount--;
-            await Update(question);
+            await Update(question,question.Id);
             return true;
         }
 

@@ -51,7 +51,7 @@ namespace MobUni.ApplicationCore.Services
         {
             var department = _mapper.Map<DepartmentDTO, Department>(dto);
 
-            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department)));
+            return new SuccessDataResult<DepartmentDTO>(_mapper.Map<Department, DepartmentDTO>(await _departmentRepository.Update(department, department.Id)));
         }
 
     }

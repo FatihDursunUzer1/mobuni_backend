@@ -67,11 +67,10 @@ namespace MobUni.Infrastructure.Repositories
             return _mobUniDbContext.Set<T>().Find(id);
         }
 
-        public async Task<T> Update(T entity)
+        public async Task<T> Update(T entity,int entityId)
         {
-           /* T exist = _mobUniDbContext.Set<T>().Find(entityId);
-            _mobUniDbContext.Entry(exist).CurrentValues.SetValues(entity); */
-            _mobUniDbContext.Set<T>().Attach(entity);
+            T exist = _mobUniDbContext.Set<T>().Find();
+            _mobUniDbContext.Entry(exist).CurrentValues.SetValues(entity);
             _mobUniDbContext.Entry(entity).State = EntityState.Modified;
             await _mobUniDbContext.SaveChangesAsync();
             return entity;

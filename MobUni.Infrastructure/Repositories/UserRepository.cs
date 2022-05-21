@@ -41,11 +41,22 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<User> UpdateAsync(User entity)
         {
-           /* _mobUniDbContext.Set<User>().Attach(entity);
-            _mobUniDbContext.Entry(await _mobUniDbContext.Set<User>().FirstOrDefaultAsync(x => x.Id == entity.Id)).CurrentValues.SetValues(entity); */
-          var c= _mobUniDbContext.Update<User>(entity);
+            //_mobUniDbContext.Set<User>().Attach(entity);
+            var user = GetById(entity.Id);
+            if(entity.Email != null)
+                user.Email = entity.Email;
+            if(entity.UserName != null)
+                user.UserName = entity.UserName;
+            if(entity.Name!=null)
+                user.Name=entity.Name;
+            if(entity.PhoneNumber!=null)
+                user.PhoneNumber= entity.PhoneNumber;
+            if(entity.Surname!=null)
+                user.Surname=entity.Surname;
+
+            _mobUniDbContext.Users.Update(user);
             await _mobUniDbContext.SaveChangesAsync();
-            return entity;
+            return user;
         }
     }
 }

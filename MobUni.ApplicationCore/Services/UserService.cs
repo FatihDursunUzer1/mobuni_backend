@@ -50,7 +50,7 @@ namespace MobUni.ApplicationCore.Services
                 user.PasswordHash = hashFunction.Item1;
                 user.PasswordSalt = hashFunction.Item2;
                 user.CreateUserTime();
-                await _userRepository.Add(user);
+                await _userRepository.Add(user,user=>user.University,user=>user.Department);
                 return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(user));
             }
             catch (SqlException ex)
@@ -169,7 +169,7 @@ namespace MobUni.ApplicationCore.Services
                 var path = await _storage.UploadProfileImage(image);
                 var user = _userRepository.GetById(_contextAccessor.HttpContext.Items["UserId"].ToString());
                 user.Image = path;
-                await _userRepository.Update(user);
+                await _userRepository.UpdateAsync(user);
                 return new SuccessDataResult<string>(path);
 
             }

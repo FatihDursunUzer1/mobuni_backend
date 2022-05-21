@@ -28,7 +28,7 @@ namespace MobUni.Infrastructure.Repositories
             if (questionLike != null)
             {
                 questionLike.IsActive = !questionLike.IsActive;
-                await Update(questionLike);
+                await Update(questionLike,questionLike.Id);
                 return true;
             }
             else
@@ -84,7 +84,7 @@ namespace MobUni.Infrastructure.Repositories
                 question.LikeCount++;
             else
                 question.LikeCount--;
-            await _questionRepository.Update(question);
+            await _questionRepository.Update(question, question.Id);
             return true;
         }
 
@@ -95,7 +95,7 @@ namespace MobUni.Infrastructure.Repositories
                 comment.LikeCount++;
             else
                 comment.LikeCount--;
-            await _questionCommentRepository.Update(comment);
+            await _questionCommentRepository.Update(comment, comment.Id);
             return true;
         }
 

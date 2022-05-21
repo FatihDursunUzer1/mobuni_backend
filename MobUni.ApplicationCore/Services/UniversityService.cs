@@ -53,7 +53,7 @@ namespace MobUni.ApplicationCore.Services
             var dbUniversity = _universityRepository.GetById(dto.Id);
             university.CreatedTime=dbUniversity.CreatedTime;
             university.UpdatedTime = DateTime.Now;
-            await _universityRepository.Update(university);
+            await _universityRepository.Update(university, university.Id);
             return new SuccessDataResult<UniversityDTO>(_mapper.Map<UniversityDTO>(university));
         }
     }
