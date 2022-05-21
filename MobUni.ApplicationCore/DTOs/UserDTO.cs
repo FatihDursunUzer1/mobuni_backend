@@ -9,6 +9,8 @@ namespace MobUni.ApplicationCore.DTOs
         public string? PhoneNumber { get; set; } = String.Empty;
         public string Name { get; set; }
 
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
         //public List<QuestionDTO> Questions { get; set; }
         public string Surname { get; set; }
         // at mappingprofile to UserType

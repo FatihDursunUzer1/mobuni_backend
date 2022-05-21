@@ -8,6 +8,8 @@ namespace MobUni.ApplicationCore.DTOs
         public UserDTO User { get; set; }
         public string Content { get; set; }
         public int LikeCount { get; set; }
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
     }
 }
 

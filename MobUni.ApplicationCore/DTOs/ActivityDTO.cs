@@ -11,7 +11,9 @@ namespace MobUni.ApplicationCore.DTOs
         public string? Image { get; set; } = string.Empty;
         public int UniversityId { get; set; }
         public UniversityDTO University { get; set; }
-        
+
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
         public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
         public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
         public int CommentCount { get; set; }
