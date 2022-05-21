@@ -37,8 +37,8 @@ namespace MobUni.Infrastructure.Data.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<User>().HasOne(u => u.University).WithOne().OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<User>().HasOne(u => u.Department).WithOne().OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<User>().HasOne(u => u.University).WithOne().OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<User>().HasOne(u => u.Department).WithOne().OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Question>().HasOne(u => u.User).WithMany(u => u.Questions).HasForeignKey(q => q.UserId);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
