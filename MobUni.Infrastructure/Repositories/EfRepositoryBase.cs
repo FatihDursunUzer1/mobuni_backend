@@ -56,9 +56,9 @@ namespace MobUni.Infrastructure.Repositories
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
         {
             if (exp != null)
-                return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.UpdatedTime).ToList();
+                return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).ToList();
             var a =  _mobUniDbContext.Set<T>();
-            var b=a.OrderByDescending(t => t.UpdatedTime).ToList();
+            var b=a.OrderByDescending(t => t.CreatedTime).ToList();
             return b;
         }
 
