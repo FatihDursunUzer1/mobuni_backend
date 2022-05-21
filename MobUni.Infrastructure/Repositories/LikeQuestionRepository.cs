@@ -125,12 +125,12 @@ namespace MobUni.Infrastructure.Repositories
 
         public List<LikeQuestion> GetLiked()
         {
-            return _mobUniDbContext.LikeQuestion.Where(question => question.IsActive).OrderBy(t => t.UpdatedTime).ToList();
+            return _mobUniDbContext.LikeQuestion.Where(question => question.IsActive).OrderByDescending(t => t.UpdatedTime).ToList();
         }
 
         public List<LikeQuestion> GetLikedByUserId(string userId)
         {
-            return _mobUniDbContext.LikeQuestion.Where(question => question.UserId == userId && question.IsActive).Include(likeQuestion=>likeQuestion.User).OrderBy(t => t.UpdatedTime).ToList();
+            return _mobUniDbContext.LikeQuestion.Where(question => question.UserId == userId && question.IsActive).Include(likeQuestion=>likeQuestion.User).OrderByDescending(t => t.UpdatedTime).ToList();
         }
 
         public List<int?> GetUserLikedComments(string userId, int id, bool isQuestionComment) // isQuestionComment= false search for ActivityComments

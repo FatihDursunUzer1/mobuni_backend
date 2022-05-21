@@ -21,12 +21,12 @@ namespace MobUni.Infrastructure.Repositories
 
         public IQueryable<Question> GetAllQuestions()
         {
-            return _mobUniDbContext.Questions.Include(question => question.User).OrderBy(t => t.UpdatedTime).AsQueryable();
+            return _mobUniDbContext.Questions.Include(question => question.User).OrderByDescending(t => t.UpdatedTime).AsQueryable();
         }
 
         public IQueryable<Question> GetAllQuestionsByUniversityId(int universityId)
         {
-            return GetAllQuestions().Where(question => question.UniversityId == universityId).OrderBy(t => t.UpdatedTime);
+            return GetAllQuestions().Where(question => question.UniversityId == universityId).OrderByDescending(t => t.UpdatedTime);
         }
 
         public async Task<bool> LikeCount(int questionId,bool isActive)
@@ -60,7 +60,7 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<List<Question>> GetByUserId(string userId)
         {
-            return await _mobUniDbContext.Questions.Where(question=>question.UserId==userId).Include(question => question.User).OrderBy(t => t.UpdatedTime).ToListAsync();
+            return await _mobUniDbContext.Questions.Where(question=>question.UserId==userId).Include(question => question.User).OrderByDescending(t => t.UpdatedTime).ToListAsync();
         }
     }
 }
