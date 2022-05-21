@@ -24,11 +24,11 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(await _questionCommentService.AddComment(createQuestionCommentDTO,userId));
         }
 
-        [HttpGet("{id}")]
+        /*[HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             return CreateActionResultInstance(_questionCommentService.GetById(id));
-        }
+        } */
 
         [HttpGet("GetByQuestionId/{questionId}")]
         public async Task<IActionResult> GetByQuestionId(int questionId)
