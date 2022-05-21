@@ -62,6 +62,16 @@ namespace MobUni.Infrastructure.Repositories
         {
             return await _mobUniDbContext.Questions.Where(question=>question.UserId==userId).Include(question => question.User).OrderByDescending(t => t.CreatedTime).ToListAsync();
         }
+
+        public void CountComment(int questionId)
+        {
+           var question= GetById(questionId);
+            if (question != null)
+                question.CommentCount++;
+            _mobUniDbContext.Questions.Update(question);
+            _mobUniDbContext.SaveChangesAsync();
+
+        }
     }
 }
 

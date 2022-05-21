@@ -22,15 +22,19 @@ namespace MobUni.ApplicationCore.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private string _userId;
+        private readonly IQuestionRepository _questionRepository;
+        private readonly IActivityRepository _activityRepository;
 
         public QuestionCommentService(IQuestionCommentRepository questionCommentRepository, IMapper mapper,
-            ILikeQuestionRepository likeRepository, IHttpContextAccessor httpContextAccessor)
+            ILikeQuestionRepository likeRepository, IHttpContextAccessor httpContextAccessor,IActivityRepository activityRepository, IQuestionRepository questionRepository)
         {
             _questionCommentRepository = questionCommentRepository;
             _mapper = mapper;
             _likeRepository = likeRepository;
             _httpContextAccessor = httpContextAccessor;
             _userId = _httpContextAccessor.HttpContext.Items["UserId"].ToString();
+            _activityRepository = activityRepository;
+            _questionRepository = questionRepository;
         }
         public async Task<IDataResult<QuestionCommentDTO>> Add(CreateQuestionCommentDTO dto, string? userId = null)
         {
@@ -48,7 +52,11 @@ namespace MobUni.ApplicationCore.Services
                 var questionComment = _mapper.Map<QuestionComment>(dto);
                 if (userId != null)
                     questionComment.UserId = userId;
-                await _questionCommentRepository.Add(questionComment, questionComment => questionComment.Question, questionComment => questionComment.User);
+                await _questionCommentRepository.Add(questionComment, questionComment => questionComment.Question, questionComment => questionComment.User,questionComment=>questionComment.Activity);
+                if (questionComment.Question != null)
+                    _questionRepository.CountComment((int)questionComment.QuestionId);
+                else if (questionComment.Activity != null)
+                    _activityRepository.CountComment((int)questionComment.ActivityId);
                 return new SuccessDataResult<bool>(true);
             }
             catch (Exception ex)

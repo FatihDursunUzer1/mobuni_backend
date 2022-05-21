@@ -9,8 +9,18 @@ namespace MobUni.Infrastructure.Repositories
 	{
         public ActivityRepository(MobUniDbContext mobUniDbContext):base(mobUniDbContext)
         {
+           
+        }
+        public void CountComment(int activityId)
+        {
+            var activity = GetById(activityId);
+            if (activity != null)
+                activity.CommentCount++;
+            _mobUniDbContext.Activities.Update(activity);
+
+             _mobUniDbContext.SaveChangesAsync();
 
         }
-	}
+    }
 }
 
