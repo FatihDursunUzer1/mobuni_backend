@@ -69,8 +69,9 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<T> Update(T entity,int entityId)
         {
-            T exist = _mobUniDbContext.Set<T>().Find();
-            _mobUniDbContext.Entry(exist).CurrentValues.SetValues(entity);
+            /* T exist = _mobUniDbContext.Set<T>().Find();
+            _mobUniDbContext.Entry(exist).CurrentValues.SetValues(entity);*/
+            _mobUniDbContext.Attach(entity);
             _mobUniDbContext.Entry(entity).State = EntityState.Modified;
             await _mobUniDbContext.SaveChangesAsync();
             return entity;
