@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,11 @@ using MobUni.ApplicationCore.Interfaces;
 
 namespace MobUni.ApplicationCore.Entities.UserAggregate
 {
-   public class User:BaseEntity<string>,IAggregateRoot
+   public class User:BaseEntity,IAggregateRoot
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string UserName { get; set; }

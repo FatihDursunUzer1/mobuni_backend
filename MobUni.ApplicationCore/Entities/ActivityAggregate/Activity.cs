@@ -2,6 +2,7 @@
 using MobUni.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,11 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.Entities.ActivityAggregate
 {
-    public class Activity:BaseEntity<int>,IAggregateRoot
+    public class Activity:BaseEntity,IAggregateRoot
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string UserId { get; set; }
         public virtual User User { get; set; }
         public string Content { get; set; }

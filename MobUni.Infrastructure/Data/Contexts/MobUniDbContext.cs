@@ -42,5 +42,42 @@ namespace MobUni.Infrastructure.Data.Contexts
             builder.Entity<Question>().HasOne(u => u.User).WithMany(u => u.Questions).HasForeignKey(q => q.UserId);
             //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            OnBeforeSave();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void OnBeforeSave()
+        {
+            var addedEntities = ChangeTracker.Entries().Where(i => i.State == EntityState.Added).Select(i => (BaseEntity)i.Entity);
+            PrepareAddeddEntities(addedEntities);
+
+            var modifiedEntities= ChangeTracker.Entries().Where(i => i.State == EntityState.Modified).Select(i => (BaseEntity)i.Entity);
+            PrepareModifiedEntities(modifiedEntities);
+        }
+
+        private void PrepareAddeddEntities(IEnumerable<BaseEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.CreatedTime = DateTime.Now;
+                entity.UpdatedTime = DateTime.Now;
+            }
+        }
+
+        private void PrepareModifiedEntities(IEnumerable<BaseEntity> entities)
+        {
+            foreach(var entity in entities)
+            {
+                entity.UpdatedTime = DateTime.Now;
+            }
+        }
     }
 }

@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace MobUni.ApplicationCore.Entities
 {
-    public abstract class BaseEntity<T>
+    public abstract class BaseEntity
     {
       //  [DatabaseGenerated(DatabaseGeneratedOption.Identity)] olusturulması diger ogelere baglı olanlarda kullanılabilir.
       //Ornegin lokasyon,adres, metadata, vb
-      [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public  T Id { get; set; }
+     
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
 

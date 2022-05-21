@@ -8,7 +8,7 @@ using MobUni.Infrastructure.Data.Contexts;
 
 namespace MobUni.Infrastructure.Repositories
 {
-	public class EfRepositoryBase<T>:IRepository<T> where T :class
+	public class EfRepositoryBase<T>:IRepository<T> where T :BaseEntity
 	{
 		protected readonly MobUniDbContext _mobUniDbContext;
 
@@ -56,9 +56,9 @@ namespace MobUni.Infrastructure.Repositories
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
         {
             if (exp != null)
-                return _mobUniDbContext.Set<T>().Where(exp).ToList();
+                return _mobUniDbContext.Set<T>().Where(exp).OrderBy(t => t.UpdatedTime).ToList();
             var a =  _mobUniDbContext.Set<T>();
-            var b=a.ToList();
+            var b=a.OrderBy(t => t.UpdatedTime).ToList();
             return b;
         }
 
