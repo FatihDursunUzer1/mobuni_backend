@@ -161,7 +161,7 @@ namespace MobUni.ApplicationCore.Services
             }
         }
 
-        public async Task<IDataResult<bool>> UpdateProfileImage(IFormFile image)
+        public async Task<IDataResult<string>> UpdateProfileImage(IFormFile image)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace MobUni.ApplicationCore.Services
                 var user = _userRepository.GetById(_contextAccessor.HttpContext.Items["UserId"].ToString());
                 user.Image = path;
                 await _userRepository.Update(user);
-                return new SuccessDataResult<bool>(true);
+                return new SuccessDataResult<string>(path);
 
             }
             catch(Exception ex)
