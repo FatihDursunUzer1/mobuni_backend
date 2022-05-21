@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
@@ -19,12 +20,17 @@ namespace MobUni.ApplicationCore.Services
         private ILikeQuestionRepository _likeRepository;
         private readonly IQuestionCommentRepository _questionCommentRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private string _userId;
 
-        public QuestionCommentService(IQuestionCommentRepository questionCommentRepository, IMapper mapper, ILikeQuestionRepository likeRepository)
+        public QuestionCommentService(IQuestionCommentRepository questionCommentRepository, IMapper mapper,
+            ILikeQuestionRepository likeRepository, IHttpContextAccessor httpContextAccessor)
         {
             _questionCommentRepository = questionCommentRepository;
             _mapper = mapper;
             _likeRepository = likeRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _userId = _httpContextAccessor.HttpContext.Items["UserId"].ToString();
         }
         public async Task<IDataResult<QuestionCommentDTO>> Add(CreateQuestionCommentDTO dto, string? userId = null)
         {
@@ -71,6 +77,7 @@ namespace MobUni.ApplicationCore.Services
             //Check am I Liked?
             var a = await _questionCommentRepository.GetAll(question => question.ActivityId==activityId);
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
+            CheckLikedComments(questionComments,activityId, _userId, false);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
         }
 
@@ -82,10 +89,23 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<QuestionCommentDTO>>> GetByQuestionId(int questionId)
         {
-            //Check am I Liked?
             var a = await _questionCommentRepository.GetAll(question=>question.QuestionId==questionId);
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
+            CheckLikedComments(questionComments, questionId, _userId, true);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
+        }
+
+        private void CheckLikedComments(List<QuestionCommentDTO> questionComments, int id, string userId, bool isQuestionComment)
+        {
+            var likes = _likeRepository.GetUserLikedComments(_userId,id, isQuestionComment);
+            foreach (var comment in questionComments)
+            {
+                foreach(var like in likes)
+                {
+                    if (comment.Id == like)
+                        comment.IsLiked = true;
+                }
+            }
         }
 
         public async Task<IDataResult<QuestionCommentDTO>> Update(QuestionCommentDTO dto)

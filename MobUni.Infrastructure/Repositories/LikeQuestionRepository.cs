@@ -123,12 +123,6 @@ namespace MobUni.Infrastructure.Repositories
             return a;
         }
 
-        public LikeQuestion? GetUserLikedComment(int commentId, string userId)
-        {
-            var a = _mobUniDbContext.LikeQuestion.Where(question => question.QuestionCommentId==commentId && question.IsActive && question.UserId == userId).FirstOrDefault();
-            return a;
-        }
-
         public List<LikeQuestion> GetLiked()
         {
             return _mobUniDbContext.LikeQuestion.Where(question => question.IsActive).ToList();
@@ -137,6 +131,18 @@ namespace MobUni.Infrastructure.Repositories
         public List<LikeQuestion> GetLikedByUserId(string userId)
         {
             return _mobUniDbContext.LikeQuestion.Where(question => question.UserId == userId && question.IsActive).Include(likeQuestion=>likeQuestion.User).ToList();
+        }
+
+        public List<int?> GetUserLikedComments(string userId, int id, bool isQuestionComment) // isQuestionComment= false search for ActivityComments
+        {
+            if (isQuestionComment)
+            {
+                return _mobUniDbContext.LikeQuestion.Where(comment => comment.QuestionComment.QuestionId == id && comment.IsActive && comment.UserId == userId).Select(comment => comment.QuestionCommentId).ToList();
+            }
+            else
+            {
+                return _mobUniDbContext.LikeQuestion.Where(comment => comment.QuestionComment.ActivityId == id && comment.IsActive && comment.UserId == userId).Select(comment => comment.QuestionCommentId).ToList();
+            }
         }
 
     }

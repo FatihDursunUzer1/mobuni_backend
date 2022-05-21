@@ -16,5 +16,6 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
        Task<bool> LikeQuestion(int questionId, string userId);
         LikeQuestion? GetUserLikedQuestion(int questionId, string userId);
         Task<bool> LikeOrDislike(int tableType, int Id, string userId);
+        List<int?> GetUserLikedComments(string userId, int id, bool isQuestionComment);
     }
 }

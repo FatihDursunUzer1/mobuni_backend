@@ -55,8 +55,8 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
         {
-            /*if (exp != null)
-                return _mobUniDbContext.Set<T>().Where(exp); */
+            if (exp != null)
+                return _mobUniDbContext.Set<T>().Where(exp).ToList();
             var a =  _mobUniDbContext.Set<T>();
             var b=a.ToList();
             return b;
