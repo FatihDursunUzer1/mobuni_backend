@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -50,36 +51,27 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter)
         {
+            //Dışarıdan katılımcı alma durumunun kontrolü gerekiyor.
             var activitiesFilter =new ActivitiesGetByFilter(filter);
-            var a =await  _activityRepository.GetAll(filter!=null?activitiesFilter.SpecExpression:null);
-            List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(a);
-            return new SuccessDataResult<List<ActivityDTO>>(activities);
-        }
-        public async Task<IDataResult<List<ActivityDTO>>> GetActivitiesByUniversityId(int universityId)
-        {
-            var activities = await _activityRepository.GetAll(x=>x.UniversityId==universityId);
-            List<ActivityDTO> activityDtos = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
-            return new SuccessDataResult<List<ActivityDTO>>(activityDtos);
-        }
-
-        public IDataResult<ActivityDTO> GetById(int id)
-        {
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(_activityRepository.GetById(id)));
+            var activities =await  _activityRepository.GetAll(filter!=null?activitiesFilter.SpecExpression:null);
+            if(filter.Categories!=null) //Kategoriye göre filtreleme.
+            {
+                foreach(var category in filter.Categories)
+                    activities= activities.Where(b=>b.ActivityCategories.Contains(category)).ToList();
+            }
+            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
+            return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
         }
 
-        public async Task<IDataResult<ActivityDTO>> Update(ActivityDTO dto)
+        public async Task<IDataResult<ActivityDTO>> Update(int activityId, int newMaxUser, bool timeOut)
         {
-            var activity = _mapper.Map<Activity>(dto);
-            var dbActivity=_activityRepository.GetById(activity.Id);
-            activity.CreatedTime = dbActivity.CreatedTime;
-            activity.UpdatedTime = DateTime.Now;
-            await _activityRepository.Update(activity, activity.Id);
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(activity));
-        }
-
-        public async Task<IDataResult<List<ActivityDTO>>> GetMyActivities(string userId)
-        {
-            return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<ActivityDTO>>(await _activityRepository.GetAll(activity=>activity.UserId==userId)));
+            var dbActivity=_activityRepository.GetById(activityId);
+            if (newMaxUser < dbActivity.MaxUser)
+                return new ErrorDataResult<ActivityDTO>("Yeni girilen maksimum kişi sayısı, şu anki maksimum kullanıcı sayısı değerinden az olamaz",400);
+            dbActivity.MaxUser = newMaxUser;
+            dbActivity.Timeout = timeOut;
+            await _activityRepository.Update(dbActivity, activityId);
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(dbActivity));
         }
     }
 }

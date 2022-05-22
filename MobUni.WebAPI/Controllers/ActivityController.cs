@@ -40,28 +40,11 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(await _activtyService.Add(activityDTO,userId));
         }
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ActivityDTO activityDTO)
+        public async Task<IActionResult> Update(int activityId,int maxUser,bool timeOut)
         {
-            return CreateActionResultInstance(await _activtyService.Update(activityDTO));
+            return CreateActionResultInstance(await _activtyService.Update(activityId,maxUser,timeOut));
         }
-        [HttpGet("GetByActivityId")]
-        public async Task<IActionResult> GetByActivityId([FromQuery] int id)
-        {
-            return CreateActionResultInstance( _activtyService.GetById(id));
-        }
-
-        [HttpGet("GetActivitiesByUniversityId")]
-        public async Task<IActionResult> GetActivitiesByUniversityId([FromQuery] int id)
-        {
-            return CreateActionResultInstance(await _activtyService.GetActivitiesByUniversityId(id));
-        }
-
-        [HttpGet("GetMyActivities")]
-        public async Task<IActionResult> GetMyActivities()
-        {
-            var userId = HttpContext.Items["UserId"]?.ToString();
-            return CreateActionResultInstance(await _activtyService.GetMyActivities(userId));
-        }
+       
     }
 }
 

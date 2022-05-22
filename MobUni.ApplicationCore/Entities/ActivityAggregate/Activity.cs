@@ -35,6 +35,34 @@ namespace MobUni.ApplicationCore.Entities.ActivityAggregate
         public int MaxUser { get; set; }
         public int TicketPrice { get; set; }
 
+        public string? Categories { get; set; } = String.Empty;
+
+        [NotMapped]
+         public int[]? ActivityCategories
+        {
+            get
+            {
+                if (Categories != null && Categories != "")
+                    return Array.ConvertAll(Categories.Split(';'), int.Parse);
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _data = value;
+                    Categories = String.Join(";", _data.Select(p => p.ToString()).ToArray());
+                }
+                else
+                {
+                    _data = null;
+                    Categories = String.Empty;
+                }
+            }
+        }
+
+        private int[] _data;
+
 
 
     }

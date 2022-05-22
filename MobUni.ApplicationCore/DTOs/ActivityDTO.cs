@@ -1,4 +1,9 @@
-﻿using System;
+﻿using MobUni.ApplicationCore.Entities.ActivityAggregate;
+using Newtonsoft.Json.Converters;
+using System;
+using Newtonsoft.Json;
+
+
 namespace MobUni.ApplicationCore.DTOs
 {
 	public class ActivityDTO
@@ -26,6 +31,7 @@ namespace MobUni.ApplicationCore.DTOs
         public bool IsActive { get; set; }
         public bool IsExternal { get; set; }
         public bool Timeout { get; set; }
+        public int[]? ActivityCategories { get; set; }
 
     }
 }

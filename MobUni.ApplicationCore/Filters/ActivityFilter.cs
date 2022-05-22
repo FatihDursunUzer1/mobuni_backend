@@ -16,6 +16,9 @@ namespace MobUni.ApplicationCore.Filters
 
         public int? CityId { get; set; }
 
+        public string? UserId { get; set; }
+
+        public int[]? Categories { get; set; }
        
     }
 }
