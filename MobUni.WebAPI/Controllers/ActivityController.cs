@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
+using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.Infrastructure.Controllers;
 
@@ -24,9 +25,11 @@ namespace MobUni.WebAPI.Controllers
         }
    
 
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAsync()
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync(
+            )
         {
+           
             return CreateActionResultInstance(await _activtyService.GetAll());
         }
 

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
+using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Result.Abstract;
@@ -46,9 +47,9 @@ namespace MobUni.ApplicationCore.Services
             return await _activityRepository.Delete(activity);
         }
 
-        public async Task<IDataResult<List<ActivityDTO>>> GetAll()
+        public async Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter)
         {
-            var a =await  _activityRepository.GetAll();
+            var a =await  _activityRepository.GetAll(filter!=null?filter.SpecExpression:null);
             List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(a);
             return new SuccessDataResult<List<ActivityDTO>>(activities);
         }

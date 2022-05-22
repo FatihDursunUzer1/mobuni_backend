@@ -19,6 +19,14 @@ namespace MobUni.ApplicationCore.DTOs
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
 
+        public int MaxUser { get; set; }
+
+        public int TicketPrice { get; set; }
+
+        public bool IsActive { get; set; }
+        public bool IsExternal { get; set; }
+        public bool Timeout { get; set; }
+
     }
 }
 
