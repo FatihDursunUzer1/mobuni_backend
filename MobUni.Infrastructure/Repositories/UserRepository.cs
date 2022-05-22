@@ -53,6 +53,10 @@ namespace MobUni.Infrastructure.Repositories
                 user.PhoneNumber= entity.PhoneNumber;
             if(entity.Surname!=null)
                 user.Surname=entity.Surname;
+            if(entity.UniversityId!=null)
+                user.UniversityId=entity.UniversityId;
+            if(entity.DepartmentId!=null)
+                user.DepartmentId=entity.DepartmentId;
 
             _mobUniDbContext.Users.Update(user);
             await _mobUniDbContext.SaveChangesAsync();
