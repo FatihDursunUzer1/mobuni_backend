@@ -1,5 +1,6 @@
 using AutoMapper;
 using Azure.Storage.Blobs;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.ApplicationCore.Services;
+using MobUni.ApplicationCore.Validation;
 using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
 using MobUni.Infrastructure.Storage;
@@ -59,7 +61,7 @@ builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 
         return new UnprocessableEntityObjectResult(problems);
     };
-});
+}).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ActivityValidator>());
 
 /*
  * Json Web Token Authentication Scheme
