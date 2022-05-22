@@ -11,20 +11,11 @@ namespace MobUni.ApplicationCore.DTOs.Requests
 {
     public class CreateQuestionDTO: BaseCreateDTO<int>
     {
-        // public UserDTO User { get; set; }
-      
-        // public UniversityDTO University { get; set; }
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int UniversityId { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public string Text { get; set; }
-
-        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public int CommentCount { get; set; }
-        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public int LikeCount { get; set; }
-
         public IFormFile? Image { get; set; }
       
     }
