@@ -10,17 +10,12 @@ namespace MobUni.ApplicationCore.Filters
 {
     public class ActivityFilter
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
-        public int UniversityId { get; set; }
+        public int? UniversityId { get; set; }
 
+        public int? CityId { get; set; }
 
-        public  Expression<Func<Activity, bool>> SpecExpression
-        {
-            get
-            {
-                return activity => (Id == null || activity.Id == Id) && (UniversityId == null || activity.UniversityId == UniversityId);
-            }
-        }
+       
     }
 }

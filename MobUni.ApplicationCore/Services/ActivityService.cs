@@ -10,6 +10,7 @@ using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Result.Abstract;
 using MobUni.ApplicationCore.Result.Concrete;
+using MobUni.ApplicationCore.Services.Filters;
 
 namespace MobUni.ApplicationCore.Services
 {
@@ -49,7 +50,8 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter)
         {
-            var a =await  _activityRepository.GetAll(filter!=null?filter.SpecExpression:null);
+            var activitiesFilter =new ActivitiesGetByFilter(filter);
+            var a =await  _activityRepository.GetAll(filter!=null?activitiesFilter.SpecExpression:null);
             List<ActivityDTO> activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(a);
             return new SuccessDataResult<List<ActivityDTO>>(activities);
         }

@@ -26,11 +26,11 @@ namespace MobUni.WebAPI.Controllers
    
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync(
-            )
+        public async Task<IActionResult> GetAllAsync([FromQuery]
+           ActivityFilter filter )
         {
            
-            return CreateActionResultInstance(await _activtyService.GetAll());
+            return CreateActionResultInstance(await _activtyService.GetAll(filter));
         }
 
         [HttpPost]

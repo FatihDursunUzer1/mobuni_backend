@@ -57,12 +57,10 @@ namespace MobUni.Infrastructure.Repositories
         {
             if (exp != null)
             {
-                var returnValue = _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).ToList();
-                return returnValue;
+                return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).ToList();
             }
-            var a =  _mobUniDbContext.Set<T>();
-            var b=a.OrderByDescending(t => t.CreatedTime).ToList();
-            return b;
+
+            return _mobUniDbContext.Set<T>().OrderByDescending(t => t.CreatedTime).ToList();
         }
 
         public  T GetById(int id)
