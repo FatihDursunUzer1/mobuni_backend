@@ -12,9 +12,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		IDataResult<UserDTO> GetById(string userId);
 		IDataResult<TokenDTO> Login(LoginUserDTO userDto);
         Task<IDataResult<TokenDTO>> Register(CreateUserDTO userDto);
-		Task<IDataResult<string>> UpdateProfileImage(IFormFile image);
-
-
+		Task<IDataResult<string>> UpdateProfileImage(IFormFile? image);
 
 	}
 }

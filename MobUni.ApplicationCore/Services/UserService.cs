@@ -161,13 +161,20 @@ namespace MobUni.ApplicationCore.Services
             }
         }
 
-        public async Task<IDataResult<string>> UpdateProfileImage(IFormFile image)
+        public async Task<IDataResult<string>> UpdateProfileImage(IFormFile? image)
         {
             try
             {
-                
-                var path = await _storage.UploadProfileImage(image);
                 var user = _userRepository.GetById(_contextAccessor.HttpContext.Items["UserId"].ToString());
+                if (image == null)
+                {
+                    user.Image = null;
+                    await _userRepository.UpdateAsync(user);
+                    return new SuccessDataResult<string>("Profil resmi silme işlemi başarılı");
+                }
+
+                var path = await _storage.UploadProfileImage(image);
+               
                 user.Image = path;
                 await _userRepository.UpdateAsync(user);
                 return new SuccessDataResult<string>(path);

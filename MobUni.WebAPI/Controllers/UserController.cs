@@ -68,7 +68,7 @@ namespace MobUni.WebAPI.Controllers
         }
 
         [HttpPost("UploadProfileImage")]
-        public  async Task<IActionResult> UploadProfileImage([FromForm] IFormFile image)
+        public  async Task<IActionResult> UploadProfileImage([FromForm] IFormFile? image)
         {
             return CreateActionResultInstance(await _userService.UpdateProfileImage(image));
         }
