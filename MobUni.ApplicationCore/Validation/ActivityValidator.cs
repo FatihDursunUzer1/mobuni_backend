@@ -17,6 +17,8 @@ namespace MobUni.ApplicationCore.Validation
             RuleFor(a => a.MaxUser).GreaterThanOrEqualTo(0).WithMessage("Maksimum Kullanıcı sayısı 0'dan büyük olmalıdır.");
             RuleFor(a => a.TicketPrice).GreaterThanOrEqualTo(0).WithMessage("Bilet fiyatları - değer alamaz");
             RuleFor(a => a.UniversityId).GreaterThanOrEqualTo(1).WithMessage("Geçersiz üniversite giriş denemesi");
+            RuleFor(a => a.Title).NotEmpty().WithMessage("Etkinlik başlığı boş olamaz");
         }
     }
+
 }
