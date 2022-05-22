@@ -17,17 +17,25 @@ namespace MobUni.ApplicationCore.Entities.ActivityAggregate
         public int Id { get; set; }
         public string UserId { get; set; }
         public virtual User User { get; set; }
-        public string Content { get; set; }
-
+        public string? Content { get; set; }
         public string? Title { get; set; }
         public string? Image { get; set; } = string.Empty;
         public int UniversityId { get; set; }
         public virtual University University { get; set; }
         public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
-        public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
+        public DateTime ActivityEndTime { get; set; } = DateTime.Now;
 
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
+
+        public bool IsExternal { get; set; }
+        public bool Timeout { get; set; }
+
+        public bool IsActive { get; set; } = true;
+        public int MaxUser { get; set; }
+        public int TicketPrice { get; set; }
+
+
 
     }
 }

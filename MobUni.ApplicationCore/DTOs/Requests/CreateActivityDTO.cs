@@ -16,23 +16,24 @@ namespace MobUni.ApplicationCore.DTOs.Requests
         public string Title { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public string Content { get; set; }
+        public string? Content { get; set; }
         //public UniversityDTO University { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int UniversityId { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
+        public DateTime ActivityStartTime { get; set; } = DateTime.Now;
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
-
+        public DateTime ActivityEndTime { get; set; } = DateTime.Now;
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public int CommentCount { get; set; }
-
+        public bool IsExternal { get; set; }
+       
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public int LikeCount { get; set; }
+        public int? MaxUser { get; set; }
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
+        public int? TicketPrice { get; set; }
 
         public IFormFile? Image { get; set; }
      
