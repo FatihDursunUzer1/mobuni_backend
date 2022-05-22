@@ -65,7 +65,7 @@ builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 
         return new UnprocessableEntityObjectResult(problems);
     };
-});
+}).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ActivityValidator>());
 
 /*
  * Json Web Token Authentication Scheme
