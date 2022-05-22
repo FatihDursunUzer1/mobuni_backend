@@ -48,6 +48,8 @@ builder.Services.AddTransient<IQuestionCommentRepository, QuestionCommentReposit
 builder.Services.AddTransient<IQuestionCommentService,QuestionCommentService>();
 builder.Services.AddTransient<ILikeQuestionRepository,LikeQuestionRepository>();
 builder.Services.AddTransient<ILikeService,LikeService>();
+builder.Services.AddTransient<IActivityCategoryRepository,ActivityCategoryRepository>();
+builder.Services.AddTransient<IActivityCategoryService,ActivityCategoryService>();
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 {

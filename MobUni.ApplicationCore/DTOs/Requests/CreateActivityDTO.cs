@@ -35,6 +35,9 @@ namespace MobUni.ApplicationCore.DTOs.Requests
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int? TicketPrice { get; set; }
 
+        [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
+        public int[]? ActivityCategories { get; set; } = null;
+
         public IFormFile? Image { get; set; }
      
     }
