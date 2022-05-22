@@ -31,7 +31,6 @@ namespace MobUni.Infrastructure.Data.Contexts
         public DbSet<Department> Departments { get; set; }
         public DbSet<University> Universities { get; set; }
         public DbSet<LikeQuestion> LikeQuestion { get; set; }
-        public DbSet<ActivityComment> ActivityComments { get; set; }
         public DbSet<QuestionComment> QuestionComments { get; set; }
         public DbSet<ActivityCategory> ActivityCategories { get; set; }
 

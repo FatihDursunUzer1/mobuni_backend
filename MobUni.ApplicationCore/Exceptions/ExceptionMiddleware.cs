@@ -33,7 +33,7 @@ namespace MobUni.ApplicationCore.Exceptions
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(new Error(" Internal Server Error from the custom middleware.").ToString());
+            await context.Response.WriteAsync(new Error(exception.Message).ToString());
         }
     }
 }
