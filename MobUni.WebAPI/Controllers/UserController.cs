@@ -64,6 +64,9 @@ namespace MobUni.WebAPI.Controllers
         [HttpPut]
         public async Task< IActionResult> Update([FromBody] UserDTO user)
         {
+            if(user.Id==null)
+                user.Id=HttpContext.Items["UserId"]?.ToString();
+
             return CreateActionResultInstance(await _userService.Update(user));
         }
 
