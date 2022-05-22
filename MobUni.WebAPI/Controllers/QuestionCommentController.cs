@@ -20,15 +20,11 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateQuestionCommentDTO createQuestionCommentDTO)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(400,"Siuuu");
             var userId = HttpContext.Items["UserId"].ToString();
             return CreateActionResultInstance(await _questionCommentService.AddComment(createQuestionCommentDTO,userId));
         }
-
-        /*[HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            return CreateActionResultInstance(_questionCommentService.GetById(id));
-        } */
 
         [HttpGet("GetByQuestionId/{questionId}")]
         public async Task<IActionResult> GetByQuestionId(int questionId)

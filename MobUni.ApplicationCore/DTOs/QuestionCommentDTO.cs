@@ -8,8 +8,6 @@ namespace MobUni.ApplicationCore.DTOs
 {
     public class QuestionCommentDTO:CommentDTO
     {
-       //public int QuestionId { get; set; }
-       //public QuestionDTO Question { get; set; }
        public bool IsLiked { get; set; }
     }
 }

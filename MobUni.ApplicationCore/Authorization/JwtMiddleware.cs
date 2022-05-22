@@ -23,10 +23,8 @@ namespace MobUni.ApplicationCore.Authorization
             var userId = jwtUtils.ValidateJwtToken(token);
             if (userId != null)
             {
-                // attach user to context on successful jwt validation
                 context.Items["UserId"] = userId;
             }
-
             await _next(context);
         }
     }

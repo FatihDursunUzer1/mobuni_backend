@@ -69,8 +69,6 @@ namespace MobUni.ApplicationCore.Authorization
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
-
-                // return user id from JWT token if validation successful
                 return userId;
             }
             catch
