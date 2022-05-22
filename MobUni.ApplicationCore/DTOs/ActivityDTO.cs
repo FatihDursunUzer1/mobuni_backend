@@ -19,8 +19,8 @@ namespace MobUni.ApplicationCore.DTOs
 
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
-        public DateTime? ActivityStartTime { get; set; } = DateTime.Now;
-        public DateTime? ActivityEndTime { get; set; } = DateTime.Now;
+        public DateTime? ActivityStartTime { get; set; }
+        public DateTime? ActivityEndTime { get; set; }
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
 

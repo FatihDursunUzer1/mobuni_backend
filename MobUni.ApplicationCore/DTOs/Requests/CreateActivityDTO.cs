@@ -11,22 +11,20 @@ namespace MobUni.ApplicationCore.DTOs.Requests
 {
     public class CreateActivityDTO: BaseCreateDTO<int>
     {
-        // public UserDTO User { get; set; }
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public string Title { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public string? Content { get; set; }
-        //public UniversityDTO University { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public int UniversityId { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public DateTime ActivityStartTime { get; set; } = DateTime.Now;
+        public DateTime ActivityStartTime { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public DateTime ActivityEndTime { get; set; } = DateTime.Now;
+        public DateTime ActivityEndTime { get; set; } 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
         public bool IsExternal { get; set; }
        
@@ -36,7 +34,7 @@ namespace MobUni.ApplicationCore.DTOs.Requests
         public int? TicketPrice { get; set; }
 
         [ModelBinder(BinderType = typeof(FormDataJsonBinder))]
-        public int[]? ActivityCategories { get; set; } = null;
+        public int[]? ActivityCategories { get; set; } 
 
         public IFormFile? Image { get; set; }
      
