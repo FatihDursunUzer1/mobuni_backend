@@ -52,7 +52,7 @@ namespace MobUni.ApplicationCore.Services
            var university=_mapper.Map<University>(dto);
             var dbUniversity = _universityRepository.GetById(dto.Id);
             university.CreatedTime=dbUniversity.CreatedTime;
-            university.UpdatedTime = DateTime.Now;
+            university.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             await _universityRepository.Update(university, university.Id);
             return new SuccessDataResult<UniversityDTO>(_mapper.Map<UniversityDTO>(university));
         }

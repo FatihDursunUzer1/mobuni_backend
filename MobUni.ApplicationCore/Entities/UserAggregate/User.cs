@@ -33,8 +33,8 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
 
        public void CreateUserTime()
         {
-            this.CreatedTime = DateTime.Now;
-            this.UpdatedTime = DateTime.Now;
+            this.CreatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+            this.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
         }
        
     }

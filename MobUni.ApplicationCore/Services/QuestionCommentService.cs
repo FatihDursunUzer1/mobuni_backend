@@ -119,7 +119,7 @@ namespace MobUni.ApplicationCore.Services
         public async Task<IDataResult<QuestionCommentDTO>> Update(QuestionCommentDTO dto)
         {
             var questionComment= _mapper.Map<QuestionComment>(dto);
-            questionComment.UpdatedTime = DateTime.Now;
+            questionComment.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             await _questionCommentRepository.Update(questionComment, questionComment.Id);
             return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(questionComment));
         }

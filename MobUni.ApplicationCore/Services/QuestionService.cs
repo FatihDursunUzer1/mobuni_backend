@@ -111,7 +111,7 @@ namespace MobUni.ApplicationCore.Services
         {
             var question = _mapper.Map<Question>(dto);
             var dbQuestion = _questionRepository.GetById(dto.Id);
-            question.UpdatedTime = DateTime.Now;
+            question.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             question.CreatedTime = dbQuestion.CreatedTime;
 
             await _questionRepository.Update(question, question.Id);

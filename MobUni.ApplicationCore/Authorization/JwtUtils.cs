@@ -34,7 +34,7 @@ namespace MobUni.ApplicationCore.Authorization
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretJWTkey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddMonths(3);
+            var expires =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc).AddMonths(3);
             var token = new JwtSecurityToken("mobuni",
              "mobuni",
               claims: new Claim[] {new Claim("id",user.Id),new Claim("role",user.UserType.ToString())},

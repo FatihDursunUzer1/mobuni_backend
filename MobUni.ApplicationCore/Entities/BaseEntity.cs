@@ -18,8 +18,8 @@ namespace MobUni.ApplicationCore.Entities
 
         public void CreateObject()
         {
-            this.CreatedTime = DateTime.Now;
-            this.UpdatedTime = DateTime.Now;
+            this.CreatedTime = DateTime.SpecifyKind( DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc), DateTimeKind.Utc);
+            this.UpdatedTime = DateTime.SpecifyKind( DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc), DateTimeKind.Utc);
         }
     }
 }
