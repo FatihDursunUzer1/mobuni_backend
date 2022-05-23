@@ -41,8 +41,10 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<User> UpdateAsync(User entity)
         {
+           
             //_mobUniDbContext.Set<User>().Attach(entity);
             var user = GetById(entity.Id);
+            user.UpdatedTime = DateTime.Now;
             if(entity.Email != null)
                 user.Email = entity.Email;
             if(entity.UserName != null)

@@ -99,11 +99,7 @@ namespace MobUni.ApplicationCore.Services
         {
             //University veya Department'ı boş gönderirse değerler boş olur ve bu şekilde updatelenir veya veri tabanından verilen Id'ye göre yerleştirme yapılabilir.
             var dtoUser = _mapper.Map<User>(dto);
-            var user = _userRepository.GetByIdAsNoTracking(dto.Id);
-            dtoUser.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-            dtoUser.CreatedTime = user?.CreatedTime;
-
-            await _userRepository.UpdateAsync(dtoUser);
+            dtoUser=await _userRepository.UpdateAsync(dtoUser);
             return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(dtoUser));
         }
 
