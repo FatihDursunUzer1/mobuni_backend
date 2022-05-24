@@ -7,6 +7,7 @@ using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.Infrastructure.Controllers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -27,10 +28,15 @@ namespace MobUni.WebAPI.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery]
-           ActivityFilter filter )
+           ActivityFilter filter, int? pageSize,int? pageIndex )
         {
-           
-            return CreateActionResultInstance(await _activtyService.GetAll(filter));
+            var activities = await _activtyService.GetAll(pageSize, pageIndex, filter);
+            if (pageSize != null && pageIndex != null)
+            {
+                return CreateActionResultInstance(await PaginatedList<ActivityDTO>.CreateAsync(activities.Data.AsQueryable(), (int)pageIndex, (int)pageSize));
+
+            }
+            return CreateActionResultInstance(activities);
         }
 
         [HttpPost]

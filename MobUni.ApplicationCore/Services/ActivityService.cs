@@ -9,6 +9,7 @@ using MobUni.ApplicationCore.Entities.ActivityAggregate;
 using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.ApplicationCore.Result.Abstract;
 using MobUni.ApplicationCore.Result.Concrete;
 using MobUni.ApplicationCore.Services.Filters;
@@ -52,11 +53,11 @@ namespace MobUni.ApplicationCore.Services
             return true;
         }
 
-        public async Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter)
+        public async Task<IDataResult<List<ActivityDTO>>> GetAll(int? pageSize, int? pageIndex, ActivityFilter filter)
         {
             //Dışarıdan katılımcı alma durumunun kontrolü gerekiyor.
             var activitiesFilter =new ActivitiesGetByFilter(filter);
-            var activities =await  _unitOfWork.Activities.GetAll(filter!=null?activitiesFilter.SpecExpression:null);
+            var activities =await  _unitOfWork.Activities.GetAll(filter!=null?activitiesFilter.SpecExpression:null,pageSize,pageIndex);
             HashSet<Activity> activitySet = new HashSet<Activity>();
             HashSet < Activity > activitySetLoop=new HashSet<Activity>();
             if (filter.Categories!=null) //Kategoriye göre filtreleme.
@@ -66,8 +67,10 @@ namespace MobUni.ApplicationCore.Services
                     activitySetLoop = activities.Where(b => b.ActivityCategories.Contains(category)).ToHashSet<Activity>();
                     activitySet.UnionWith(activitySetLoop);
                 }
+                activities = activitySet.ToList();
             }
-            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activitySet.ToList());
+            
+            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
             return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
         }
 

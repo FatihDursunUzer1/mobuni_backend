@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -53,13 +54,16 @@ namespace MobUni.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
+        public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null,int? pageSize=null, int? pageIndex=null)
         {
             if (exp != null)
             {
+                if(pageSize!=null && pageIndex!=null)
+                return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).Skip((int)pageIndex).Take((int)pageSize).ToList();
                 return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).ToList();
             }
-
+            if (pageSize != null && pageIndex != null)
+                return _mobUniDbContext.Set<T>().OrderByDescending(t => t.CreatedTime).Skip((int)pageIndex).Take((int)pageSize).ToList();
             return _mobUniDbContext.Set<T>().OrderByDescending(t => t.CreatedTime).ToList();
         }
 

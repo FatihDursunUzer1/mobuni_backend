@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.ApplicationCore.Result.Abstract;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,11 @@ namespace MobUni.Infrastructure.Controllers
             {
                 StatusCode = result.StatusCode
             };
+        }
+
+        public IActionResult CreateActionResultInstance<T>(PaginatedList<T> result)
+        {
+            return new ObjectResult(result);
         }
     }
 }
