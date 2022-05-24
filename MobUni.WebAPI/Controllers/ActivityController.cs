@@ -40,7 +40,7 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(await _activtyService.Add(activityDTO,userId));
         }
         [HttpPut]
-        public async Task<IActionResult> Update(int activityId,int maxUser,bool timeOut)
+        public async Task<IActionResult> Update(int activityId,int? maxUser,bool? timeOut)
         {
             return CreateActionResultInstance(await _activtyService.Update(activityId,maxUser,timeOut));
         }

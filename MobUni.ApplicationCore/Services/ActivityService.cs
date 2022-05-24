@@ -54,22 +54,34 @@ namespace MobUni.ApplicationCore.Services
             //Dışarıdan katılımcı alma durumunun kontrolü gerekiyor.
             var activitiesFilter =new ActivitiesGetByFilter(filter);
             var activities =await  _activityRepository.GetAll(filter!=null?activitiesFilter.SpecExpression:null);
-            if(filter.Categories!=null) //Kategoriye göre filtreleme.
+            HashSet<Activity> activitySet = new HashSet<Activity>();
+            HashSet < Activity > activitySetLoop=new HashSet<Activity>();
+            if (filter.Categories!=null) //Kategoriye göre filtreleme.
             {
-                foreach(var category in filter.Categories)
-                    activities= activities.Where(b=>b.ActivityCategories.Contains(category)).ToList();
+                foreach (var category in filter.Categories)
+                {
+                    activitySetLoop = activities.Where(b => b.ActivityCategories.Contains(category)).ToHashSet<Activity>();
+                    activitySet.UnionWith(activitySetLoop);
+                }
             }
-            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
+            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activitySet.ToList());
             return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
         }
 
-        public async Task<IDataResult<ActivityDTO>> Update(int activityId, int newMaxUser, bool timeOut)
+        public  IDataResult<List<ActivityDTO>> GetNoTimeOuts()
+        {
+            return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<Activity>, List<ActivityDTO>>( _activityRepository.GetAll(activity => activity.Timeout == false).Result));
+        }
+
+        public async Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut)
         {
             var dbActivity=_activityRepository.GetById(activityId);
-            if (newMaxUser < dbActivity.MaxUser)
+            if ((newMaxUser!=0 || newMaxUser!=null ) && newMaxUser < dbActivity.MaxUser)
                 return new ErrorDataResult<ActivityDTO>("Yeni girilen maksimum kişi sayısı, şu anki maksimum kullanıcı sayısı değerinden az olamaz",400);
-            dbActivity.MaxUser = newMaxUser;
-            dbActivity.Timeout = timeOut;
+            if(newMaxUser!=null)
+            dbActivity.MaxUser = (int)newMaxUser;
+            else if(timeOut!=null)
+            dbActivity.Timeout = (bool)timeOut;
             await _activityRepository.Update(dbActivity, activityId);
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(dbActivity));
         }
