@@ -17,6 +17,7 @@ using MobUni.ApplicationCore.Validation;
 using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
 using MobUni.Infrastructure.Storage;
+using MobUni.Infrastructure.UnitOfWork;
 using MobUni.WebAPI;
 
 using MobUni.WebAPI.BackgroundServices;
@@ -59,6 +60,7 @@ builder.Services.AddTransient<ILikeQuestionRepository,LikeQuestionRepository>();
 builder.Services.AddTransient<ILikeService,LikeService>();
 builder.Services.AddTransient<IActivityCategoryRepository,ActivityCategoryRepository>();
 builder.Services.AddTransient<IActivityCategoryService,ActivityCategoryService>();
+builder.Services.AddTransient<IUnitOfWork,UnitOfWork>();
 
 
 

@@ -20,21 +20,16 @@ namespace MobUni.ApplicationCore.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        // private readonly IUniversityRepository _universityRepository;
-        private readonly IDepartmentRepository _departmentRepository;
-        private readonly IUniversityRepository _universityRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IJwtUtils _jwtUtils;
         private readonly IStorage _storage;
         private readonly IHttpContextAccessor _contextAccessor;
-        public UserService(IUserRepository userRepository, IMapper mapper, IDepartmentRepository departmentRepository, IUniversityRepository universityRepository,
-            IJwtUtils jwtUtils, IHttpContextAccessor contextAccessor,IStorage storage)
+
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IJwtUtils jwtUtils, IStorage storage, IHttpContextAccessor contextAccessor)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _departmentRepository = departmentRepository;
-            _universityRepository = universityRepository;
             _jwtUtils = jwtUtils;
             _storage = storage;
             _contextAccessor = contextAccessor;
@@ -50,7 +45,8 @@ namespace MobUni.ApplicationCore.Services
                 user.PasswordHash = hashFunction.Item1;
                 user.PasswordSalt = hashFunction.Item2;
                 user.CreateUserTime();
-                await _userRepository.Add(user,user=>user.University,user=>user.Department);
+                await _unitOfWork.Users.Add(user,user=>user.University,user=>user.Department);
+                await _unitOfWork.Save();
                 return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(user));
             }
             catch (SqlException ex)
@@ -69,7 +65,7 @@ namespace MobUni.ApplicationCore.Services
         }
         public IDataResult<TokenDTO> Login(LoginUserDTO userDto)
         {
-            var databaseUser = _userRepository.GetByEmailOrUserName(userDto.Email);
+            var databaseUser = _unitOfWork.Users.GetByEmailOrUserName(userDto.Email);
             if (databaseUser is null)
             {
                 return new ErrorDataResult<TokenDTO>("Kullanıcı adı/E-posta veya şifre yanlış", 422);
@@ -87,19 +83,20 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<UserDTO>>> GetAll()
         {
-            return new SuccessDataResult<List<UserDTO>>(_mapper.Map<List<User>, List<UserDTO>>(await _userRepository.GetAll()));
+            return new SuccessDataResult<List<UserDTO>>(_mapper.Map<List<User>, List<UserDTO>>(await _unitOfWork.Users.GetAll()));
         }
 
         public IDataResult<UserDTO> GetById(string userId)
         {
-            return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(_userRepository.GetById(userId)));
+            return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(_unitOfWork.Users.GetById(userId)));
         }
 
         public async Task<IDataResult<UserDTO>> Update(UserDTO dto)
         {
             //University veya Department'ı boş gönderirse değerler boş olur ve bu şekilde updatelenir veya veri tabanından verilen Id'ye göre yerleştirme yapılabilir.
             var dtoUser = _mapper.Map<User>(dto);
-            dtoUser=await _userRepository.UpdateAsync(dtoUser);
+            dtoUser=await _unitOfWork.Users.UpdateAsync(dtoUser);
+            await _unitOfWork.Save();
             return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(dtoUser));
         }
 
@@ -137,6 +134,7 @@ namespace MobUni.ApplicationCore.Services
                 if (userDto.Password.Length < 6)
                     return new ErrorDataResult<TokenDTO>("Şifre uzunluğunun 6 karakterden uzun olması gerekmektedir.", 422);
                 var user = await Add(userDto);
+                await _unitOfWork.Save();
                 if (user.Data == null)
                     return new ErrorDataResult<TokenDTO>(message: "Kullanıcı belirlenemeyen bir nedenden dolayı eklenemedi", statusCode: 500);
                 return new SuccessDataResult<TokenDTO>(_jwtUtils.GenerateJwtToken(_mapper.Map<UserDTO, User>(user.Data)));
@@ -161,18 +159,20 @@ namespace MobUni.ApplicationCore.Services
         {
             try
             {
-                var user = _userRepository.GetById(_contextAccessor.HttpContext.Items["UserId"].ToString());
+                var user = _unitOfWork.Users.GetById(_contextAccessor.HttpContext.Items["UserId"].ToString());
                 if (image == null)
                 {
                     user.Image = null;
-                    await _userRepository.UpdateAsync(user);
+                    await _unitOfWork.Users.UpdateAsync(user);
+                    await _unitOfWork.Save();
                     return new SuccessDataResult<string>("Profil resmi silme işlemi başarılı");
                 }
 
                 var path = await _storage.UploadProfileImage(image);
                
                 user.Image = path;
-                await _userRepository.UpdateAsync(user);
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.Save();
                 return new SuccessDataResult<string>(path);
 
             }
