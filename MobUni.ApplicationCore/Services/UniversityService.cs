@@ -2,6 +2,7 @@
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities;
+using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.ApplicationCore.Result.Abstract;
@@ -16,19 +17,20 @@ namespace MobUni.ApplicationCore.Services
 {
     public class UniversityService : IUniversityService
     {
-        private readonly IUniversityRepository _universityRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UniversityService(IUniversityRepository universityRepository,IMapper mapper)
+        public UniversityService(IMapper mapper,IUnitOfWork unitOfWork)
         {
-            _universityRepository= universityRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<IDataResult<UniversityDTO>> Add(CreateUniversityDTO dto,string? userId=null)
         {
             var university = _mapper.Map<University>(dto);
             university.CreateObject();
-            await _universityRepository.Add(university);
+            await _unitOfWork.Universities.Add(university);
+            await _unitOfWork.Save();
             return new SuccessDataResult<UniversityDTO>(_mapper.Map<University, UniversityDTO>(university));
         }
 
@@ -39,21 +41,22 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<UniversityDTO>>> GetAll()
         {
-            return new SuccessDataResult<List<UniversityDTO>>(_mapper.Map<List<University>, List<UniversityDTO>>(await _universityRepository.GetAll()));
+            return new SuccessDataResult<List<UniversityDTO>>(_mapper.Map<List<University>, List<UniversityDTO>>(await _unitOfWork.Universities.GetAll()));
         }
 
         public IDataResult<UniversityDTO> GetById(int id)
         {
-            return new SuccessDataResult<UniversityDTO>(_mapper.Map<UniversityDTO>(_universityRepository.GetById(id)));
+            return new SuccessDataResult<UniversityDTO>(_mapper.Map<UniversityDTO>(_unitOfWork.Universities.GetById(id)));
         }
 
         public async Task<IDataResult<UniversityDTO>> Update(UniversityDTO dto)
         {
            var university=_mapper.Map<University>(dto);
-            var dbUniversity = _universityRepository.GetById(dto.Id);
+            var dbUniversity = _unitOfWork.Universities.GetById(dto.Id);
             university.CreatedTime=dbUniversity.CreatedTime;
             university.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-            await _universityRepository.Update(university, university.Id);
+            university= await _unitOfWork.Universities.Update(university, university.Id);
+            await _unitOfWork.Save();
             return new SuccessDataResult<UniversityDTO>(_mapper.Map<UniversityDTO>(university));
         }
     }

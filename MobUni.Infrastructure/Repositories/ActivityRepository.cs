@@ -17,9 +17,6 @@ namespace MobUni.Infrastructure.Repositories
             if (activity != null)
                 activity.CommentCount++;
             _mobUniDbContext.Activities.Update(activity);
-
-             _mobUniDbContext.SaveChangesAsync();
-
         }
     }
 }

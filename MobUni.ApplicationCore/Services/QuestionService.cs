@@ -16,20 +16,18 @@ namespace MobUni.ApplicationCore.Services
     public class QuestionService : IQuestionService
     {
         private readonly IMapper _mapper;
-        private readonly IQuestionRepository _questionRepository;
-        private readonly ILikeQuestionRepository _likeQuestionRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private  readonly IStorage _storage;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public QuestionService(IMapper mapper, IQuestionRepository questionRepository, ILikeQuestionRepository likeQuestionRepository,
-            IStorage storage,IHttpContextAccessor contextAccessor)
+        public QuestionService(IMapper mapper, IUnitOfWork unitOfWork, IStorage storage, IHttpContextAccessor contextAccessor)
         {
             _mapper = mapper;
-            _questionRepository = questionRepository;
-            _likeQuestionRepository = likeQuestionRepository;
+            _unitOfWork = unitOfWork;
             _storage = storage;
             _contextAccessor = contextAccessor;
         }
+
         public async Task<IDataResult<QuestionDTO>> Add( CreateQuestionDTO dto,string? userId=null)
         {
             try
@@ -37,15 +35,16 @@ namespace MobUni.ApplicationCore.Services
                 var question = _mapper.Map<Question>(dto);
                 if (userId is not null)
                     question.UserId = userId;
-                await _questionRepository.Add(question, q => q.User, q => q.University);
+                await _unitOfWork.Questions.Add(question, q => q.User, q => q.University);
 
                 if (dto.Image != null)
                 {
                     var path = await _storage.UploadQuestionImage(dto.Image, question.Id);
                     question.Image = path;
-                    await _questionRepository.Update(question, question.Id);
+                    await _unitOfWork.Questions.Update(question, question.Id);
 
                 }
+                await _unitOfWork.Save();
                 return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
 
             }
@@ -62,35 +61,35 @@ namespace MobUni.ApplicationCore.Services
 
         public async Task<IDataResult<List<QuestionDTO>>> GetAll()
         {
-            // var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll());
-            var questionDtos = _mapper.Map<List<QuestionDTO>>( await _questionRepository.GetAllQuestions().ToListAsync());
+            // var questionDtos = _mapper.Map<List<QuestionDTO>>(await _unitOfWork.Questions.GetAll());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>( await _unitOfWork.Questions.GetAllQuestions().ToListAsync());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
 
         public IDataResult<QuestionDTO> GetById(int id)
         {
-            var questionDTO = _mapper.Map<Question, QuestionDTO>(_questionRepository.GetById(id));
+            var questionDTO = _mapper.Map<Question, QuestionDTO>(_unitOfWork.Questions.GetById(id));
             CheckLikedQuestion(questionDTO);
             return new SuccessDataResult<QuestionDTO>(questionDTO);
         }
 
         public async Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId)
         {
-            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAllQuestionsByUniversityId(universityId).ToListAsync());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _unitOfWork.Questions.GetAllQuestionsByUniversityId(universityId).ToListAsync());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
 
         public IDataResult<int> GetQuestionCountByUniversityId(int universityId)
         {
-            var questionCount = _questionRepository.GetQuestionCountByUniversityId(universityId);
+            var questionCount = _unitOfWork.Questions.GetQuestionCountByUniversityId(universityId);
             return new SuccessDataResult<int>(questionCount);
         }
 
         public async Task<IDataResult<List<QuestionDTO>>> GetMyQuestions(string userId)
         {
-            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(await _questionRepository.GetAll(question => question.UserId == userId)));
+            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(await _unitOfWork.Questions.GetAll(question => question.UserId == userId)));
         }
 
         public async Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null)
@@ -98,7 +97,8 @@ namespace MobUni.ApplicationCore.Services
             try
             {
                 // await _likeQuestionRepository.LikeQuestion(questionId, userId);
-               await _questionRepository.LikeOrDislikeQuestion(questionId, userId);
+               await _unitOfWork.Questions.LikeOrDislikeQuestion(questionId, userId);
+                await _unitOfWork.Save();
                 return new SuccessDataResult<bool>(true);
             }
             catch (Exception ex)
@@ -110,21 +110,22 @@ namespace MobUni.ApplicationCore.Services
         public async Task<IDataResult<QuestionDTO>> Update(QuestionDTO dto)
         {
             var question = _mapper.Map<Question>(dto);
-            var dbQuestion = _questionRepository.GetById(dto.Id);
+            var dbQuestion = _unitOfWork.Questions.GetById(dto.Id);
             question.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             question.CreatedTime = dbQuestion.CreatedTime;
 
-            await _questionRepository.Update(question, question.Id);
+            question=await _unitOfWork.Questions.Update(question, question.Id);
+            await _unitOfWork.Save();
             return new SuccessDataResult<QuestionDTO>(_mapper.Map<Question, QuestionDTO>(question));
         }
         private void CheckLikedQuestion(QuestionDTO questionDTO)
         {
-            if(_likeQuestionRepository.GetUserLikedQuestion(questionDTO.Id,_contextAccessor.HttpContext.Items["UserId"]?.ToString()) != null)
+            if(_unitOfWork.Likes.GetUserLikedQuestion(questionDTO.Id,_contextAccessor.HttpContext.Items["UserId"]?.ToString()) != null)
                 questionDTO.IsLiked=true;
         }
         private void CheckLikedQuestions(List<QuestionDTO> questionDTOs)
         {
-            questionDTOs.ForEach(x => { if (_likeQuestionRepository.GetUserLikedQuestion(x.Id, _contextAccessor.HttpContext.Items["UserId"]?.ToString()) != null)
+            questionDTOs.ForEach(x => { if (_unitOfWork.Likes.GetUserLikedQuestion(x.Id, _contextAccessor.HttpContext.Items["UserId"]?.ToString()) != null)
                     x.IsLiked = true;
                 else x.IsLiked = false;
                 });
@@ -132,13 +133,13 @@ namespace MobUni.ApplicationCore.Services
 
          public IDataResult<List<LikeQuestionDTO>> GetMyLikedQuestions(string userId)
         {
-            var likeQuestion = _likeQuestionRepository.GetLikedByUserId(userId);
+            var likeQuestion = _unitOfWork.Likes.GetLikedByUserId(userId);
             return new SuccessDataResult<List<LikeQuestionDTO>>(_mapper.Map<List<LikeQuestionDTO>>(likeQuestion));
         }
 
         public async Task<IDataResult<List<QuestionDTO>>> GetQuestionsByUserId(string userId)
         {
-            var questions = await _questionRepository.GetByUserId(userId);
+            var questions = await _unitOfWork.Questions.GetByUserId(userId);
             return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(questions));
         }
     }

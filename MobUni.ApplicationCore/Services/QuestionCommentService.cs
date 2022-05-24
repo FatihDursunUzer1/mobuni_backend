@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
+using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
 using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.ApplicationCore.Result.Abstract;
@@ -17,25 +18,22 @@ namespace MobUni.ApplicationCore.Services
 {
     public class QuestionCommentService : IQuestionCommentService
     {
-        private ILikeQuestionRepository _likeRepository;
-        private readonly IQuestionCommentRepository _questionCommentRepository;
+        
+   
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private string _userId;
-        private readonly IQuestionRepository _questionRepository;
-        private readonly IActivityRepository _activityRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public QuestionCommentService(IQuestionCommentRepository questionCommentRepository, IMapper mapper,
-            ILikeQuestionRepository likeRepository, IHttpContextAccessor httpContextAccessor,IActivityRepository activityRepository, IQuestionRepository questionRepository)
+        public QuestionCommentService( IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
         {
-            _questionCommentRepository = questionCommentRepository;
+       
             _mapper = mapper;
-            _likeRepository = likeRepository;
             _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
             _userId = _httpContextAccessor.HttpContext.Items["UserId"].ToString();
-            _activityRepository = activityRepository;
-            _questionRepository = questionRepository;
         }
+
         public async Task<IDataResult<QuestionCommentDTO>> Add(CreateQuestionCommentDTO dto, string? userId = null)
         {
             var questionComment = _mapper.Map<QuestionComment>(dto);
@@ -52,11 +50,12 @@ namespace MobUni.ApplicationCore.Services
                 var questionComment = _mapper.Map<QuestionComment>(dto);
                 if (userId != null)
                     questionComment.UserId = userId;
-                await _questionCommentRepository.Add(questionComment, questionComment => questionComment.Question, questionComment => questionComment.User,questionComment=>questionComment.Activity);
+                await _unitOfWork.Comments.Add(questionComment, questionComment => questionComment.Question, questionComment => questionComment.User,questionComment=>questionComment.Activity);
                 if (questionComment.Question != null)
-                    _questionRepository.CountComment((int)questionComment.QuestionId);
+                    _unitOfWork.Questions.CountComment((int)questionComment.QuestionId);
                 else if (questionComment.Activity != null)
-                    _activityRepository.CountComment((int)questionComment.ActivityId);
+                    _unitOfWork.Activities.CountComment((int)questionComment.ActivityId);
+                await _unitOfWork.Save();
                 return new SuccessDataResult<bool>(true);
             }
             catch (Exception ex)
@@ -74,7 +73,7 @@ namespace MobUni.ApplicationCore.Services
         {
 
             //Check am I Liked?
-            var a = await _questionCommentRepository.GetAll();
+            var a = await _unitOfWork.Comments.GetAll();
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
         }
@@ -83,7 +82,7 @@ namespace MobUni.ApplicationCore.Services
         {
 
             //Check am I Liked?
-            var a = await _questionCommentRepository.GetAll(question => question.ActivityId==activityId);
+            var a = await _unitOfWork.Comments.GetAll(question => question.ActivityId==activityId);
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
             CheckLikedComments(questionComments,activityId, _userId, false);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
@@ -92,12 +91,12 @@ namespace MobUni.ApplicationCore.Services
         public IDataResult<QuestionCommentDTO> GetById(int id)
         {
             //Check am I Liked?
-            return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(_questionCommentRepository.GetById(id)));
+            return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(_unitOfWork.Comments.GetById(id)));
         }
 
         public async Task<IDataResult<List<QuestionCommentDTO>>> GetByQuestionId(int questionId)
         {
-            var a = await _questionCommentRepository.GetAll(question=>question.QuestionId==questionId);
+            var a = await _unitOfWork.Comments.GetAll(question=>question.QuestionId==questionId);
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
             CheckLikedComments(questionComments, questionId, _userId, true);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
@@ -105,7 +104,7 @@ namespace MobUni.ApplicationCore.Services
 
         private void CheckLikedComments(List<QuestionCommentDTO> questionComments, int id, string userId, bool isQuestionComment)
         {
-            var likes = _likeRepository.GetUserLikedComments(_userId,id, isQuestionComment);
+            var likes = _unitOfWork.Likes.GetUserLikedComments(_userId,id, isQuestionComment);
             foreach (var comment in questionComments)
             {
                 foreach(var like in likes)
@@ -120,7 +119,8 @@ namespace MobUni.ApplicationCore.Services
         {
             var questionComment= _mapper.Map<QuestionComment>(dto);
             questionComment.UpdatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-            await _questionCommentRepository.Update(questionComment, questionComment.Id);
+            questionComment= await _unitOfWork.Comments.Update(questionComment, questionComment.Id);
+            await _unitOfWork.Save();
             return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(questionComment));
         }
     }

@@ -17,13 +17,14 @@ namespace MobUni.ApplicationCore.Services
 {
     public class LikeService : ILikeService
     {
-        private readonly ILikeQuestionRepository _likeQuestionRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public LikeService(ILikeQuestionRepository likeQuestionRepository,IMapper mapper)
+        public LikeService( IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _likeQuestionRepository = likeQuestionRepository;
+       
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IDataResult<bool>> Like(CreateLikeDTO dto, string? userId = null)
         {
@@ -34,7 +35,9 @@ namespace MobUni.ApplicationCore.Services
                 like.QuestionId = dto.Id;
             like.UserId = userId;
             like.IsActive = true;
-            return new SuccessDataResult<bool>(await _likeQuestionRepository.LikeOrDislike(dto.TableType, dto.Id, userId));
+            bool value = await _unitOfWork.Likes.LikeOrDislike(dto.TableType, dto.Id, userId);
+            await _unitOfWork.Save();
+            return new SuccessDataResult<bool>(value);
         }
 
        
