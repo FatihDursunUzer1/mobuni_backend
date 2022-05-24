@@ -14,6 +14,8 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null);
 		public Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut);
 		public Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter = null);
+
+		public IDataResult<List<ActivityDTO>> GetNoTimeOuts();
 	}
 }
 

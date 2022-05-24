@@ -68,6 +68,11 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
         }
 
+        public  IDataResult<List<ActivityDTO>> GetNoTimeOuts()
+        {
+            return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<Activity>, List<ActivityDTO>>( _activityRepository.GetAll(activity => activity.Timeout == false).Result));
+        }
+
         public async Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut)
         {
             var dbActivity=_activityRepository.GetById(activityId);

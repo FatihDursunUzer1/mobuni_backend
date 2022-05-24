@@ -18,6 +18,8 @@ using MobUni.Infrastructure.Data.Contexts;
 using MobUni.Infrastructure.Repositories;
 using MobUni.Infrastructure.Storage;
 using MobUni.WebAPI;
+
+using MobUni.WebAPI.BackgroundServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -36,7 +38,8 @@ builder.Services.AddControllers(options => options.Filters.Add<ActionFilter>());
 //builder.Services.AddDbContext<MobUniDbContext>(options=> options.UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
 builder.Services.AddSingleton<IStorage, AzureStorage >();
-builder.Services.AddDbContext<MobUniDbContext>();
+builder.Services.AddHostedService<ActivityTimeOutService>();
+builder.Services.AddDbContext<MobUniDbContext>(ServiceLifetime.Transient);
 builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddTransient<IQuestionRepository,QuestionRepository>();
@@ -56,6 +59,8 @@ builder.Services.AddTransient<ILikeQuestionRepository,LikeQuestionRepository>();
 builder.Services.AddTransient<ILikeService,LikeService>();
 builder.Services.AddTransient<IActivityCategoryRepository,ActivityCategoryRepository>();
 builder.Services.AddTransient<IActivityCategoryService,ActivityCategoryService>();
+
+
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 {
