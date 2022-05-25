@@ -69,7 +69,6 @@ namespace MobUni.Infrastructure.Repositories
             if (question != null)
                 question.CommentCount++;
             _mobUniDbContext.Questions.Update(question);
-            _mobUniDbContext.SaveChangesAsync();
 
         }
     }

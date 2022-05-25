@@ -39,8 +39,9 @@ builder.Services.AddControllers(options => options.Filters.Add<ActionFilter>());
 //builder.Services.AddDbContext<MobUniDbContext>(options=> options.UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
 builder.Services.AddSingleton<IStorage, AzureStorage >();
-builder.Services.AddHostedService<ActivityTimeOutService>();
-builder.Services.AddDbContext<MobUniDbContext>(ServiceLifetime.Singleton);
+//builder.Services.AddHostedService<ActivityTimeOutService>();
+builder.Services.AddDbContext<MobUniDbContext>(optionsBuilder=>optionsBuilder.UseLazyLoadingProxies().
+            UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddTransient<IQuestionRepository,QuestionRepository>();
