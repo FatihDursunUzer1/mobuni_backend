@@ -12,7 +12,8 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 		Task<bool> LikeOrDislikeQuestion(int questionId, string userId);
         Task<List<Question>> GetByUserId(string userId);
 
-		void CountComment(int questionId);
-    }
+		Task CountComment(int questionId);
+
+	}
 }
 
