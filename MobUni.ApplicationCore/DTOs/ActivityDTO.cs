@@ -33,6 +33,8 @@ namespace MobUni.ApplicationCore.DTOs
         public bool Timeout { get; set; }
         public int[]? ActivityCategories { get; set; }
 
+        public bool IsJoined { get; set; }
+
     }
 }
 

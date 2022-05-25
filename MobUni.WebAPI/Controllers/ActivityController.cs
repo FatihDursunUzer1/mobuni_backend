@@ -7,6 +7,7 @@ using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.ApplicationCore.Interfaces.Services;
 using MobUni.Infrastructure.Controllers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,12 +19,14 @@ namespace MobUni.WebAPI.Controllers
     public class ActivityController : MobUniControllerBase
     {
         private readonly IActivityService _activtyService;
+        private readonly IActivityParticipantService _activityParticipantService;
 
-        public ActivityController(IActivityService activityService)
+        public ActivityController(IActivityService activityService, IActivityParticipantService activityParticipantService)
         {
             _activtyService = activityService;
+            _activityParticipantService = activityParticipantService;
         }
-   
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery]
@@ -43,6 +46,13 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> Update(int activityId,int? maxUser,bool? timeOut)
         {
             return CreateActionResultInstance(await _activtyService.Update(activityId,maxUser,timeOut));
+        }
+
+        [HttpPost("JoinOrLeave")]
+        public async Task<IActionResult> JoinOrLeave([FromBody] CreateActivityParticipantDTO createActivityParticipantDTO)
+        {
+            var userId = HttpContext.Items["UserId"]?.ToString();
+            return CreateActionResultInstance(await _activityParticipantService.Add(createActivityParticipantDTO,userId));
         }
        
     }

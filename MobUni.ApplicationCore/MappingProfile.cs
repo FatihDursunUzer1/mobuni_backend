@@ -32,6 +32,8 @@ namespace MobUni.ApplicationCore
 			CreateMap<LikeQuestionDTO, LikeQuestion>().ReverseMap();
 			CreateMap<LikeDTO, LikeQuestion>().ReverseMap();
 			CreateMap<ActivityCategory, ActivityCategoryDTO>().ReverseMap();
+			CreateMap<ActivityParticipant,ActivityParticipantDTO>().ReverseMap();
+			CreateMap<CreateActivityParticipantDTO, ActivityParticipant>().ReverseMap();
 		}
 	}
 }

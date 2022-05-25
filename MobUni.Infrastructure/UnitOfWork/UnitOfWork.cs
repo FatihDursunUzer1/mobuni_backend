@@ -27,11 +27,9 @@ namespace MobUni.Infrastructure.UnitOfWork
 
         public IUserRepository Users { get; }
 
-        private MobUniDbContext _dbContext;
+        public IActivityParticipantRepository ActivityParticipants { get; }
 
-        public UnitOfWork(IActivityCategoryRepository activityCategories, IActivityRepository activities, IDepartmentRepository departments, 
-            ILikeQuestionRepository likes, IQuestionCommentRepository comments, IQuestionRepository questions, IUniversityRepository universities,
-            IUserRepository users, MobUniDbContext dbContext)
+        public UnitOfWork(IActivityCategoryRepository activityCategories, IActivityRepository activities, IDepartmentRepository departments, ILikeQuestionRepository likes, IQuestionCommentRepository comments, IQuestionRepository questions, IUniversityRepository universities, IUserRepository users, IActivityParticipantRepository activityParticipants, MobUniDbContext dbContext)
         {
             ActivityCategories = activityCategories;
             Activities = activities;
@@ -41,8 +39,11 @@ namespace MobUni.Infrastructure.UnitOfWork
             Questions = questions;
             Universities = universities;
             Users = users;
+            ActivityParticipants = activityParticipants;
             _dbContext = dbContext;
         }
+
+        private MobUniDbContext _dbContext;
 
         public async Task Save()
         {
