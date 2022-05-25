@@ -14,14 +14,13 @@ namespace MobUni.Infrastructure.Data.Contexts
 {
     public class MobUniDbContext:DbContext
     {
-       /* public MobUniDbContext(DbContextOptions options):base(options)
+        public MobUniDbContext(DbContextOptions options):base(options)
         {
 
-        } */
+        } 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLazyLoadingProxies().
-            UseSqlServer("Data Source=mobuni.c9uwcgm4xelz.us-east-2.rds.amazonaws.com,1433;Initial Catalog=MobUni;User ID=admin;Password=oz15ar47uz28;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+           
         }
 
         public DbSet<User> Users { get; set; }
