@@ -18,6 +18,7 @@ namespace MobUni.ApplicationCore.Interfaces
         IQuestionRepository Questions { get; }
         IUniversityRepository Universities { get; }
         IUserRepository Users { get; }
+        IActivityParticipantRepository ActivityParticipants { get; }
         Task Save();
     }
 }

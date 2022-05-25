@@ -40,7 +40,7 @@ builder.Services.AddControllers(options => options.Filters.Add<ActionFilter>());
 
 builder.Services.AddSingleton<IStorage, AzureStorage >();
 builder.Services.AddHostedService<ActivityTimeOutService>();
-builder.Services.AddDbContext<MobUniDbContext>(ServiceLifetime.Transient);
+builder.Services.AddDbContext<MobUniDbContext>(ServiceLifetime.Singleton);
 builder.Services.AddTransient<IActivityService, ActivityService>();
 builder.Services.AddTransient<IQuestionService, QuestionService>();
 builder.Services.AddTransient<IQuestionRepository,QuestionRepository>();
@@ -61,6 +61,8 @@ builder.Services.AddTransient<ILikeService,LikeService>();
 builder.Services.AddTransient<IActivityCategoryRepository,ActivityCategoryRepository>();
 builder.Services.AddTransient<IActivityCategoryService,ActivityCategoryService>();
 builder.Services.AddTransient<IUnitOfWork,UnitOfWork>();
+builder.Services.AddTransient<IActivityParticipantRepository,ActivityParticipantRepository>();
+builder.Services.AddTransient<IActivityParticipantService,ActivityParticipantService>();
 
 
 

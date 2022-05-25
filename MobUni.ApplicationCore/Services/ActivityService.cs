@@ -19,13 +19,15 @@ namespace MobUni.ApplicationCore.Services
 	{
         private readonly IUnitOfWork _unitOfWork;
         private readonly IStorage _storage;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         private readonly IMapper _mapper;
-		public ActivityService(IActivityRepository activityRepository,IMapper mapper,IStorage storage,IUnitOfWork unitOfWork)
+		public ActivityService(IActivityRepository activityRepository,IMapper mapper,IStorage storage,IUnitOfWork unitOfWork,IHttpContextAccessor contextAccessor)
 		{
             _mapper = mapper;
             _storage= storage;
             _unitOfWork= unitOfWork;
+            _contextAccessor= contextAccessor;
 		}
 
         public async Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null)
@@ -66,9 +68,31 @@ namespace MobUni.ApplicationCore.Services
                     activitySetLoop = activities.Where(b => b.ActivityCategories.Contains(category)).ToHashSet<Activity>();
                     activitySet.UnionWith(activitySetLoop);
                 }
+                activities = activitySet.ToList();
             }
-            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activitySet.ToList());
+            List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
+            if(filter.UserId!=null)
+            await IsJoined(activitiyDTOS, filter.UserId);
+            else
+            {
+                var userId = _contextAccessor.HttpContext.Items["UserId"].ToString();
+                await IsJoined(activitiyDTOS, userId);
+            }
             return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
+        }
+
+        private async Task IsJoined(List<ActivityDTO> activityDTOS,string userId)
+        {
+            var joinedActivityIds = await _unitOfWork.ActivityParticipants.GetJoinedActivitiesIds(userId);
+            foreach (var activityDto in activityDTOS)
+            {
+                foreach (var activityId in joinedActivityIds)
+                    if (activityDto.Id == activityId)
+                    {
+                        activityDto.IsJoined = true;
+                    }
+            }
+
         }
 
         public  IDataResult<List<ActivityDTO>> GetNoTimeOuts()

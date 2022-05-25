@@ -33,6 +33,7 @@ namespace MobUni.Infrastructure.Data.Contexts
         public DbSet<LikeQuestion> LikeQuestion { get; set; }
         public DbSet<QuestionComment> QuestionComments { get; set; }
         public DbSet<ActivityCategory> ActivityCategories { get; set; }
+        public DbSet<ActivityParticipant> ActivityParticipants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,6 +46,7 @@ namespace MobUni.Infrastructure.Data.Contexts
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
+            OnBeforeSave();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
