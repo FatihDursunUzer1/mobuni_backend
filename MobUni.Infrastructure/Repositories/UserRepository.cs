@@ -61,7 +61,7 @@ namespace MobUni.Infrastructure.Repositories
                 user.DepartmentId=entity.DepartmentId;
 
             _mobUniDbContext.Users.Update(user);
- 
+            await _mobUniDbContext.SaveChangesAsync();
             return user;
         }
     }

@@ -20,12 +20,14 @@ namespace MobUni.Infrastructure.Repositories
         public async Task<T> Add(T entity, params Expression<Func<T, object>>[] includes)
         {
             var newEntry = _mobUniDbContext.Set<T>().Add(entity);
+            await _mobUniDbContext.SaveChangesAsync();
             await ApplyIncludes(includes, newEntry);
             return newEntry.Entity;
         }
         public async Task<T> Add(T entity)
         {
             _mobUniDbContext.Set<T>().Add(entity);
+            await _mobUniDbContext.SaveChangesAsync();
             return entity;
         }
         private static async Task ApplyIncludes(Expression<Func<T, object>>[] includes, Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<T> newEntry)
@@ -70,6 +72,7 @@ namespace MobUni.Infrastructure.Repositories
             _mobUniDbContext.Entry(exist).CurrentValues.SetValues(entity);*/
             _mobUniDbContext.Attach(entity);
             _mobUniDbContext.Entry(entity).State = EntityState.Modified;
+            await _mobUniDbContext.SaveChangesAsync();
             return entity;
         }
 
