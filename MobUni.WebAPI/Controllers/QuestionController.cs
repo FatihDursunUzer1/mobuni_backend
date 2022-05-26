@@ -41,7 +41,7 @@ namespace MobUni.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
-            return CreateActionResultInstance(await _questionService.GetAll());
+            return CreateActionResultInstance( _questionService.GetAll());
         }
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] QuestionDTO question)
@@ -61,13 +61,13 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(_questionService.GetMyLikedQuestions(_userId));
         } */
         [HttpGet("GetByUniversityId")]
-        public async Task<IActionResult> GetQuestionsByUniversityId(int universityId)
+        public IActionResult GetQuestionsByUniversityId(int universityId)
         {
-            return CreateActionResultInstance(await _questionService.GetByUniversityId(universityId));
+            return CreateActionResultInstance(_questionService.GetByUniversityId(universityId));
         }
 
          [HttpGet("GetQuestionCountsByUniversityId")]
-        public async Task<IActionResult> GetQuestionCountByUniversityId(int universityId)
+        public IActionResult GetQuestionCountByUniversityId(int universityId)
         {
             return CreateActionResultInstance(_questionService.GetQuestionCountByUniversityId(universityId));
         }
@@ -75,7 +75,7 @@ namespace MobUni.WebAPI.Controllers
         [HttpGet("GetQuestionsByUserId/{userId}")]
         public async Task<IActionResult> GetQuestionsByUserId(string userId)
         {
-            return CreateActionResultInstance(await _questionService.GetQuestionsByUserId(userId));
+            return CreateActionResultInstance(_questionService.GetQuestionsByUserId(userId));
         }
     }
 }

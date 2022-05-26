@@ -9,6 +9,7 @@ using MobUni.ApplicationCore.Entities.ActivityAggregate;
 using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.ApplicationCore.Result.Abstract;
 using MobUni.ApplicationCore.Result.Concrete;
 using MobUni.ApplicationCore.Services.Filters;
@@ -57,11 +58,23 @@ namespace MobUni.ApplicationCore.Services
         public async Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter)
         {
             //Dışarıdan katılımcı alma durumunun kontrolü gerekiyor.
-            var activitiesFilter =new ActivitiesGetByFilter(filter);
-            var activities =await  _unitOfWork.Activities.GetAll(filter!=null?activitiesFilter.SpecExpression:null);
+            List<ActivityDTO> activitiyDTOS =GetAllActivities(filter);
+            return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
+        }
+
+        public IDataResult<PaginatedList<ActivityDTO>> GetAllPaginated(ActivityFilter filter,PaginationQuery query)
+        {
+            var paginatedList =PaginatedList<ActivityDTO>.CreateAsync( GetAllActivities(filter),query.PageIndex,query.PageSize);
+            return new SuccessDataResult<PaginatedList<ActivityDTO>>(paginatedList);
+        }
+
+        private List<ActivityDTO> GetAllActivities(ActivityFilter filter,PaginationQuery? paginationQuery=null)
+        {
+            var activitiesFilter = new ActivitiesGetByFilter(filter);
+            var activities = _unitOfWork.Activities.GetAll(filter != null ? activitiesFilter.SpecExpression : null);
             HashSet<Activity> activitySet = new HashSet<Activity>();
-            HashSet < Activity > activitySetLoop=new HashSet<Activity>();
-            if (filter.Categories!=null) //Kategoriye göre filtreleme.
+            HashSet<Activity> activitySetLoop = new HashSet<Activity>();
+            if (filter.Categories != null) //Kategoriye göre filtreleme.
             {
                 foreach (var category in filter.Categories)
                 {
@@ -71,19 +84,20 @@ namespace MobUni.ApplicationCore.Services
                 activities = activitySet.ToList();
             }
             List<ActivityDTO> activitiyDTOS = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities);
-            if(filter.UserId!=null)
-            await IsJoined(activitiyDTOS, filter.UserId);
+            if (filter.UserId != null)
+                 IsJoined(activitiyDTOS, filter.UserId);
             else
             {
                 var userId = _contextAccessor.HttpContext.Items["UserId"].ToString();
-                await IsJoined(activitiyDTOS, userId);
+                 IsJoined(activitiyDTOS, userId);
             }
-            return new SuccessDataResult<List<ActivityDTO>>(activitiyDTOS);
+
+            return activitiyDTOS;
         }
 
-        private async Task IsJoined(List<ActivityDTO> activityDTOS,string userId)
+        private void IsJoined(List<ActivityDTO> activityDTOS,string userId)
         {
-            var joinedActivityIds = await _unitOfWork.ActivityParticipants.GetJoinedActivitiesIds(userId);
+            var joinedActivityIds = _unitOfWork.ActivityParticipants.GetJoinedActivitiesIds(userId);
             foreach (var activityDto in activityDTOS)
             {
                 foreach (var activityId in joinedActivityIds)
@@ -97,7 +111,7 @@ namespace MobUni.ApplicationCore.Services
 
         public  IDataResult<List<ActivityDTO>> GetNoTimeOuts()
         {
-            return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<Activity>, List<ActivityDTO>>( _unitOfWork.Activities.GetAll(activity => activity.Timeout == false).Result));
+            return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<Activity>, List<ActivityDTO>>( _unitOfWork.Activities.GetAll(activity => activity.Timeout == false)));
         }
 
         public async Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut)

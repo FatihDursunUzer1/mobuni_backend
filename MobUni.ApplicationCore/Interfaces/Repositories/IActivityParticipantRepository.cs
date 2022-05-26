@@ -9,7 +9,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 {
     public interface IActivityParticipantRepository:IRepository<ActivityParticipant>
     {
-        Task<List<int>> GetJoinedActivitiesIds(string userId);
+        List<int> GetJoinedActivitiesIds(string userId);
         Task<(ActivityParticipant, bool isJoined)> JoinOrLeave(ActivityParticipant activityParticipant);
     }
 }

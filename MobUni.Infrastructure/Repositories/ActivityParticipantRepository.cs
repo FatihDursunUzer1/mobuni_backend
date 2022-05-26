@@ -17,7 +17,7 @@ namespace MobUni.Infrastructure.Repositories
 
         public async Task<(ActivityParticipant,bool isJoined)> JoinOrLeave(ActivityParticipant activityParticipant)
         {
-            var dbActivityParticipants = await GetAll(a => a.IsApproved && a.UserId == activityParticipant.UserId && a.ActivityId == activityParticipant.ActivityId);
+            var dbActivityParticipants = GetAll(a => a.IsApproved && a.UserId == activityParticipant.UserId && a.ActivityId == activityParticipant.ActivityId);
             var dbActivityParticipant = dbActivityParticipants.FirstOrDefault();
             if (dbActivityParticipant == null)
             {
@@ -35,9 +35,9 @@ namespace MobUni.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<int>> GetJoinedActivitiesIds(string userId)
+        public List<int> GetJoinedActivitiesIds(string userId)
         {
-            var activityParticipants = await GetAll(a => a.UserId == userId && a.IsActive && a.IsJoined);
+            var activityParticipants =  GetAll(a => a.UserId == userId && a.IsActive && a.IsJoined);
             var Ids = activityParticipants.Select(a => a.ActivityId).ToList();
 
             return Ids;

@@ -59,10 +59,10 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<List<QuestionDTO>>> GetAll()
+        public IDataResult<List<QuestionDTO>> GetAll()
         {
             // var questionDtos = _mapper.Map<List<QuestionDTO>>(await _unitOfWork.Questions.GetAll());
-            var questionDtos = _mapper.Map<List<QuestionDTO>>( await _unitOfWork.Questions.GetAllQuestions().ToListAsync());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>( _unitOfWork.Questions.GetAllQuestions().ToListAsync());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
@@ -74,9 +74,9 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<QuestionDTO>(questionDTO);
         }
 
-        public async Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId)
+        public IDataResult<List<QuestionDTO>> GetByUniversityId(int universityId)
         {
-            var questionDtos = _mapper.Map<List<QuestionDTO>>(await _unitOfWork.Questions.GetAllQuestionsByUniversityId(universityId).ToListAsync());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>(_unitOfWork.Questions.GetAllQuestionsByUniversityId(universityId).ToListAsync());
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
@@ -87,9 +87,9 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<int>(questionCount);
         }
 
-        public async Task<IDataResult<List<QuestionDTO>>> GetMyQuestions(string userId)
+        public IDataResult<List<QuestionDTO>> GetMyQuestions(string userId)
         {
-            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(await _unitOfWork.Questions.GetAll(question => question.UserId == userId)));
+            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>( _unitOfWork.Questions.GetAll(question => question.UserId == userId)));
         }
 
         public async Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null)
@@ -137,9 +137,9 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<List<LikeQuestionDTO>>(_mapper.Map<List<LikeQuestionDTO>>(likeQuestion));
         }
 
-        public async Task<IDataResult<List<QuestionDTO>>> GetQuestionsByUserId(string userId)
+        public IDataResult<List<QuestionDTO>> GetQuestionsByUserId(string userId)
         {
-            var questions = await _unitOfWork.Questions.GetByUserId(userId);
+            var questions = _unitOfWork.Questions.GetByUserId(userId);
             return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(questions));
         }
     }

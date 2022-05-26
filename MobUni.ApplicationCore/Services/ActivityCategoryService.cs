@@ -34,9 +34,9 @@ namespace MobUni.ApplicationCore.Services
 
         }
 
-        public async Task<IDataResult<List<ActivityCategoryDTO>>> GetAll()
+        public IDataResult<List<ActivityCategoryDTO>> GetAll()
         {
-            return new SuccessDataResult<List<ActivityCategoryDTO>>(_mapper.Map<List<ActivityCategoryDTO>>(await _unitOfWork.ActivityCategories.GetAll()));
+            return new SuccessDataResult<List<ActivityCategoryDTO>>(_mapper.Map<List<ActivityCategoryDTO>>(_unitOfWork.ActivityCategories.GetAll()));
         }
     }
 }

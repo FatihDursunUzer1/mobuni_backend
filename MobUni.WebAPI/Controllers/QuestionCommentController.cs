@@ -29,13 +29,13 @@ namespace MobUni.WebAPI.Controllers
         [HttpGet("GetByQuestionId/{questionId}")]
         public async Task<IActionResult> GetByQuestionId(int questionId)
         {
-            return CreateActionResultInstance(await _questionCommentService.GetByQuestionId(questionId));
+            return CreateActionResultInstance( _questionCommentService.GetByQuestionId(questionId));
         }
 
         [HttpGet("GetByActivityId/{activityId}")]
         public async Task<IActionResult> GetByActivityId(int activityId)
         {
-            return CreateActionResultInstance(await _questionCommentService.GetByActivityId(activityId));
+            return CreateActionResultInstance( _questionCommentService.GetByActivityId(activityId));
         }
     }
 }

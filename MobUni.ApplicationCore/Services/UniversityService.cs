@@ -39,9 +39,9 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<List<UniversityDTO>>> GetAll()
+        public IDataResult<List<UniversityDTO>> GetAll()
         {
-            return new SuccessDataResult<List<UniversityDTO>>(_mapper.Map<List<University>, List<UniversityDTO>>(await _unitOfWork.Universities.GetAll()));
+            return new SuccessDataResult<List<UniversityDTO>>(_mapper.Map<List<University>, List<UniversityDTO>>(_unitOfWork.Universities.GetAll()));
         }
 
         public IDataResult<UniversityDTO> GetById(int id)
