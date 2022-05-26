@@ -10,7 +10,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 		IQueryable<Question> GetAllQuestionsByUniversityId(int universityId);
 		Task<bool> LikeCount(int questionId, bool isActive);
 		Task<bool> LikeOrDislikeQuestion(int questionId, string userId);
-        Task<List<Question>> GetByUserId(string userId);
+		List<Question> GetByUserId(string userId);
 
 		Task CountComment(int questionId);
 

@@ -58,9 +58,9 @@ namespace MobUni.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<Question>> GetByUserId(string userId)
+        public List<Question> GetByUserId(string userId)
         {
-            return await _mobUniDbContext.Questions.Where(question=>question.UserId==userId).Include(question => question.User).OrderByDescending(t => t.CreatedTime).ToListAsync();
+            return _mobUniDbContext.Questions.Where(question => question.UserId == userId).Include(question => question.User).OrderByDescending(t => t.CreatedTime).ToList();
         }
 
         public async Task CountComment(int questionId)
