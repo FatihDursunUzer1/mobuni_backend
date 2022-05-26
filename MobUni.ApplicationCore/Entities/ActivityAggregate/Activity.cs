@@ -26,7 +26,9 @@ namespace MobUni.ApplicationCore.Entities.ActivityAggregate
         public DateTime ActivityEndTime { get; set; } 
 
         public int CommentCount { get; set; }
-        public int LikeCount { get; set; }
+
+        [Column("LikeCount")]
+        public int JoinedCount { get; set; }
 
         public bool IsExternal { get; set; }
         public bool Timeout { get; set; }

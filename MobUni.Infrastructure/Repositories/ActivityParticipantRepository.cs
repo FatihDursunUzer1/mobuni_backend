@@ -15,20 +15,23 @@ namespace MobUni.Infrastructure.Repositories
         {
         }
 
-        public async Task<ActivityParticipant> JoinOrLeave(ActivityParticipant activityParticipant)
+        public async Task<(ActivityParticipant,bool isJoined)> JoinOrLeave(ActivityParticipant activityParticipant)
         {
-            var dbActivityParticipants = await GetAll(a => a.IsJoined && a.IsApproved && a.UserId == activityParticipant.UserId && a.ActivityId == activityParticipant.ActivityId);
+            var dbActivityParticipants = await GetAll(a => a.IsApproved && a.UserId == activityParticipant.UserId && a.ActivityId == activityParticipant.ActivityId);
             var dbActivityParticipant = dbActivityParticipants.FirstOrDefault();
             if (dbActivityParticipant == null)
             {
                 activityParticipant = await Add(activityParticipant,a=>a.Activity,a=>a.User);
-                return activityParticipant;
+                return (activityParticipant,true);
             }
             else
             {
                 dbActivityParticipant.IsJoined = !dbActivityParticipant.IsJoined;
                 await Update(dbActivityParticipant, dbActivityParticipant.Id);
-                return dbActivityParticipant;
+                if(dbActivityParticipant.IsJoined)
+                return (dbActivityParticipant,true);
+                else 
+                    return (dbActivityParticipant, false);
             }
         }
 

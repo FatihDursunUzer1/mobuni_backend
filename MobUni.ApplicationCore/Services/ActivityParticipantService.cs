@@ -28,7 +28,14 @@ namespace MobUni.ApplicationCore.Services
         {
             var activityParticipant = _mapper.Map<CreateActivityParticipantDTO, ActivityParticipant>(dto);
             activityParticipant.UserId= userId;
-            activityParticipant=await _unitOfWork.ActivityParticipants.JoinOrLeave(activityParticipant);
+            var joinOrLeave = await _unitOfWork.ActivityParticipants.JoinOrLeave(activityParticipant);
+            activityParticipant = joinOrLeave.Item1;
+            //var activity= _unitOfWork.Activities.GetById(activityParticipant.ActivityId);
+            if (joinOrLeave.Item2)
+                activityParticipant.Activity.JoinedCount++;
+            else
+                activityParticipant.Activity.JoinedCount--;
+            await _unitOfWork.Activities.Update(activityParticipant.Activity,activityParticipant.ActivityId);
             await _unitOfWork.Save();
             return new SuccessDataResult<ActivityParticipantDTO>(_mapper.Map<ActivityParticipant, ActivityParticipantDTO>(activityParticipant));
         }
