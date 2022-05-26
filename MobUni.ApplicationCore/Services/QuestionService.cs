@@ -76,7 +76,7 @@ namespace MobUni.ApplicationCore.Services
 
         public IDataResult<List<QuestionDTO>> GetByUniversityId(int universityId)
         {
-            var questionDtos = _mapper.Map<List<QuestionDTO>>(_unitOfWork.Questions.GetAllQuestionsByUniversityId(universityId).ToListAsync());
+            var questionDtos = _mapper.Map<List<QuestionDTO>>(_unitOfWork.Questions.GetAll(question=>question.UniversityId==universityId));
             CheckLikedQuestions(questionDtos);
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
