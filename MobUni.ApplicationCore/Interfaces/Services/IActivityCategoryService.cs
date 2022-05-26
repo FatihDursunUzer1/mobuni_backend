@@ -10,7 +10,7 @@ namespace MobUni.ApplicationCore.Interfaces.Services
 {
     public interface IActivityCategoryService
     {
-        Task<IDataResult<List<ActivityCategoryDTO>>> GetAll();
+       IDataResult<List<ActivityCategoryDTO>> GetAll();
         Task<IDataResult<ActivityCategoryDTO>> Add(ActivityCategoryDTO activityCategoryDTO);
     }
 }

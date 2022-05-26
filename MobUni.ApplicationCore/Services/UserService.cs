@@ -81,9 +81,9 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<List<UserDTO>>> GetAll()
+        public IDataResult<List<UserDTO>> GetAll()
         {
-            return new SuccessDataResult<List<UserDTO>>(_mapper.Map<List<User>, List<UserDTO>>(await _unitOfWork.Users.GetAll()));
+            return new SuccessDataResult<List<UserDTO>>(_mapper.Map<List<User>, List<UserDTO>>(_unitOfWork.Users.GetAll()));
         }
 
         public IDataResult<UserDTO> GetById(string userId)

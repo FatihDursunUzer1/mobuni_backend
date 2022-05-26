@@ -19,9 +19,9 @@ namespace MobUni.WebAPI.Controllers
             _activityCategoryService = activityCategoryService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            return CreateActionResultInstance(await _activityCategoryService.GetAll());
+            return CreateActionResultInstance( _activityCategoryService.GetAll());
         }
 
         [HttpPost]

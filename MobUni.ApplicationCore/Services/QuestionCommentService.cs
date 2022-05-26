@@ -69,20 +69,20 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<List<QuestionCommentDTO>>> GetAll()
+        public  IDataResult<List<QuestionCommentDTO>> GetAll()
         {
 
             //Check am I Liked?
-            var a = await _unitOfWork.Comments.GetAll();
+            var a = _unitOfWork.Comments.GetAll();
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
         }
 
-        public async Task<IDataResult<List<QuestionCommentDTO>>> GetByActivityId(int activityId)
+        public IDataResult<List<QuestionCommentDTO>> GetByActivityId(int activityId)
         {
 
             //Check am I Liked?
-            var a = await _unitOfWork.Comments.GetAll(question => question.ActivityId==activityId);
+            var a = _unitOfWork.Comments.GetAll(question => question.ActivityId==activityId);
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
             CheckLikedComments(questionComments,activityId, _userId, false);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);
@@ -94,9 +94,9 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<QuestionCommentDTO>(_mapper.Map<QuestionCommentDTO>(_unitOfWork.Comments.GetById(id)));
         }
 
-        public async Task<IDataResult<List<QuestionCommentDTO>>> GetByQuestionId(int questionId)
+        public IDataResult<List<QuestionCommentDTO>> GetByQuestionId(int questionId)
         {
-            var a = await _unitOfWork.Comments.GetAll(question=>question.QuestionId==questionId);
+            var a = _unitOfWork.Comments.GetAll(question=>question.QuestionId==questionId);
             List<QuestionCommentDTO> questionComments = _mapper.Map<List<QuestionComment>, List<QuestionCommentDTO>>(a);
             CheckLikedComments(questionComments, questionId, _userId, true);
             return new SuccessDataResult<List<QuestionCommentDTO>>(questionComments);

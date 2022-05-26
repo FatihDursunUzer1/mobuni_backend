@@ -45,7 +45,7 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public Task<Result.Abstract.IDataResult<List<ActivityParticipantDTO>>> GetAll()
+        public Result.Abstract.IDataResult<List<ActivityParticipantDTO>> GetAll()
         {
             throw new NotImplementedException();
         }

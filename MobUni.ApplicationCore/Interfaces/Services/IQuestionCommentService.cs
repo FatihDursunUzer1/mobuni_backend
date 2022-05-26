@@ -11,8 +11,8 @@ namespace MobUni.ApplicationCore.Interfaces.Services
 {
     public interface IQuestionCommentService:IService<QuestionCommentDTO,CreateQuestionCommentDTO>
     {
-        Task<IDataResult<List<QuestionCommentDTO>>> GetByQuestionId(int questionId);
+        IDataResult<List<QuestionCommentDTO>> GetByQuestionId(int questionId);
         Task<IDataResult<bool>> AddComment(CreateQuestionCommentDTO dto, string? userId = null);
-        Task<IDataResult<List<QuestionCommentDTO>>> GetByActivityId(int activityId);
+        IDataResult<List<QuestionCommentDTO>> GetByActivityId(int activityId);
     }
 }

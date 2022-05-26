@@ -44,7 +44,7 @@ namespace MobUni.WebAPI.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            return CreateActionResultInstance(await _userService.GetAll());
+            return CreateActionResultInstance( _userService.GetAll());
         }
         [HttpGet("GetByUserId")]
         public IActionResult GetByUserId([FromQuery] string UserId)

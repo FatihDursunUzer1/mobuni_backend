@@ -33,7 +33,7 @@ namespace MobUni.WebAPI.Controllers
         [HttpGet("ALL")]
         public async Task<IActionResult> GetAll()
         {
-            return CreateActionResultInstance(await _departmentService.GetAll());
+            return CreateActionResultInstance( _departmentService.GetAll());
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<bool> Delete(TDTO dto);
 		public Task<IDataResult<TDTO>> Add(CreateDTO dto,string? userId=null);
 		public Task<IDataResult<TDTO>> Update(TDTO dto);
-		public Task<IDataResult<List<TDTO>>> GetAll();
+		public IDataResult<List<TDTO>> GetAll();
 	}
 }
 

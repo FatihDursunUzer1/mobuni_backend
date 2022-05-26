@@ -51,7 +51,7 @@ namespace MobUni.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>> exp=null)
+        public List<T> GetAll(Expression<Func<T, bool>> exp=null)
         {
             if (exp != null)
             {

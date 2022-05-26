@@ -40,9 +40,9 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<List<DepartmentDTO>>> GetAll()
+        public  IDataResult<List<DepartmentDTO>> GetAll()
         {
-            return new SuccessDataResult<List<DepartmentDTO>>(_mapper.Map<List<Department>, List<DepartmentDTO>>(await _unitOfWork.Departments.GetAll()));
+            return new SuccessDataResult<List<DepartmentDTO>>(_mapper.Map<List<Department>, List<DepartmentDTO>>( _unitOfWork.Departments.GetAll()));
         }
 
         public IDataResult<DepartmentDTO> GetById(int id)

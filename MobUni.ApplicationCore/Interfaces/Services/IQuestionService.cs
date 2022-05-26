@@ -9,10 +9,10 @@ namespace MobUni.ApplicationCore.Interfaces
 {
 	public interface IQuestionService:IService<QuestionDTO,CreateQuestionDTO>
 	{
-		public Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null);
-		Task<IDataResult<List<QuestionDTO>>> GetByUniversityId(int universityId);
-		Task<IDataResult<List<QuestionDTO>>> GetMyQuestions(string userId);
-		Task<IDataResult<List<QuestionDTO>>> GetQuestionsByUserId(string userId);
+		Task<IDataResult<bool>> LikeQuestion(int questionId, string? userId=null);
+		IDataResult<List<QuestionDTO>> GetByUniversityId(int universityId);
+		IDataResult<List<QuestionDTO>> GetMyQuestions(string userId);
+		IDataResult<List<QuestionDTO>> GetQuestionsByUserId(string userId);
 		IDataResult<List<LikeQuestionDTO>> GetMyLikedQuestions(string userId);
 
 		IDataResult<int> GetQuestionCountByUniversityId(int universityId);

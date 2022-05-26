@@ -47,7 +47,7 @@ namespace MobUni.ApplicationCore.Services
             throw new NotImplementedException();
         }
 
-        public Task<IDataResult<List<LikeDTO>>> GetAll()
+        public IDataResult<List<LikeDTO>> GetAll()
         {
             throw new NotImplementedException();
         }
