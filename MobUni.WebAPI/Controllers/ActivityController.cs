@@ -33,7 +33,7 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> GetAllAsync([FromQuery]
            ActivityFilter filter, [FromQuery] PaginationQuery? paginationQuery)
         {
-            if (paginationQuery.PageSize==0 && paginationQuery.PageIndex==0)
+            if (paginationQuery.PageSize==0 || paginationQuery.PageIndex==0)
                 return CreateActionResultInstance(await _activtyService.GetAll(filter));
             else
                 return CreateActionResultInstance(_activtyService.GetAllPaginated(filter,paginationQuery));
