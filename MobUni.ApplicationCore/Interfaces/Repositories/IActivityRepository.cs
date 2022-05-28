@@ -5,7 +5,7 @@ namespace MobUni.ApplicationCore.Interfaces.Repositories
 {
 	public interface IActivityRepository:IRepository<Activity>
 	{
-		void CountComment(int activityId);
+		Task CountComment(int activityId);
 		int GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null);
 	}
 }

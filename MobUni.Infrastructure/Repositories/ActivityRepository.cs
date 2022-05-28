@@ -11,12 +11,13 @@ namespace MobUni.Infrastructure.Repositories
         {
            
         }
-        public void CountComment(int activityId)
+        public async Task CountComment(int activityId)
         {
             var activity = GetById(activityId);
             if (activity != null)
                 activity.CommentCount++;
             _mobUniDbContext.Activities.Update(activity);
+           await _mobUniDbContext.SaveChangesAsync();
         }
 
         public int GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null)

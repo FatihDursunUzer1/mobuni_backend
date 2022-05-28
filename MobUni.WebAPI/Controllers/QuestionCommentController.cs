@@ -21,7 +21,7 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> Add([FromBody] CreateQuestionCommentDTO createQuestionCommentDTO)
         {
             if (!ModelState.IsValid)
-                return StatusCode(400,"Siuuu");
+                return StatusCode(400,"");
             var userId = HttpContext.Items["UserId"].ToString();
             return CreateActionResultInstance(await _questionCommentService.AddComment(createQuestionCommentDTO,userId));
         }
