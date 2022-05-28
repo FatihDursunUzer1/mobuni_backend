@@ -16,7 +16,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		public Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut);
 		public Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter = null);
 		public IDataResult<PaginatedList<ActivityDTO>> GetAllPaginated(ActivityFilter filter, PaginationQuery query);
-
+		IDataResult<int> GetActivitiesByUniversityId(int universityId, DateTime? dateTime = null);
 		public IDataResult<List<ActivityDTO>> GetNoTimeOuts();
 	}
 }

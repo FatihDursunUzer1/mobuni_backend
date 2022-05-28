@@ -57,7 +57,16 @@ namespace MobUni.WebAPI.Controllers
             var userId = HttpContext.Items["UserId"]?.ToString();
             return CreateActionResultInstance(await _activityParticipantService.Add(createActivityParticipantDTO,userId));
         }
-       
+
+        [HttpGet("GetActivityCountsByUniversityId")]
+        public IActionResult GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null)
+        {
+            if (dateTime != null)
+                dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
+            return CreateActionResultInstance(_activtyService.GetActivitiesByUniversityId(universityId, dateTime));
+        }
+
+
     }
 }
 

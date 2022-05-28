@@ -7,7 +7,7 @@ namespace MobUni.ApplicationCore.Interfaces
 	public interface IRepository<T> where T : class
 	{
 		public T GetById(int id);
-		public List<T> GetAll(Expression<Func<T, bool>> exp = null);
+		List<T> GetAll(Expression<Func<T, bool>> exp = null, int? PageIndex = null, int? PageSize = null);
 		public Task<T> Add(T entity, params Expression<Func<T, object>>[] includes);
 		public Task<T> Add(T entity);
 

@@ -50,15 +50,33 @@ namespace MobUni.Infrastructure.Repositories
         public async Task<bool> Delete(T entity) { _mobUniDbContext.Remove<T>(entity);
             return true;
         }
-
-        public List<T> GetAll(Expression<Func<T, bool>> exp=null)
+        
+        public List<T> GetAll(Expression<Func<T, bool>> exp=null, int? PageIndex=null, int? PageSize=null)
         {
             if (exp != null)
             {
-                return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).ToList();
+                if (PageIndex != null && PageSize != null)
+                {
+                    return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t => t.CreatedTime).Skip((PageIndex.Value - 1) * PageSize.Value).Take(PageSize.Value).ToList();
+                }
+                else
+                {
+                    return _mobUniDbContext.Set<T>().Where(exp).OrderByDescending(t=>t.CreatedTime).ToList();
+                }
             }
 
-            return _mobUniDbContext.Set<T>().OrderByDescending(t => t.CreatedTime).ToList();
+            else
+            {
+
+                if (PageIndex != null && PageSize != null)
+                {
+                    return _mobUniDbContext.Set<T>().OrderByDescending(t => t.CreatedTime).Skip((PageIndex.Value - 1) * PageSize.Value).Take(PageSize.Value).ToList();
+                }
+                else
+                {
+                    return _mobUniDbContext.Set<T>().OrderByDescending(t => t.CreatedTime).ToList();
+                }
+            }
         }
 
         public  T GetById(int id)

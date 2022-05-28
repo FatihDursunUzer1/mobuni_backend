@@ -8,6 +8,7 @@ using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.QuestionAggregate;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.ApplicationCore.Result.Abstract;
 using MobUni.ApplicationCore.Result.Concrete;
 
@@ -81,12 +82,11 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<List<QuestionDTO>>(questionDtos);
         }
 
-        public IDataResult<int> GetQuestionCountByUniversityId(int universityId)
+        public IDataResult<int> GetQuestionCountByUniversityId(int universityId,DateTime? dateTime=null)
         {
-            var questionCount = _unitOfWork.Questions.GetQuestionCountByUniversityId(universityId);
+            var questionCount = _unitOfWork.Questions.GetQuestionCountByUniversityId(universityId,dateTime);
             return new SuccessDataResult<int>(questionCount);
         }
-
         public IDataResult<List<QuestionDTO>> GetMyQuestions(string userId)
         {
             return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>( _unitOfWork.Questions.GetAll(question => question.UserId == userId)));
@@ -140,8 +140,27 @@ namespace MobUni.ApplicationCore.Services
         public IDataResult<List<QuestionDTO>> GetQuestionsByUserId(string userId)
         {
             var questions = _unitOfWork.Questions.GetByUserId(userId);
-            return new SuccessDataResult<List<QuestionDTO>>(_mapper.Map<List<QuestionDTO>>(questions));
+            var questionDTOS = _mapper.Map<List<QuestionDTO>>(questions);
+            CheckLikedQuestions(questionDTOS);
+            return new SuccessDataResult<List<QuestionDTO>>(questionDTOS);
         }
+
+        public IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUserIdPagination(string userId, PaginationQuery paginationQuery)
+        {
+            var questions = _unitOfWork.Questions.GetByUserId(userId);
+            var paginatedList = PaginatedList<QuestionDTO>.CreateAsync(_mapper.Map<List<Question>, List<QuestionDTO>>(questions), paginationQuery.PageIndex, paginationQuery.PageSize);
+            CheckLikedQuestions(paginatedList.Items);
+            return new SuccessDataResult<PaginatedList<QuestionDTO>>(paginatedList);
+        }
+
+        public IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUniversityIdPagination(int universityId, PaginationQuery paginationQuery)
+        {
+            var questions = _unitOfWork.Questions.GetAll(question => question.UniversityId == universityId);
+            var paginatedList = PaginatedList<QuestionDTO>.CreateAsync(_mapper.Map<List<Question>, List<QuestionDTO>>(questions), paginationQuery.PageIndex, paginationQuery.PageSize);
+            CheckLikedQuestions(paginatedList.Items);
+            return new SuccessDataResult<PaginatedList<QuestionDTO>>(paginatedList);
+        }
+
     }
 }
 

@@ -126,6 +126,10 @@ namespace MobUni.ApplicationCore.Services
             await _unitOfWork.Activities.Update(dbActivity, activityId);
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(dbActivity));
         }
+        public IDataResult<int> GetActivitiesByUniversityId(int universityId,DateTime? dateTime=null)
+        {
+            return new SuccessDataResult<int>(_unitOfWork.Activities.GetActivityCountByUniversityId(universityId, dateTime));
+        }
     }
 }
 

@@ -18,6 +18,18 @@ namespace MobUni.Infrastructure.Repositories
                 activity.CommentCount++;
             _mobUniDbContext.Activities.Update(activity);
         }
+
+        public int GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null)
+        {
+            if (dateTime == null)
+            {
+                return _mobUniDbContext.Activities.Count(x => x.UniversityId == universityId);
+            }
+            else
+            {
+                return _mobUniDbContext.Activities.Count(x => x.UniversityId == universityId && x.CreatedTime > dateTime);
+            }
+        }
     }
 }
 

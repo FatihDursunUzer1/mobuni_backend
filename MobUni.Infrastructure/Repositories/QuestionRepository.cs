@@ -14,9 +14,16 @@ namespace MobUni.Infrastructure.Repositories
 
         }
 
-        public int GetQuestionCountByUniversityId(int universityId)
+        public int GetQuestionCountByUniversityId(int universityId,DateTime? dateTime=null)
         {
-            return _mobUniDbContext.Questions.Where(question=>question.University.Id== universityId).Count();
+            if (dateTime == null)
+            {
+                return _mobUniDbContext.Questions.Count(x => x.UniversityId == universityId);
+            }
+            else
+            {
+                return _mobUniDbContext.Questions.Count(x => x.UniversityId == universityId && x.CreatedTime > dateTime);
+            }
         }
 
         public IQueryable<Question> GetAllQuestions()
@@ -58,9 +65,13 @@ namespace MobUni.Infrastructure.Repositories
             }
         }
 
-        public List<Question> GetByUserId(string userId)
+        public List<Question> GetByUserId(string userId,int? pageIndex=null, int? pageSize=null)
         {
-            return _mobUniDbContext.Questions.Where(question => question.UserId == userId).Include(question => question.User).OrderByDescending(t => t.CreatedTime).ToList();
+            if (pageIndex == null || pageIndex == 0 || pageSize == null || pageSize == 0)
+                return _mobUniDbContext.Questions.Where(question => question.UserId == userId).OrderByDescending(t => t.CreatedTime).ToList();
+            else
+                return _mobUniDbContext.Questions.Where(question => question.UserId == userId).OrderByDescending(t => t.CreatedTime).Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value).ToList();
+         
         }
 
         public async Task CountComment(int questionId)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Interfaces;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.Infrastructure.Controllers;
 
 namespace MobUni.WebAPI.Controllers
@@ -31,11 +32,15 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(await _questionService.Add(questionDTO,_userId));
         }
 
+        //Pagination
+
         [HttpGet("GetByQuestionId")]
         public async Task<IActionResult> Get([FromQuery] int id)
         {
             return CreateActionResultInstance(_questionService.GetById(id));
         }
+
+        //Pagination
 
         [HttpGet("GetAll")]
         [AllowAnonymous]
@@ -48,7 +53,7 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(await _questionService.Update(question));
         }
-
+        
         [HttpPut("LikeQuestion")]
         public async Task<IActionResult> LikeQuestion(int questionId)
         {
@@ -60,22 +65,33 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(_questionService.GetMyLikedQuestions(_userId));
         } */
+
+        //Pagination
         [HttpGet("GetByUniversityId")]
-        public IActionResult GetQuestionsByUniversityId(int universityId)
+        public IActionResult GetQuestionsByUniversityId(int universityId, [FromQuery] PaginationQuery? paginationQuery)
         {
-            return CreateActionResultInstance(_questionService.GetByUniversityId(universityId));
+            if(paginationQuery.PageSize==0 || paginationQuery.PageIndex==0)
+                return CreateActionResultInstance(_questionService.GetByUniversityId(universityId));
+            return CreateActionResultInstance(_questionService.GetQuestionsByUniversityIdPagination(universityId, paginationQuery));
         }
 
          [HttpGet("GetQuestionCountsByUniversityId")]
-        public IActionResult GetQuestionCountByUniversityId(int universityId)
+        public IActionResult GetQuestionCountByUniversityId(int universityId, DateTime? dateTime = null)
         {
-            return CreateActionResultInstance(_questionService.GetQuestionCountByUniversityId(universityId));
+            if(dateTime!=null)
+                dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
+            return CreateActionResultInstance(_questionService.GetQuestionCountByUniversityId(universityId,dateTime));
         }
 
+        //Pagination
+
         [HttpGet("GetQuestionsByUserId/{userId}")]
-        public async Task<IActionResult> GetQuestionsByUserId(string userId)
+        public async Task<IActionResult> GetQuestionsByUserId(string userId, [FromQuery] PaginationQuery? paginationQuery)
         {
-            return CreateActionResultInstance(_questionService.GetQuestionsByUserId(userId));
+            if (paginationQuery.PageSize == 0 || paginationQuery.PageIndex == 0)
+                return CreateActionResultInstance(_questionService.GetQuestionsByUserId(userId));
+            else
+                return CreateActionResultInstance(_questionService.GetQuestionsByUserIdPagination(userId, paginationQuery));
         }
     }
 }
