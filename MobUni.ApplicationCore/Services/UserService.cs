@@ -20,19 +20,21 @@ namespace MobUni.ApplicationCore.Services
 {
     public class UserService : IUserService
     {
+        private IFirestoreUser _firestoreUser;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IJwtUtils _jwtUtils;
         private readonly IStorage _storage;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IJwtUtils jwtUtils, IStorage storage, IHttpContextAccessor contextAccessor)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IJwtUtils jwtUtils, IStorage storage, IHttpContextAccessor contextAccessor,IFirestoreUser firestoreUser)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jwtUtils = jwtUtils;
             _storage = storage;
             _contextAccessor = contextAccessor;
+            _firestoreUser = firestoreUser;
         }
 
         public async Task<IDataResult<UserDTO>> Add(CreateUserDTO dto,string? userId=null)
@@ -47,6 +49,8 @@ namespace MobUni.ApplicationCore.Services
                 user.CreateUserTime();
                 await _unitOfWork.Users.Add(user,user=>user.University,user=>user.Department);
                 await _unitOfWork.Save();
+
+               await _firestoreUser.AddToUserDocument(user);
                 return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(user));
             }
             catch (SqlException ex)
@@ -97,6 +101,7 @@ namespace MobUni.ApplicationCore.Services
             var dtoUser = _mapper.Map<User>(dto);
             dtoUser=await _unitOfWork.Users.UpdateAsync(dtoUser);
             await _unitOfWork.Save();
+            await _firestoreUser.AddToUserDocument(dtoUser);
             return new SuccessDataResult<UserDTO>(_mapper.Map<User, UserDTO>(dtoUser));
         }
 
