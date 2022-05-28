@@ -19,11 +19,15 @@ using MobUni.Infrastructure.Repositories;
 using MobUni.Infrastructure.Storage;
 using MobUni.Infrastructure.UnitOfWork;
 using MobUni.WebAPI;
+using Google.Cloud.Firestore;
 
 using MobUni.WebAPI.BackgroundServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using MobUni.Infrastructure.Firestore.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +68,7 @@ builder.Services.AddTransient<IActivityCategoryService,ActivityCategoryService>(
 builder.Services.AddTransient<IUnitOfWork,UnitOfWork>();
 builder.Services.AddTransient<IActivityParticipantRepository,ActivityParticipantRepository>();
 builder.Services.AddTransient<IActivityParticipantService,ActivityParticipantService>();
-
+builder.Services.AddTransient<IFirestoreUser, FirestoreUser>();
 
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
@@ -82,6 +86,9 @@ builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
  * 
  * 
  *  */
+
+
+System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "mobuniserviceAccountKey.json");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

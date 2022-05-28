@@ -1,4 +1,6 @@
 ﻿using System;
+using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.Entities.UserAggregate;
 using MobUni.ApplicationCore.Interfaces.Repositories;
@@ -8,9 +10,12 @@ namespace MobUni.Infrastructure.Repositories
 {
 	public class UserRepository: EfRepositoryBase<User>,IUserRepository
 	{
+        private readonly FirestoreDb db;
+        
         public UserRepository(MobUniDbContext mobUniDbContext):base(mobUniDbContext)
         {
-            
+          
+            db = FirestoreDb.Create("mobuni-f6930");
         }
         public User? GetByEmailOrUserName(string emailOrUserName)
         {
