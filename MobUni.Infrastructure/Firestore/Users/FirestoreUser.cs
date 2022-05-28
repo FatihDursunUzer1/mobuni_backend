@@ -31,7 +31,8 @@ namespace MobUni.Infrastructure.Firestore.Users
                 {"phoneNumber", user.PhoneNumber??null},
                 {"userName", user.UserName},
                 {"universityId", user.UniversityId},
-                {"departmentId", user.DepartmentId}
+                {"departmentId", user.DepartmentId},
+                {"image",user.Image??null }
             };
             await _firestoreDb.Collection("user").Document(user.Id).SetAsync(_userData);
             return true;
