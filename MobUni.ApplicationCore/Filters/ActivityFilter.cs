@@ -19,6 +19,8 @@ namespace MobUni.ApplicationCore.Filters
         public string? UserId { get; set; }
 
         public int[]? Categories { get; set; }
+
+        public bool?IsExternal{ get; set; }
        
     }
 }

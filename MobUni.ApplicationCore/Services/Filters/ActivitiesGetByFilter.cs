@@ -22,7 +22,7 @@ namespace MobUni.ApplicationCore.Services.Filters
             get
             {
                 return activity => (_activityFilter.Id == null || activity.Id == _activityFilter.Id) && (_activityFilter.UniversityId == null || activity.UniversityId == _activityFilter.UniversityId)
-                && (_activityFilter.UserId == null || activity.UserId == _activityFilter.UserId);
+                && (_activityFilter.UserId == null || activity.UserId == _activityFilter.UserId) && (_activityFilter.IsExternal == null || activity.IsExternal == _activityFilter.IsExternal);
             }
         }
     }
