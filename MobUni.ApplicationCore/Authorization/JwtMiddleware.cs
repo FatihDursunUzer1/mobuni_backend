@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using MobUni.ApplicationCore.Errors;
 using MobUni.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace MobUni.ApplicationCore.Authorization
             {
                 context.Items["UserId"] = userId;
             }
+            else
+                context.Request.Headers["Authorization"] = String.Empty;
             await _next(context);
         }
     }
