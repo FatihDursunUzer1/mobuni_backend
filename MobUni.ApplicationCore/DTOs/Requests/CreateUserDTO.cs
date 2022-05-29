@@ -16,7 +16,8 @@ namespace MobUni.ApplicationCore.DTOs.Requests
         public string Surname { get; set; }
         public int UserType { get; set; }
         public string? Image { get; set; }
-       public int UniversityId { get; set; }
-       public int DepartmentId { get; set; }
+       public int? UniversityId { get; set; }
+       public int? DepartmentId { get; set; }
+        public bool IsUniversityStudent { get; set; }
     }
 }

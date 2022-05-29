@@ -9,7 +9,6 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
     public enum UserType
     {
         ADMIN,
-        UNIVERSİTY,
-        HIGHSCHOOL
+        USER
     }
 }

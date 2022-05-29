@@ -168,16 +168,18 @@ namespace MobUni.ApplicationCore.Services
                 if (image == null)
                 {
                     user.Image = null;
-                    await _unitOfWork.Users.UpdateAsync(user);
+                   user= await _unitOfWork.Users.UpdateAsync(user);
                     await _unitOfWork.Save();
+                    await _firestoreUser.AddToUserDocument(user);
                     return new SuccessDataResult<string>("Profil resmi silme işlemi başarılı");
                 }
 
                 var path = await _storage.UploadProfileImage(image);
                
                 user.Image = path;
-                await _unitOfWork.Users.UpdateAsync(user);
+               user= await _unitOfWork.Users.UpdateAsync(user);
                 await _unitOfWork.Save();
+                await _firestoreUser.AddToUserDocument(user);
                 return new SuccessDataResult<string>(path);
 
             }
