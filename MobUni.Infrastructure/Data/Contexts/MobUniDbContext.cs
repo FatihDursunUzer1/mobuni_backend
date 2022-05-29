@@ -69,8 +69,8 @@ namespace MobUni.Infrastructure.Data.Contexts
         {
             foreach (var entity in entities)
             {
-                entity.CreatedTime = DateTime.SpecifyKind(DateTime.Now,DateTimeKind.Utc);
-                entity.UpdatedTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                entity.CreatedTime = DateTime.Now.ToLocalTime();
+                entity.UpdatedTime = DateTime.Now.ToLocalTime();
             }
         }
 
@@ -78,7 +78,7 @@ namespace MobUni.Infrastructure.Data.Contexts
         {
             foreach(var entity in entities)
             {
-                entity.UpdatedTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                entity.UpdatedTime = DateTime.Now.ToLocalTime();
             }
         }
     }
