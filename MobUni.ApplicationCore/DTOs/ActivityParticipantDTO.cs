@@ -12,9 +12,9 @@ namespace MobUni.ApplicationCore.DTOs
         public string UserId { get; set; }
 
         public UserDTO User { get; set; }
-        public string ActivityId { get; set; }
+        public int ActivityId { get; set; }
 
-        public ActivityDTO Activity { get; set; }
+        //public ActivityDTO Activity { get; set; }
         public bool IsActive { get; set; }
         public bool? IsApproved { get; set; }
         public bool IsJoined { get; set; }
