@@ -153,9 +153,13 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<PaginatedList<QuestionDTO>>(paginatedList);
         }
 
-        public IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUniversityIdPagination(int universityId, PaginationQuery paginationQuery)
+        public IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUniversityIdPagination(int universityId, PaginationQuery paginationQuery, bool isUniversityStudent)
         {
-            var questions = _unitOfWork.Questions.GetAll(question => question.UniversityId == universityId);
+            var questions = new List<Question>();
+            if(!isUniversityStudent)
+                questions = _unitOfWork.Questions.GetAll(question => question.UniversityId == universityId && question.IsUniversityStudent==false);
+            else
+                questions = _unitOfWork.Questions.GetAll(question => question.UniversityId == universityId);
             var paginatedList = PaginatedList<QuestionDTO>.CreateAsync(_mapper.Map<List<Question>, List<QuestionDTO>>(questions), paginationQuery.PageIndex, paginationQuery.PageSize);
             CheckLikedQuestions(paginatedList.Items);
             return new SuccessDataResult<PaginatedList<QuestionDTO>>(paginatedList);

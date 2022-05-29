@@ -18,7 +18,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUserIdPagination(string userId, PaginationQuery paginationQuery);
 		IDataResult<int> GetQuestionCountByUniversityId(int universityId, DateTime? dateTime = null);
 
-		IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUniversityIdPagination(int universityId, PaginationQuery paginationQuery);
+		IDataResult<PaginatedList<QuestionDTO>> GetQuestionsByUniversityIdPagination(int universityId, PaginationQuery paginationQuery, bool isUniversityStudent);
 		//public Task<IDataResult<QuestionDTO>> Add(CreateQuestionDTO dto, IFormFile file, string? userId = null);
 	}
 }

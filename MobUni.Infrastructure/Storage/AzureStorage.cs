@@ -31,8 +31,8 @@ namespace MobUni.Infrastructure.Storage
             {
                 var blobContainer = _blobServiceClient.GetBlobContainerClient("root");
                 await blobContainer.CreateIfNotExistsAsync();
-                var blobClient = blobContainer.GetBlobClient(userId+"/"+pathName + "/"+id.ToString()+"/"+files.FileName);
-                var blobClientWithOutId= blobContainer.GetBlobClient(userId + "/" + pathName + "/" + files.FileName);
+                var blobClient = blobContainer.GetBlobClient(userId+"/"+pathName + "/"+id.ToString()+"/"+DateTime.Now.ToString());
+                var blobClientWithOutId= blobContainer.GetBlobClient(userId + "/" + pathName + "/" + DateTime.Now.ToString());
                 if (id != null)
                 {
                     await blobClient.UploadAsync(files.OpenReadStream());
