@@ -10,5 +10,6 @@ namespace MobUni.ApplicationCore.Interfaces.Services
 {
     public interface IActivityParticipantService:IService<ActivityParticipantDTO,CreateActivityParticipantDTO>
     {
+        Task<Result.Abstract.IDataResult<ActivityDTO>> AddParticipant(CreateActivityParticipantDTO dto, string? userId = null);
     }
 }

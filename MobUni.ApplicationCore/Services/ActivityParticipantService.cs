@@ -4,6 +4,7 @@ using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Services;
+using MobUni.ApplicationCore.Result.Abstract;
 using MobUni.ApplicationCore.Result.Concrete;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace MobUni.ApplicationCore.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result.Abstract.IDataResult<ActivityParticipantDTO>> Add(CreateActivityParticipantDTO dto, string? userId = null)
+        public async Task<Result.Abstract.IDataResult<ActivityDTO>> AddParticipant(CreateActivityParticipantDTO dto, string? userId = null)
         {
             var activityParticipant = _mapper.Map<CreateActivityParticipantDTO, ActivityParticipant>(dto);
             activityParticipant.UserId= userId;
@@ -37,7 +38,7 @@ namespace MobUni.ApplicationCore.Services
                 activityParticipant.Activity.JoinedCount--;
             await _unitOfWork.Activities.Update(activityParticipant.Activity,activityParticipant.ActivityId);
             await _unitOfWork.Save();
-            return new SuccessDataResult<ActivityParticipantDTO>(_mapper.Map<ActivityParticipant, ActivityParticipantDTO>(activityParticipant));
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityParticipant, ActivityParticipantDTO>(activityParticipant).Activity);
         }
 
         public Task<bool> Delete(ActivityParticipantDTO dto)
@@ -56,6 +57,11 @@ namespace MobUni.ApplicationCore.Services
         }
 
         public Task<Result.Abstract.IDataResult<ActivityParticipantDTO>> Update(ActivityParticipantDTO dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IDataResult<ActivityParticipantDTO>> IService<ActivityParticipantDTO, CreateActivityParticipantDTO>.Add(CreateActivityParticipantDTO dto, string? userId)
         {
             throw new NotImplementedException();
         }

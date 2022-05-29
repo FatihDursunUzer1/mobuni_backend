@@ -55,7 +55,7 @@ namespace MobUni.WebAPI.Controllers
         public async Task<IActionResult> JoinOrLeave([FromBody] CreateActivityParticipantDTO createActivityParticipantDTO)
         {
             var userId = HttpContext.Items["UserId"]?.ToString();
-            return CreateActionResultInstance(await _activityParticipantService.Add(createActivityParticipantDTO,userId));
+            return CreateActionResultInstance(await _activityParticipantService.AddParticipant(createActivityParticipantDTO,userId));
         }
 
         [HttpGet("GetActivityCountsByUniversityId")]
