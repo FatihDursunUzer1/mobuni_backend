@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.Entities;
 using MobUni.ApplicationCore.Entities.UserAggregate;
+using MobUni.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -24,11 +25,13 @@ namespace MobUni.ApplicationCore.Authorization
     {
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public JwtUtils(IConfiguration configuration, IMapper mapper)
+        public JwtUtils(IConfiguration configuration, IMapper mapper,IUnitOfWork unitOfWork)
         {
             _configuration = configuration;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
         public TokenDTO GenerateJwtToken(User user)
         {
@@ -69,7 +72,10 @@ namespace MobUni.ApplicationCore.Authorization
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
-                return userId;
+                if (_unitOfWork.Users.GetById(userId) != null)
+                    return userId;
+                else
+                    throw (new Exception("User not found"));
             }
             catch
             {
