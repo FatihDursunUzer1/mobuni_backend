@@ -114,6 +114,15 @@ namespace MobUni.ApplicationCore.Services
             return new SuccessDataResult<List<ActivityDTO>>(_mapper.Map<List<Activity>, List<ActivityDTO>>( _unitOfWork.Activities.GetAll(activity => activity.Timeout == false)));
         }
 
+        public IDataResult<PaginatedList<ActivityDTO>> GetMyJoinedActivities(string userId, PaginationQuery paginationQuery)
+        {
+            var activityParticipant = _unitOfWork.ActivityParticipants.GetAll(activityParticipant => activityParticipant.UserId == userId && activityParticipant.IsActive && activityParticipant.IsJoined);
+            var activities = activityParticipant.Select(activityParticipant => activityParticipant.Activity).ToList();
+            var activityDtos = _mapper.Map<List<ActivityDTO>>(activities);
+            activityDtos.ForEach(activityDTO => activityDTO.IsJoined = true);
+            return new SuccessDataResult<PaginatedList<ActivityDTO>>(PaginatedList<ActivityDTO>.CreateAsync(activityDtos, paginationQuery.PageIndex, paginationQuery.PageSize));
+        }
+
         public async Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut)
         {
             var dbActivity=_unitOfWork.Activities.GetById(activityId);

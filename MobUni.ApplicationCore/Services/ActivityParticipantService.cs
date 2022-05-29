@@ -4,6 +4,7 @@ using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Services;
+using MobUni.ApplicationCore.Pagination;
 using MobUni.ApplicationCore.Result.Abstract;
 using MobUni.ApplicationCore.Result.Concrete;
 using System;
@@ -38,8 +39,15 @@ namespace MobUni.ApplicationCore.Services
                 activityParticipant.Activity.JoinedCount--;
             await _unitOfWork.Activities.Update(activityParticipant.Activity,activityParticipant.ActivityId);
             await _unitOfWork.Save();
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityParticipant, ActivityParticipantDTO>(activityParticipant).Activity);
+            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity));
         }
+
+        public IDataResult<PaginatedList<ActivityParticipantDTO>> GetActivityParticipantsByActivityId(int activityId, PaginationQuery paginationQuery)
+        {
+            var activityParticipant = _unitOfWork.ActivityParticipants.GetAll(activityParticipant => activityParticipant.ActivityId == activityId && activityParticipant.IsActive && activityParticipant.IsJoined);
+            return new SuccessDataResult<PaginatedList<ActivityParticipantDTO>>(PaginatedList<ActivityParticipantDTO>.CreateAsync(_mapper.Map<List<ActivityParticipantDTO>>(activityParticipant), paginationQuery.PageIndex, paginationQuery.PageSize));
+        }
+
 
         public Task<bool> Delete(ActivityParticipantDTO dto)
         {

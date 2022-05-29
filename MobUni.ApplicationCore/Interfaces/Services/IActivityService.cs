@@ -11,13 +11,14 @@ namespace MobUni.ApplicationCore.Interfaces
 {
 	public interface IActivityService
 	{
-		public Task<bool> Delete(ActivityDTO dto);
-		public Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null);
-		public Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut);
-		public Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter = null);
-		public IDataResult<PaginatedList<ActivityDTO>> GetAllPaginated(ActivityFilter filter, PaginationQuery query);
+		 Task<bool> Delete(ActivityDTO dto);
+		 Task<IDataResult<ActivityDTO>> Add(CreateActivityDTO dto,string? userId=null);
+		 Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut);
+		 Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter = null);
+		 IDataResult<PaginatedList<ActivityDTO>> GetAllPaginated(ActivityFilter filter, PaginationQuery query);
 		IDataResult<int> GetActivitiesByUniversityId(int universityId, DateTime? dateTime = null);
-		public IDataResult<List<ActivityDTO>> GetNoTimeOuts();
+		 IDataResult<List<ActivityDTO>> GetNoTimeOuts();
+		IDataResult<PaginatedList<ActivityDTO>> GetMyJoinedActivities(string userId, PaginationQuery paginationQuery);
 	}
 }
 
