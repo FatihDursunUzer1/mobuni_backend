@@ -24,7 +24,7 @@ namespace MobUni.Infrastructure.Firestore.Users
 
             _userData = new Dictionary<string, object>
             {
-                {"userId", user.Id},
+                {"id", user.Id},
                 {"name", user.Name},
                 {"surname", user.Surname},
                 {"email", user.Email},

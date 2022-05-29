@@ -22,6 +22,8 @@ namespace MobUni.ApplicationCore.DTOs
         //University DepartmentId foreignKey. DepartmentId is nullable
         public int? DepartmentId { get; set; }
         public DepartmentDTO? Department { get; set; }
+
+        public bool IsUniversityStudent { get; set; }
     }
 }
 

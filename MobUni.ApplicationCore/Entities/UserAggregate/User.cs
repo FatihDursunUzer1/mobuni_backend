@@ -24,13 +24,13 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public string Surname { get; set; }
         public UserType UserType { get; set; }
         public string? Image { get; set; }=String.Empty;
-       public int UniversityId { get; set; }
-        public virtual University University { get; set; }
-       public int DepartmentId { get; set; }
+       public int? UniversityId { get; set; }
+        public virtual University? University { get; set; }
+       public int? DepartmentId { get; set; }
+        public virtual Department? Department { get; set; }
 
+        public virtual bool IsUniversityStudent { get; set; } = true;
         public virtual ICollection<Question> Questions { get; set; }
-        public virtual Department Department { get; set; }
-
        public void CreateUserTime()
         {
             this.CreatedTime =  DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
