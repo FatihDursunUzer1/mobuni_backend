@@ -28,7 +28,6 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] CreateQuestionDTO questionDTO)
         {
-            
             return CreateActionResultInstance(await _questionService.Add(questionDTO,_userId));
         }
 
@@ -68,11 +67,11 @@ namespace MobUni.WebAPI.Controllers
 
         //Pagination
         [HttpGet("GetByUniversityId")]
-        public IActionResult GetQuestionsByUniversityId(int universityId, [FromQuery] PaginationQuery? paginationQuery)
+        public IActionResult GetQuestionsByUniversityId(int universityId, [FromQuery] PaginationQuery? paginationQuery, bool isUniversityStudent=true)
         {
             if(paginationQuery.PageSize==0 || paginationQuery.PageIndex==0)
                 return CreateActionResultInstance(_questionService.GetByUniversityId(universityId));
-            return CreateActionResultInstance(_questionService.GetQuestionsByUniversityIdPagination(universityId, paginationQuery));
+            return CreateActionResultInstance(_questionService.GetQuestionsByUniversityIdPagination(universityId, paginationQuery, isUniversityStudent));
         }
 
          [HttpGet("GetQuestionCountsByUniversityId")]

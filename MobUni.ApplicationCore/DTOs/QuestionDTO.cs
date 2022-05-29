@@ -12,8 +12,11 @@ namespace MobUni.ApplicationCore.DTOs
         public DateTime? UpdatedTime { get; set; }
         public int UniversityId { get; set; }
         public UniversityDTO University { get; set; }
+        public DepartmentDTO? Department { get; set; }
         public int CommentCount { get; set; }
         public int LikeCount { get; set; }
+
+        public bool IsUniversityStudent { get; set; }
         public bool IsLiked { get; set; }
     
     }
