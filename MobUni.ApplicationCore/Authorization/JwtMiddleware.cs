@@ -16,7 +16,6 @@ namespace MobUni.ApplicationCore.Authorization
         public JwtMiddleware(RequestDelegate next, IUnitOfWork unitOfWork)
         {
             _next = next;
-            _unitOfWork = unitOfWork;
         }
         public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
         {
