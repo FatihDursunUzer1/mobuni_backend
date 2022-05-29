@@ -58,12 +58,25 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(await _activityParticipantService.AddParticipant(createActivityParticipantDTO,userId));
         }
 
+        [HttpGet("ActivityParticipants")]
+        public IActionResult GetActivityParticipantsByActivityId( int activityId,[FromQuery] PaginationQuery paginationQuery)
+        {
+            return CreateActionResultInstance(_activityParticipantService.GetActivityParticipantsByActivityId(activityId,paginationQuery));
+        }
+
         [HttpGet("GetActivityCountsByUniversityId")]
         public IActionResult GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null)
         {
             if (dateTime != null)
                 dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
             return CreateActionResultInstance(_activtyService.GetActivitiesByUniversityId(universityId, dateTime));
+        }
+
+        [HttpGet("GetMyJoinedActivities")]
+        public IActionResult GetMyJoinedActivities([FromQuery] PaginationQuery paginationQuery)
+        {
+            var userId = HttpContext.Items["UserId"]?.ToString();
+            return CreateActionResultInstance(_activtyService.GetMyJoinedActivities(userId, paginationQuery));
         }
 
 
