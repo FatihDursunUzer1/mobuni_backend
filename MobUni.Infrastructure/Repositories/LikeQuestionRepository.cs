@@ -52,7 +52,7 @@ namespace MobUni.Infrastructure.Repositories
             if (questionLike != null)
             {
                 questionLike.IsActive = !questionLike.IsActive;
-                _mobUniDbContext.LikeQuestion.Update(questionLike);
+                await Update(questionLike,questionLike.Id);
                 if(tableType == 1)
                 return await LikeCountQuestion(Id, questionLike.IsActive);
                 else 
@@ -67,9 +67,8 @@ namespace MobUni.Infrastructure.Repositories
                     question.QuestionCommentId = Id;
                 else if(tableType == 3)
                 { }
-                question.CreateObject();
-                await _mobUniDbContext.LikeQuestion.AddAsync(question);
-                if(tableType==1)
+               await Add(question);
+                if (tableType==1)
                 return await LikeCountQuestion(Id, true);
                 else if(tableType==2)
                     return await LikeCountComment(Id, true);

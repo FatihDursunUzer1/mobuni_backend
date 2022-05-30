@@ -54,6 +54,7 @@ namespace MobUni.Infrastructure.Repositories
             {
                 questionLike.IsActive = !questionLike.IsActive;
                 _mobUniDbContext.LikeQuestion.Update(questionLike);
+                await _mobUniDbContext.SaveChangesAsync();
                 return await LikeCount(questionId, questionLike.IsActive);
             }
             else
@@ -61,6 +62,7 @@ namespace MobUni.Infrastructure.Repositories
                 var question = new LikeQuestion { QuestionId = questionId, UserId = userId, IsActive = true };
                 question.CreateObject();
                 await _mobUniDbContext.LikeQuestion.AddAsync(question);
+                await _mobUniDbContext.SaveChangesAsync();
                 return await LikeCount(questionId,true);
             }
         }

@@ -28,6 +28,7 @@ using System.Text.Json.Serialization;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using MobUni.Infrastructure.Firestore.Users;
+using MobUni.Infrastructure.Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,7 @@ builder.Services.AddTransient<IUnitOfWork,UnitOfWork>();
 builder.Services.AddTransient<IActivityParticipantRepository,ActivityParticipantRepository>();
 builder.Services.AddTransient<IActivityParticipantService,ActivityParticipantService>();
 builder.Services.AddTransient<IFirestoreUser, FirestoreUser>();
+builder.Services.AddTransient<IPushNotification,OneSignalNotification >();
 
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
