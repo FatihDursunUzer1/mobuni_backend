@@ -18,20 +18,21 @@ namespace MobUni.ApplicationCore.Services
 {
     public class QuestionCommentService : IQuestionCommentService
     {
-        
-   
+
+        private readonly IPushNotification _pushNotification;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private string _userId;
         private readonly IUnitOfWork _unitOfWork;
 
-        public QuestionCommentService( IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
+        public QuestionCommentService(IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, IPushNotification pushNotification)
         {
-       
+
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _userId = _httpContextAccessor.HttpContext.Items["UserId"].ToString();
+            _pushNotification = pushNotification;
         }
 
         public async Task<IDataResult<QuestionCommentDTO>> Add(CreateQuestionCommentDTO dto, string? userId = null)
@@ -50,11 +51,17 @@ namespace MobUni.ApplicationCore.Services
                 var questionComment = _mapper.Map<QuestionComment>(dto);
                 if (userId != null)
                     questionComment.UserId = userId;
-                await _unitOfWork.Comments.Add(questionComment, questionComment => questionComment.Question, questionComment => questionComment.User,questionComment=>questionComment.Activity);
-                if (questionComment.Question != null)
-                    _unitOfWork.Questions.CountComment((int)questionComment.QuestionId);
-                else if (questionComment.Activity != null)
-                    _unitOfWork.Activities.CountComment((int)questionComment.ActivityId);
+                questionComment= await _unitOfWork.Comments.Add(questionComment, questionComment => questionComment.Question, questionComment => questionComment.User,questionComment=>questionComment.Activity);
+                if (questionComment.QuestionId is not null)
+                {
+                    await _unitOfWork.Questions.CountComment((int)questionComment.QuestionId);
+                    await _pushNotification.SendQuestionCommentNotification(userId, questionComment.Question.UserId, (int)questionComment.QuestionId,questionComment.User.FullName, questionComment.Content);
+                }
+                else if (questionComment.ActivityId is not null)
+                {
+                   await _unitOfWork.Activities.CountComment((int)questionComment.ActivityId);
+                    await _pushNotification.SendActivityCommentNotification(userId, questionComment.Activity.UserId, (int)questionComment.ActivityId, questionComment.User.FullName, questionComment.Content);
+                }
                 await _unitOfWork.Save();
                 return new SuccessDataResult<bool>(true);
             }

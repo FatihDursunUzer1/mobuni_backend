@@ -17,14 +17,16 @@ namespace MobUni.ApplicationCore.Services
 {
     public class LikeService : ILikeService
     {
+        private readonly IPushNotification _pushNotification;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public LikeService( IMapper mapper, IUnitOfWork unitOfWork)
+        public LikeService(IMapper mapper, IUnitOfWork unitOfWork, IPushNotification pushNotification)
         {
-       
+
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _pushNotification = pushNotification;
         }
         public async Task<IDataResult<bool>> Like(CreateLikeDTO dto, string? userId = null)
         {
@@ -37,6 +39,30 @@ namespace MobUni.ApplicationCore.Services
             like.IsActive = true;
             bool value = await _unitOfWork.Likes.LikeOrDislike(dto.TableType, dto.Id, userId);
             await _unitOfWork.Save();
+            if (value==true)
+            {
+                var user = _unitOfWork.Users.GetById(userId);
+                if (dto.TableType == 2)
+                {
+                    var questionComment = _unitOfWork.Comments.GetById(dto.Id);
+                   
+                    if (questionComment.ActivityId is not null)
+                    {
+                        await _pushNotification.SendActivityCommentLikeNotification(userId, questionComment.UserId, (int)questionComment.ActivityId, user.FullName, questionComment.Content);
+                    }
+                    else if (questionComment.QuestionId is not null)
+                    {
+                        await _pushNotification.SendQuestionCommentLikeNotification(userId, questionComment.UserId, (int)questionComment.QuestionId, user.FullName, questionComment.Content);
+                    }
+                }
+                else
+                {
+                    var question = _unitOfWork.Questions.GetById(dto.Id);
+                    await _pushNotification.SendQuestionLikeNotification(userId,question.UserId, question.Id,user.FullName, question.Text);
+                }
+                
+            }
+           
             return new SuccessDataResult<bool>(value);
         }
 

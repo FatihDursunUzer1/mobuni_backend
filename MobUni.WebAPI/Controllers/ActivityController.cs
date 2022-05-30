@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
@@ -21,11 +22,13 @@ namespace MobUni.WebAPI.Controllers
     {
         private readonly IActivityService _activtyService;
         private readonly IActivityParticipantService _activityParticipantService;
+       
 
-        public ActivityController(IActivityService activityService, IActivityParticipantService activityParticipantService)
+        public ActivityController(IActivityService activityService, IActivityParticipantService activityParticipantService,IPushNotification pushNotification)
         {
             _activtyService = activityService;
             _activityParticipantService = activityParticipantService;
+         
         }
 
 
@@ -54,6 +57,7 @@ namespace MobUni.WebAPI.Controllers
         [HttpPost("JoinOrLeave")]
         public async Task<IActionResult> JoinOrLeave([FromBody] CreateActivityParticipantDTO createActivityParticipantDTO)
         {
+           
             var userId = HttpContext.Items["UserId"]?.ToString();
             return CreateActionResultInstance(await _activityParticipantService.AddParticipant(createActivityParticipantDTO,userId));
         }
@@ -63,10 +67,12 @@ namespace MobUni.WebAPI.Controllers
         {
             return CreateActionResultInstance(_activityParticipantService.GetActivityParticipantsByActivityId(activityId,paginationQuery));
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("GetActivityCountsByUniversityId")]
         public IActionResult GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null)
         {
+           
             if (dateTime != null)
                 dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
             return CreateActionResultInstance(_activtyService.GetActivitiesByUniversityId(universityId, dateTime));

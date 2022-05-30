@@ -20,13 +20,15 @@ namespace MobUni.ApplicationCore.Services
         private readonly IUnitOfWork _unitOfWork;
         private  readonly IStorage _storage;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IPushNotification _pushNotification;
 
-        public QuestionService(IMapper mapper, IUnitOfWork unitOfWork, IStorage storage, IHttpContextAccessor contextAccessor)
+        public QuestionService(IMapper mapper, IUnitOfWork unitOfWork, IStorage storage, IHttpContextAccessor contextAccessor, IPushNotification pushNotification)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _storage = storage;
             _contextAccessor = contextAccessor;
+            _pushNotification = pushNotification;
         }
 
         public async Task<IDataResult<QuestionDTO>> Add( CreateQuestionDTO dto,string? userId=null)
@@ -97,8 +99,17 @@ namespace MobUni.ApplicationCore.Services
             try
             {
                 // await _likeQuestionRepository.LikeQuestion(questionId, userId);
-               await _unitOfWork.Questions.LikeOrDislikeQuestion(questionId, userId);
+               var like= await _unitOfWork.Questions.LikeOrDislikeQuestion(questionId, userId);
                 await _unitOfWork.Save();
+
+                if (like == true)
+                {
+                    var question = _unitOfWork.Questions.GetById(questionId);
+                    var senderUser = _unitOfWork.Users.GetById(userId);
+                    if(question.UserId!=senderUser.Id)
+                    await _pushNotification.SendQuestionLikeNotification(userId, question.UserId, question.Id,senderUser.Name + senderUser.Surname,question.Text);
+                }
+                    
                 return new SuccessDataResult<bool>(true);
             }
             catch (Exception ex)

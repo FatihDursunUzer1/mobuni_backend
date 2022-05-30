@@ -21,6 +21,8 @@ namespace MobUni.ApplicationCore.Entities.UserAggregate
         public string Email { get; set; }
         public string? PhoneNumber { get; set; } = String.Empty;
         public string Name { get; set; }
+
+        public string FullName { get { return $"{Name} {Surname}"; } }
         public string Surname { get; set; }
         public UserType UserType { get; set; }
         public string? Image { get; set; }=String.Empty;

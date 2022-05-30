@@ -19,11 +19,13 @@ namespace MobUni.ApplicationCore.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPushNotification _pushNotification;
 
-        public ActivityParticipantService(IMapper mapper, IUnitOfWork unitOfWork)
+        public ActivityParticipantService(IMapper mapper, IUnitOfWork unitOfWork, IPushNotification pushNotification)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _pushNotification = pushNotification;
         }
 
         public async Task<Result.Abstract.IDataResult<ActivityDTO>> AddParticipant(CreateActivityParticipantDTO dto, string? userId = null)
@@ -34,9 +36,14 @@ namespace MobUni.ApplicationCore.Services
             activityParticipant = joinOrLeave.Item1;
             //var activity= _unitOfWork.Activities.GetById(activityParticipant.ActivityId);
             if (joinOrLeave.Item2)
+            {
                 activityParticipant.Activity.JoinedCount++;
+                await _pushNotification.SendActivityJoinedNotification(userId,activityParticipant.Activity.UserId,activityParticipant.ActivityId,activityParticipant.User.FullName,activityParticipant.Activity.Title);
+            }
             else
+            {
                 activityParticipant.Activity.JoinedCount--;
+            }
             await _unitOfWork.Activities.Update(activityParticipant.Activity,activityParticipant.ActivityId);
             await _unitOfWork.Save();
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity));
