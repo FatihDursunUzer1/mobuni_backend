@@ -35,9 +35,11 @@ namespace MobUni.ApplicationCore.Services
             var joinOrLeave = await _unitOfWork.ActivityParticipants.JoinOrLeave(activityParticipant);
             activityParticipant = joinOrLeave.Item1;
             //var activity= _unitOfWork.Activities.GetById(activityParticipant.ActivityId);
+            var isJoined = false;
             if (joinOrLeave.Item2)
             {
                 activityParticipant.Activity.JoinedCount++;
+                isJoined = true;
                 await _pushNotification.SendActivityJoinedNotification(userId,activityParticipant.Activity.UserId,activityParticipant.ActivityId,activityParticipant.User.FullName,activityParticipant.Activity.Title);
             }
             else
@@ -46,7 +48,9 @@ namespace MobUni.ApplicationCore.Services
             }
             await _unitOfWork.Activities.Update(activityParticipant.Activity,activityParticipant.ActivityId);
             await _unitOfWork.Save();
-            return new SuccessDataResult<ActivityDTO>(_mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity));
+            var activityDTO = _mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity);
+            activityDTO.IsJoined = isJoined;
+            return new SuccessDataResult<ActivityDTO>(activityDTO);
         }
 
         public IDataResult<PaginatedList<ActivityParticipantDTO>> GetActivityParticipantsByActivityId(int activityId, PaginationQuery paginationQuery)
