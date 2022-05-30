@@ -44,13 +44,19 @@ namespace MobUni.ApplicationCore.Services
             }
             else
             {
+                if(activityParticipant!=null)
                 activityParticipant.Activity.JoinedCount--;
             }
-            await _unitOfWork.Activities.Update(activityParticipant.Activity,activityParticipant.ActivityId);
-            await _unitOfWork.Save();
-            var activityDTO = _mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity);
-            activityDTO.IsJoined = isJoined;
-            return new SuccessDataResult<ActivityDTO>(activityDTO);
+            if (activityParticipant != null)
+            {
+                await _unitOfWork.Activities.Update(activityParticipant.Activity, activityParticipant.ActivityId);
+                await _unitOfWork.Save();
+                var activityDTO = _mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity);
+                activityDTO.IsJoined = isJoined;
+                return new SuccessDataResult<ActivityDTO>(activityDTO);
+            }
+            else
+                return new ErrorDataResult<ActivityDTO>("Katılımcı sınırına ulaşılmıştır",400);
         }
 
         public IDataResult<PaginatedList<ActivityParticipantDTO>> GetActivityParticipantsByActivityId(int activityId, PaginationQuery paginationQuery)

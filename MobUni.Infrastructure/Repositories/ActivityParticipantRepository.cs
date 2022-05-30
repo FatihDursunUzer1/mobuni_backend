@@ -11,22 +11,34 @@ namespace MobUni.Infrastructure.Repositories
 {
     public class ActivityParticipantRepository:EfRepositoryBase<ActivityParticipant>,IActivityParticipantRepository
     {
-        public ActivityParticipantRepository(MobUniDbContext mobUniDbContext) : base(mobUniDbContext)
+
+        private IActivityRepository _activityRepository;
+        public ActivityParticipantRepository(MobUniDbContext mobUniDbContext, IActivityRepository activityRepository) : base(mobUniDbContext)
         {
+            _activityRepository = activityRepository;
         }
 
         public async Task<(ActivityParticipant,bool isJoined)> JoinOrLeave(ActivityParticipant activityParticipant)
         {
             var dbActivityParticipants = GetAll(a => a.IsApproved && a.UserId == activityParticipant.UserId && a.ActivityId == activityParticipant.ActivityId);
             var dbActivityParticipant = dbActivityParticipants.FirstOrDefault();
+            var activity = _activityRepository.GetById(activityParticipant.ActivityId);
             if (dbActivityParticipant == null)
             {
+                if (activity.MaxUser < activity.JoinedCount + 1 && activity.MaxUser != 0)
+                {
+                    return (null, false);
+                }
                 activityParticipant = await Add(activityParticipant,a=>a.Activity,a=>a.User);
                 return (activityParticipant,true);
             }
             else
             {
                 dbActivityParticipant.IsJoined = !dbActivityParticipant.IsJoined;
+                if (activity.MaxUser < activity.JoinedCount + 1 && dbActivityParticipant.IsJoined && activity.MaxUser != 0)
+                {
+                    return (null, false);
+                }
                 await Update(dbActivityParticipant, dbActivityParticipant.Id);
                 if(dbActivityParticipant.IsJoined)
                 return (dbActivityParticipant,true);
