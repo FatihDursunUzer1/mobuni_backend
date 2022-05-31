@@ -44,11 +44,14 @@ namespace MobUni.ApplicationCore.Services
             }
             else
             {
-                if(activityParticipant!=null)
+                if(activityParticipant!=null && !(activityParticipant.UpdatedTime.Value.AddHours(24) > DateTime.Now.ToUniversalTime()))
                 activityParticipant.Activity.JoinedCount--;
             }
             if (activityParticipant != null)
             {
+                //isApproved son 1 gün içerisinde etkinliğe katılıp katılmadığının kontrolü için. Belki etkinliğe katılımdan sonra da 1 gün çıkamama durumu olabilir. O zaman da isJoined ve tarih kontrolü yapılır.
+                if (!activityParticipant.IsJoined && activityParticipant.IsApproved==false)
+                    return new ErrorDataResult<ActivityDTO>("Etkinliğe daha önceden katılım sağlayıp ayrıldığınız için bir süre beklemeniz gerekmektedir", 400);
                 await _unitOfWork.Activities.Update(activityParticipant.Activity, activityParticipant.ActivityId);
                 await _unitOfWork.Save();
                 var activityDTO = _mapper.Map<Activity, ActivityDTO>(activityParticipant.Activity);

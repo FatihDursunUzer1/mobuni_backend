@@ -34,6 +34,11 @@ namespace MobUni.Infrastructure.Repositories
             }
             else
             {
+                if (!dbActivityParticipant.IsJoined && dbActivityParticipant.UpdatedTime.Value.AddHours(24) > DateTime.Now.ToUniversalTime())
+                {
+                    dbActivityParticipant.IsApproved = false;
+                    return (dbActivityParticipant, false);
+                }
                 dbActivityParticipant.IsJoined = !dbActivityParticipant.IsJoined;
                 if (activity.MaxUser < activity.JoinedCount + 1 && dbActivityParticipant.IsJoined && activity.MaxUser != 0)
                 {
