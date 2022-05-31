@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MobUni.ApplicationCore.DTOs;
 using MobUni.ApplicationCore.DTOs.Requests;
 using MobUni.ApplicationCore.Entities.ActivityAggregate;
+using MobUni.ApplicationCore.Expressions;
 using MobUni.ApplicationCore.Filters;
 using MobUni.ApplicationCore.Interfaces;
 using MobUni.ApplicationCore.Interfaces.Repositories;
@@ -135,9 +137,13 @@ namespace MobUni.ApplicationCore.Services
             await _unitOfWork.Activities.Update(dbActivity, activityId);
             return new SuccessDataResult<ActivityDTO>(_mapper.Map<ActivityDTO>(dbActivity));
         }
-        public IDataResult<int> GetActivitiesByUniversityId(int universityId,DateTime? dateTime=null)
+        public IDataResult<int> GetActivitiesByUniversityId(ActivityFilter filter,DateTime? dateTime=null)
         {
-            return new SuccessDataResult<int>(_unitOfWork.Activities.GetActivityCountByUniversityId(universityId, dateTime));
+            var activitiesFilter = new ActivitiesGetByFilter(filter);
+            var newFilter = activitiesFilter.SpecExpression.And(x => x.CreatedTime > dateTime);
+            
+            var activitiesCount = _unitOfWork.Activities.GetAll(newFilter).Count();
+            return new SuccessDataResult<int>(activitiesCount);
         }
     }
 }

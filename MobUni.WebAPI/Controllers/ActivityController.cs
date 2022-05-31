@@ -68,14 +68,14 @@ namespace MobUni.WebAPI.Controllers
             return CreateActionResultInstance(_activityParticipantService.GetActivityParticipantsByActivityId(activityId,paginationQuery));
         }
         
-        [AllowAnonymous]
+        
         [HttpGet("GetActivityCountsByUniversityId")]
-        public IActionResult GetActivityCountByUniversityId(int universityId, DateTime? dateTime = null)
+        public IActionResult GetActivityCountByUniversityId([FromQuery] ActivityFilter activityFilter, DateTime? dateTime = null)
         {
-           
+
             if (dateTime != null)
-                dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-            return CreateActionResultInstance(_activtyService.GetActivitiesByUniversityId(universityId, dateTime));
+                dateTime = dateTime.Value.ToUniversalTime();
+            return CreateActionResultInstance(_activtyService.GetActivitiesByUniversityId(activityFilter, dateTime));
         }
 
         [HttpGet("GetMyJoinedActivities")]

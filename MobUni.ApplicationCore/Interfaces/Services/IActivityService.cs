@@ -16,7 +16,7 @@ namespace MobUni.ApplicationCore.Interfaces
 		 Task<IDataResult<ActivityDTO>> Update(int activityId, int? newMaxUser, bool? timeOut);
 		 Task<IDataResult<List<ActivityDTO>>> GetAll(ActivityFilter filter = null);
 		 IDataResult<PaginatedList<ActivityDTO>> GetAllPaginated(ActivityFilter filter, PaginationQuery query);
-		IDataResult<int> GetActivitiesByUniversityId(int universityId, DateTime? dateTime = null);
+		IDataResult<int> GetActivitiesByUniversityId(ActivityFilter filter, DateTime? dateTime = null);
 		 IDataResult<List<ActivityDTO>> GetNoTimeOuts();
 		IDataResult<PaginatedList<ActivityDTO>> GetMyJoinedActivities(string userId, PaginationQuery paginationQuery);
 	}
