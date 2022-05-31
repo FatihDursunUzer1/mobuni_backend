@@ -55,7 +55,8 @@ namespace MobUni.Infrastructure.Repositories
                 questionLike.IsActive = !questionLike.IsActive;
                 _mobUniDbContext.LikeQuestion.Update(questionLike);
                 await _mobUniDbContext.SaveChangesAsync();
-                return await LikeCount(questionId, questionLike.IsActive);
+                 await LikeCount(questionId, questionLike.IsActive);
+                return questionLike.IsActive;
             }
             else
             {
@@ -63,7 +64,8 @@ namespace MobUni.Infrastructure.Repositories
                 question.CreateObject();
                 await _mobUniDbContext.LikeQuestion.AddAsync(question);
                 await _mobUniDbContext.SaveChangesAsync();
-                return await LikeCount(questionId,true);
+                 await LikeCount(questionId,true);
+                return question.IsActive; //isActive == false ise beğeni geri çekilmiş demektir.
             }
         }
 
