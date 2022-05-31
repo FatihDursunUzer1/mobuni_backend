@@ -37,7 +37,7 @@ namespace MobUni.ApplicationCore.Services
                 like.QuestionId = dto.Id;
             like.UserId = userId;
             like.IsActive = true;
-            bool value = await _unitOfWork.Likes.LikeOrDislike(dto.TableType, dto.Id, userId);
+            bool value = await _unitOfWork.Likes.LikeOrDislike(dto.TableType, dto.Id, userId); // beğeni geri çekildeyse false dönecek.
             await _unitOfWork.Save();
             if (value==true)
             {

@@ -53,10 +53,17 @@ namespace MobUni.Infrastructure.Repositories
             {
                 questionLike.IsActive = !questionLike.IsActive;
                 await Update(questionLike,questionLike.Id);
-                if(tableType == 1)
-                return await LikeCountQuestion(Id, questionLike.IsActive);
-                else 
-                    return await LikeCountComment(Id,questionLike.IsActive);
+                if (tableType == 1)
+                {
+                    await LikeCountQuestion(Id, questionLike.IsActive); //Question like count
+                   
+                }
+                else
+                {
+                    await LikeCountComment(Id, questionLike.IsActive);
+                   
+                }
+                return questionLike.IsActive; //Beğeni geri çekildeyse false
             }
             else
             {
@@ -69,9 +76,11 @@ namespace MobUni.Infrastructure.Repositories
                 { }
                await Add(question);
                 if (tableType==1)
-                return await LikeCountQuestion(Id, true);
+                 await LikeCountQuestion(Id, true);
                 else if(tableType==2)
-                    return await LikeCountComment(Id, true);
+                    await LikeCountComment(Id, true);
+
+                return true; // beğenme işlemi yapıldığı için true döner.
             }
             return false;
         }
