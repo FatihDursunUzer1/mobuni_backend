@@ -1,4 +1,5 @@
 ﻿using MobUni.ApplicationCore.Interfaces;
+using MobUni.Infrastructure.Firestore.Notifications;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -155,8 +156,8 @@ namespace MobUni.Infrastructure.Notification
                     var body = await response.Content.ReadAsStringAsync();
                     Console.WriteLine(body);
                 }
-
-                return true;
+                var pushNotification = new FirebaseNotification();
+                return await pushNotification.AddToFirebase(obj,pushObject.Include_external_user_ids[0]);
 
             }
             catch (Exception ex)
