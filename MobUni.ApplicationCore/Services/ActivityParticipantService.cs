@@ -44,7 +44,7 @@ namespace MobUni.ApplicationCore.Services
             }
             else
             {
-                if(activityParticipant!=null && !(activityParticipant.UpdatedTime.Value.AddHours(24) > DateTime.Now.ToUniversalTime()))
+                if(activityParticipant!=null)
                 activityParticipant.Activity.JoinedCount--;
             }
             if (activityParticipant != null)
