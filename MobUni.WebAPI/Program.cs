@@ -30,6 +30,8 @@ using Google.Apis.Auth.OAuth2;
 using MobUni.Infrastructure.Firestore.Users;
 using MobUni.Infrastructure.Notification;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -72,6 +74,17 @@ builder.Services.AddTransient<IActivityParticipantService,ActivityParticipantSer
 builder.Services.AddTransient<IFirestoreUser, FirestoreUser>();
 builder.Services.AddTransient<IPushNotification,OneSignalNotification >();
 
+
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(name: "CorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
 {
@@ -162,7 +175,7 @@ var app = builder.Build();
 //swagger
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 // id control from token
